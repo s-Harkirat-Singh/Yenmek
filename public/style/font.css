@@ -1,0 +1,128 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+
+
+/* Main body font */
+body {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+    /* ... keep your existing styles ... */
+}
+
+/* Main title */
+.header h1 {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    /* ... keep your existing gradient and animation styles ... */
+}
+#Main-title{
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+}
+/* Subtitle */
+.header p {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+    /* ... keep your existing styles ... */
+}
+#selection-days{
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+
+
+/* Form labels - Use Orbitron for tech feel */
+.form-group label {
+    font-family: 'Orbitron', monospace;
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.8px;
+    /* ... keep your existing styles ... */
+}
+
+/* Form inputs and select - Use Rajdhani for readability */
+.form-group input, .form-group select {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    /* ... keep your existing styles ... */
+}
+
+/* Placeholder text */
+.form-group input::placeholder {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+    /* ... keep your existing styles ... */
+}
+
+/* Generate button - Use Orbitron for impact */
+.generate-btn {
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    /* ... keep your existing gradient and hover styles ... */
+}
+
+/* Download button - Also use Orbitron */
+.download-btn {
+    font-family: 'Orbitron', monospace;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 1.2px;
+    /* ... keep your existing styles ... */
+}
+
+/* Loading messages - Use Rajdhani */
+.loading p {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+}
+
+.loading p:last-child {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+}
+
+/* Results section fonts */
+.results-header h2 {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.results-meta {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+}
+
+/* Day headers */
+.day-header {
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+}
+
+/* Location names */
+.location-name {
+    font-family: 'Orbitron', monospace;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Location descriptions */
+.location-description {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* Error messages */
+.error {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+}
