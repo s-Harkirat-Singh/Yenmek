@@ -3,32 +3,30 @@ const router = express.Router();
 const path = require('path');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
-// Load environment variables more explicitly
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
-// Load API Keys from .env
-const PEXELS_API_KEY = process.env.PEXELS_API_KEY; // Kept for now, but won't be used for images
+
+const PEXELS_API_KEY = process.env.PEXELS_API_KEY; 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const Maps_API_KEY = process.env.Maps_API_KEY; // <-- ADD THIS TO YOUR .env FILE
+const Maps_API_KEY = process.env.Maps_API_KEY; 
 
 // Enhanced Debug: Check if API keys are loaded
 console.log("=== API KEYS DEBUG ===");
 console.log("Pexels API Key loaded:", PEXELS_API_KEY ? "✅ Yes" : "❌ No (Not used for images anymore)");
 console.log("Groq API Key loaded:", GROQ_API_KEY ? "✅ Yes" : "❌ No");
-console.log("Google Maps API Key loaded:", Maps_API_KEY ? "✅ Yes" : "❌ No"); // This line is crucial
+console.log("Google Maps API Key loaded:", Maps_API_KEY ? "✅ Yes" : "❌ No"); 
 console.log("========================");
 
 
-// NEW FUNCTION to get images from Google Places API
 async function getImagesFromGooglePlaces(locationName, destinationContext) {
   if (!Maps_API_KEY) {
     console.warn("Google Maps API key is not configured - skipping Google image fetch.");
     return [];
   }
 
-  // Try with destination context first for more accuracy
+  
   let searchQuery = `${locationName}, ${destinationContext}`;
-  if (!destinationContext || destinationContext.trim() === '') { // If no context, just use location name
+  if (!destinationContext || destinationContext.trim() === '') { 
       searchQuery = locationName;
   }
 
@@ -40,10 +38,10 @@ async function getImagesFromGooglePlaces(locationName, destinationContext) {
     if (!placeResponse.ok) {
       const errorText = await placeResponse.text();
       console.error(`Google Find Place API error for "${searchQuery}":`, placeResponse.status, errorText);
-      // If search with context fails, and context was provided, try without context before giving up
+     
       if (destinationContext && destinationContext.trim() !== '') {
         console.log(`Retrying search for "${locationName}" without destination context.`);
-        return getImagesFromGooglePlaces(locationName, ''); // Recursive call with empty context
+        return getImagesFromGooglePlaces(locationName, ''); 
       }
       return [];
     }
@@ -52,8 +50,8 @@ async function getImagesFromGooglePlaces(locationName, destinationContext) {
 
     if (placeData.status !== "OK" || !placeData.candidates || placeData.candidates.length === 0) {
       console.warn(`No place found or error for "${searchQuery}":`, placeData.status, placeData.error_message || '');
-      // If search with context fails, and context was provided, try without context
-      if (destinationContext && destinationContext.trim() !== '' && placeData.status !== "ZERO_RESULTS") { // Avoid retry if it's genuinely zero results
+      
+      if (destinationContext && destinationContext.trim() !== '' && placeData.status !== "ZERO_RESULTS") { 
         console.log(`Retrying search for "${locationName}" without destination context due to status: ${placeData.status}`);
         return getImagesFromGooglePlaces(locationName, '');
       }
@@ -63,7 +61,7 @@ async function getImagesFromGooglePlaces(locationName, destinationContext) {
     const candidate = placeData.candidates[0];
     if (!candidate.photos || candidate.photos.length === 0) {
       console.log(`No Google photos found for "${searchQuery}" (Place ID: ${candidate.place_id})`);
-       // If search with context yields no photos, and context was provided, try without context
+      
       if (destinationContext && destinationContext.trim() !== '') {
         console.log(`Retrying search for "${locationName}" (no photos) without destination context.`);
         return getImagesFromGooglePlaces(locationName, '');
@@ -71,11 +69,11 @@ async function getImagesFromGooglePlaces(locationName, destinationContext) {
       return [];
     }
 
-    // Get up to 4 photo references
+    
     const photoReferences = candidate.photos.slice(0, 4);
     const imageUrls = photoReferences.map(photo => {
-      // You can adjust maxwidth/maxheight as needed.
-      // The cost is per photo request, not based on resolution.
+      // adjustment of maxwidth/maxheight (important) .
+      
       return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photo.photo_reference}&key=${Maps_API_KEY}`;
     });
 
@@ -84,7 +82,7 @@ async function getImagesFromGooglePlaces(locationName, destinationContext) {
 
   } catch (error) {
     console.error(`Error fetching Google Places images for ${searchQuery}:`, error.message);
-    // Fallback attempt if a generic error occurred and context was used
+    // Fallback attempt 
     if (destinationContext && destinationContext.trim() !== '') {
         console.log(`Error occurred, retrying search for "${locationName}" without destination context.`);
         return getImagesFromGooglePlaces(locationName, '');
@@ -223,7 +221,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Days must be a positive number between 1 and 30.", success: false });
     }
 
-    console.log(`🎯 Generating ${numDays}-day itinerary for ${destination}...`);
+    console.log(` Generating ${numDays}-day itinerary for ${destination}...`);
     const rawText = await getItineraryFromAI(destination, numDays);
     const itinerary = parseItinerary(rawText);
     
