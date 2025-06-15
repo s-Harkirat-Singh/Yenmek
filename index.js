@@ -99,10 +99,36 @@ app.use("/api/itinerary", itineraryRoute);
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "modern-sesign.html"));
 });
+
+
 app.get("/config/maps-api-key", (req, res) => {
   res.json({ key: process.env.MAPS_FRONTEND_KEY || "" });
 });
 
+const axios = require('axios');
+
+app.get("/api/photo", async (req, res) => {
+  const ref = req.query.ref;
+  if (!ref) return res.status(400).send("Missing photo reference");
+
+  const apiKey = process.env.MAPS_BACKEND_KEY;
+
+  const url = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photo_reference=${ref}&key=${apiKey}`;
+
+  try {
+    const response = await axios({
+      method: 'GET',
+      url,
+      responseType: 'stream',
+    });
+
+    res.setHeader('Content-Type', response.headers['content-type']);
+    response.data.pipe(res);
+  } catch (err) {
+    console.error("❌ Error fetching photo:", err.message);
+    res.status(500).send("Failed to fetch photo");
+  }
+});
 
 
 // Handle 404 for any other routes

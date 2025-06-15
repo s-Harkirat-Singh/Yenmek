@@ -1173,43 +1173,90 @@ async function displayResults(data) {
             <div class="day-header">${day}</div>`;
         
         const dayLocations = dayGroups[day];
-        for (let locationIndex = 0; locationIndex < dayLocations.length; locationIndex++) {
-            const location = dayLocations[locationIndex];
-            const mapId = `map-${dayIndex}-${locationIndex}`;
+        // for (let locationIndex = 0; locationIndex < dayLocations.length; locationIndex++) {
+        //     const location = dayLocations[locationIndex];
+        //     const mapId = `map-${dayIndex}-${locationIndex}`;
             
-            // Store location data for overview map
-            allLocationsData.push({
-                ...location,
-                dayIndex: dayIndex,
-                color: dayColor,
-                day: day
-            });
+        //     // Store location data for overview map
+        //     allLocationsData.push({
+        //         ...location,
+        //         dayIndex: dayIndex,
+        //         color: dayColor,
+        //         day: day
+        //     });
             
-            html += `
-                <div class="location-card">
-                    <div class="location-name">📍 ${location.location}</div>
-                    <div class="location-description">${location.description}</div>
+        //     html += `
+        //         <div class="location-card">
+        //             <div class="location-name">📍 ${location.location}</div>
+        //             <div class="location-description">${location.description}</div>
                     
-                    <!-- Restaurant section will be populated after geocoding -->
-                    <div id="restaurants-${dayIndex}-${locationIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
+        //             <!-- Restaurant section will be populated after geocoding -->
+        //             <div id="restaurants-${dayIndex}-${locationIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
                     
-                    <div class="images-container">
-            `;
+        //             <div class="images-container">
+        //     `;
             
-            if (location.images && location.images.length > 0) {
-                location.images.forEach(imageUrl => {
-                    html += `<img src="${imageUrl}" alt="${location.location}" class="location-image" loading="lazy">`;
-                });
-            } else {
-                html += `<div class="no-images">No images available</div>`;
-            }
+        //     if (location.images && location.images.length > 0) {
+        //         location.images.forEach(imageUrl => {
+        //             html += `<img src="${imageUrl}" alt="${location.location}" class="location-image" loading="lazy">`;
+        //         });
+        //     } else {
+        //         html += `<div class="no-images">No images available</div>`;
+        //     }
             
-            html += `</div>
-                    <div id="${mapId}" class="location-map"></div>
-                </div>`;
-        }
+        //     html += `</div>
+        //             <div id="${mapId}" class="location-map"></div>
+        //         </div>`;
+        // }
         
-        html += `</div>`;
+        // html += `</div>`;
+
+for (let locationIndex = 0; locationIndex < dayLocations.length; locationIndex++) {
+    const location = dayLocations[locationIndex];
+    const mapId = `map-${dayIndex}-${locationIndex}`;
+
+    // Store location data for overview map
+    allLocationsData.push({
+        ...location,
+        dayIndex: dayIndex,
+        color: dayColor,
+        day: day
+    });
+
+    html += `
+        <div class="location-card">
+            <div class="location-name">📍 ${location.location}</div>
+            <div class="location-description">${location.description}</div>
+
+            <!-- Restaurant section will be populated after geocoding -->
+            <div id="restaurants-${dayIndex}-${locationIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
+
+            <div class="images-container">
+    `;
+
+    if (location.images && location.images.length > 0) {
+        location.images.forEach(imageUrl => {
+            const refMatch = imageUrl.match(/photoreference=([^&]+)/);
+            const photoRef = refMatch ? refMatch[1] : null;
+
+            if (photoRef) {
+                html += `<img src="/api/photo?ref=${photoRef}" alt="${location.location}" class="location-image" loading="lazy">`;
+            } else {
+                html += `<div class="no-images">Invalid photo reference</div>`;
+            }
+        });
+    } else {
+        html += `<div class="no-images">No images available</div>`;
+    }
+
+    html += `</div>
+            <div id="${mapId}" class="location-map"></div>
+        </div>`;
+}
+
+html += `</div>`;
+
+
     }
 
     // Add overview map section
