@@ -1,0 +1,2259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/font.css">
+    
+    <title id="Main-title">AI Travel Itinerary Generator</title>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+ 
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+
+/* Main body font */
+body {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+    /* ... keep your existing styles ... */
+}
+
+/* Main title */
+.header h1 {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    /* ... keep your existing gradient and animation styles ... */
+}
+#Main-title{
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+}
+/* Subtitle */
+.header p {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+    /* ... keep your existing styles ... */
+}
+#selection-days{
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+
+
+/* Form labels - Use Orbitron for tech feel */
+.form-group label {
+    font-family: 'Orbitron', monospace;
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.8px;
+    /* ... keep your existing styles ... */
+}
+
+/* Form inputs and select - Use Rajdhani for readability */
+.form-group input, .form-group select {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    /* ... keep your existing styles ... */
+}
+
+/* Placeholder text */
+.form-group input::placeholder {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+    /* ... keep your existing styles ... */
+}
+
+/* Generate button - Use Orbitron for impact */
+.generate-btn {
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 1.5px;
+    /* ... keep your existing gradient and hover styles ... */
+}
+
+/* Download button - Also use Orbitron */
+.download-btn {
+    font-family: 'Orbitron', monospace;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 1.2px;
+    /* ... keep your existing styles ... */
+}
+
+/* Loading messages - Use Rajdhani */
+.loading p {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+}
+
+.loading p:last-child {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+}
+
+/* Results section fonts */
+.results-header h2 {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.results-meta {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+}
+
+/* Day headers */
+.day-header {
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+}
+
+/* Location names */
+.location-name {
+    font-family: 'Orbitron', monospace;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Location descriptions */
+.location-description {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* Error messages */
+.error {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 500;
+}
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; */
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            border-radius: 2px;
+        }
+
+        .header h1 {
+              background: linear-gradient(135deg, #00d4ff, #7c3aed, #ffffff);
+    background-size: 200% auto;
+    animation: pulseGradient 5s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+        }
+@keyframes pulseGradient {
+    0% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+    100% { background-position: 0% center; }
+}
+        .header p {
+            color: #888888;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .form-container {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+             backdrop-filter: blur(10px);
+            background-color: rgba(10, 10, 10, 0.65); /* translucent */
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            opacity: 0.6;
+        }
+
+
+      /* Map Styles */
+        .location-map {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            margin-top: 15px;
+        }
+
+        .overview-map-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px solid #667eea;
+
+
+
+        }
+
+        .overview-map-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .overview-map-header h3 {
+            /* color: #333;
+            font-size: 1.8rem;*/
+            margin-bottom: 10px; 
+            background: linear-gradient(135deg, #00d4ff, #7c3aed, #ffffff);
+    background-size: 200% auto;
+    animation: pulseGradient 5s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+        }
+
+        .overview-map {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .map-legend {
+            
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+
+
+        /* Digital Rain Background */
+        .digital-rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .rain-column {
+            position: absolute;
+            top: -100%;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1;
+            opacity: 0.15;
+            animation: fall linear infinite;
+            color: #00d4ff;
+        }
+
+        .rain-column:nth-child(even) {
+            color: #7c3aed;
+            opacity: 0.1;
+        }
+
+        .rain-column:nth-child(3n) {
+            color: #ffffff;
+            opacity: 0.08;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.15;
+            }
+            90% {
+                opacity: 0.15;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* Ensure form content is above rain */
+        .form-container form {
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 16px 20px;
+            background: #111111;
+            border: 1px solid #333333;
+            border-radius: 12px;
+            font-size: 16px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+            background: #0a0a0a;
+            
+        }
+
+        .form-group input::placeholder {
+            color: #666666;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 24px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            color: white;
+            padding: 18px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+
+        .generate-btn:disabled {
+            background: #333333;
+            color: #666666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            background: #111111;
+            border-radius: 16px;
+            border: 1px solid #2a2a2a;
+            margin-bottom: 20px;
+        }
+
+        .loading p {
+            color: #00d4ff;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .loading p:last-child {
+            color: #888888;
+            font-size: 14px;
+        }
+
+        .loading::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 40px;
+            margin: 20px auto 0;
+            border: 3px solid #333333;
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: linear-gradient(145deg, #2a1a1a, #1a0f0f);
+            color: #ff6b6b;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 1px solid #4a2a2a;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .results {
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #2a2a2a;
+            position: relative;
+        }
+
+        .results-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+        }
+
+        .results-header h2 {
+            color: #ffffff;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .results-meta {
+            color: #888888;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .day-section {
+            margin-bottom: 50px;
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            color: #ffffff;
+            padding: 20px 28px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border: 1px solid #3a3a3a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #00d4ff, #7c3aed);
+        }
+
+        .location-card {
+            background: linear-gradient(145deg, #161616, #0d0d0d);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .location-card:hover {
+            border-color: #3a3a3a;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .location-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .location-description {
+            color: #cccccc;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .images-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .location-image {
+            /* width: 100%; */
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid #2a2a2a;
+            transition: all 0.3s ease;
+            filter: brightness(0.9);
+        }
+
+        .location-image:hover {
+            transform: scale(1.02);
+            filter: brightness(1);
+            border-color: #00d4ff;
+        }
+
+        .no-images {
+            color: #666666;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .download-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #2a2a2a;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            color: #ffffff;
+            padding: 16px 32px;
+            border: 1px solid #3a3a3a;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-btn:disabled {
+            background: #1a1a1a;
+            color: #666666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+.api-key-notice {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        .download-section p {
+            color: #888888;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3a3a3a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a4a4a;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-container {
+                padding: 28px 20px;
+            }
+            
+            .results {
+                padding: 28px 20px;
+            }
+            
+            .images-container {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+            
+            .location-image {
+                height: 100px;
+            }
+        }
+
+        /* Subtle animations */
+        .form-container, .results, .location-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Select styling for better consistency */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        select:focus {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2300d4ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        }
+
+body {
+    animation: fadeInBody 1s ease-in;
+}
+
+@keyframes fadeInBody {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+  .location-map {
+            width: 100%;
+            height: 200px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            margin-top: 15px;
+        }
+
+        .overview-map-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px solid #667eea;
+        }
+
+        .overview-map-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .overview-map-header h3 {
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .overview-map {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            border: 2px solid #ddd;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .map-legend {
+            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 20px;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+#lightbox {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#lightbox.show {
+  display: flex;
+  opacity: 1;
+}
+
+
+
+
+/* Digital Rain Fullscreen Background */
+.digital-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+    background: transparent;
+}
+
+.rain-column {
+    position: absolute;
+    top: -100%;
+    white-space: pre;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.1;
+    opacity: 0.12; /* increased visibility */
+    animation: fall linear infinite;
+    color: #00bfff; /* strong blue */
+}
+
+.rain-column:nth-child(even) {
+    color: #00aaff;
+    opacity: 0.10;
+}
+
+.rain-column:nth-child(3n) {
+    color: #0088ff;
+    opacity: 0.08;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.12;
+    }
+    90% {
+        opacity: 0.12;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+
+.restaurants-section {
+    border-top: 1px solid #333;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.restaurants-header h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.restaurant-item {
+    transition: all 0.3s ease;
+}
+
+.restaurant-item:hover {
+    border-color: #FF4444 !important;
+    box-shadow: 0 2px 8px rgba(255, 68, 68, 0.2);
+}
+
+.restaurants-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+
+/* Make sure all content stays above the rain */
+.container {
+    position: relative;
+    z-index: 2;
+}
+/* Grid Background */
+.grid-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+    </style>
+</head>
+<body>
+    <div class="grid-overlay"></div>
+    <div class="digital-rain" id="digitalRain"></div>
+    <div class="container">
+        <div class="header">
+            <h1>AI Travel Itinerary Generator</h1>
+            <p>Intelligent travel planning powered by Yenmek</p>
+        </div>
+
+        <div class="form-container">
+            <div class="digital-rain" id="digitalRain"></div>
+            <form id="itineraryForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="destination">Destination</label>
+                        <input type="text" id="destination" name="destination" 
+                               placeholder="Enter your destination" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="days">Duration</label>
+                        <select id="days" name="days" required>
+                            <option value="">Select duration</option>
+                            <option value="1">1 Day</option>
+                            <option value="2">2 Days</option>
+                            <option value="3">3 Days</option>
+                            <option value="4">4 Days</option>
+                            <option value="5">5 Days</option>
+                            <option value="7">1 Week</option>
+                            <option value="10">10 Days</option>
+                            <option value="14">2 Weeks</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="generate-btn" id="generateBtn">
+                    Generate Itinerary
+                </button>
+            </form>
+        </div>
+  
+        <div id="loading" class="loading" style="display: none;">
+            <p>Processing your request</p>
+            <p>AI is analyzing optimal routes and destinations</p>
+        </div>
+
+        <div id="error" class="error" style="display: none;"></div>
+
+        <div id="results" class="results" style="display: none;"></div>
+    </div>
+<div id="lightbox" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000;">
+  <span id="lightbox-close" style="position:absolute; top:20px; right:30px; font-size:40px; color:white; cursor:pointer;">&times;</span>
+  <img id="lightbox-img" src="" alt="Zoomed" style="max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.4);">
+</div>
+  
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <script>
+        // const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
+        const API_BASE_URL = window.location.origin;
+        let googleMapsLoaded = false;
+        let mapsToInitialize = [];
+        let allLocationsData = [];
+
+        // Google Maps initialization callback
+        window.initGoogleMaps = function() {
+            googleMapsLoaded = true;
+            console.log('✅ Google Maps API loaded');
+            
+            // Initialize any pending maps
+            mapsToInitialize.forEach(mapConfig => {
+    if (mapConfig.restaurantContainerId) {
+        initializeMapWithRestaurants(
+            mapConfig.elementId, 
+            mapConfig.locations, 
+            mapConfig.isOverview,
+            mapConfig.dayIndex,
+            mapConfig.locationIndex,
+            mapConfig.restaurantContainerId
+        );
+    } else {
+        initializeMap(mapConfig.elementId, mapConfig.locations, mapConfig.isOverview);
+    }
+});
+            mapsToInitialize = [];
+        };
+
+        // Map color scheme for different days
+        const dayColors = [
+            '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+            '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
+        ];
+
+        document.getElementById('itineraryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const destination = document.getElementById('destination').value.trim();
+            const days = parseInt(document.getElementById('days').value);
+            
+            if (!destination || !days) {
+                showError('Please fill in all fields');
+                return;
+            }
+
+            // Show loading state
+            showLoading(true);
+            hideError();
+            hideResults();
+
+            try {
+                console.log('Sending request to:', `${API_BASE_URL}/api/itinerary`);
+                console.log('Request data:', { destination, days });
+
+                const response = await fetch(`${API_BASE_URL}/api/itinerary`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        destination: destination,
+                        days: days
+                    })
+                });
+
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (data.success) {
+                    displayResults(data);
+                } else {
+                    throw new Error(data.error || 'Failed to generate itinerary');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError(`Error: ${error.message}`);
+            } finally {
+                showLoading(false);
+            }
+        });
+
+        function showLoading(show) {
+            const loading = document.getElementById('loading');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            if (show) {
+                loading.style.display = 'block';
+                generateBtn.disabled = true;
+                generateBtn.textContent = 'Generating...';
+            } else {
+                loading.style.display = 'none';
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Itinerary with Maps';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+
+        function hideResults() {
+            document.getElementById('results').style.display = 'none';
+        }
+
+       // 1. UPDATE: Add this function to find nearby restaurants using Google Places API
+async function findNearbyRestaurants(location, coordinates) {
+    return new Promise((resolve) => {
+        if (!window.google || !window.google.maps || !coordinates) {
+            resolve([]);
+            return;
+        }
+
+        const service = new google.maps.places.PlacesService(document.createElement('div'));
+        
+        const request = {
+            location: coordinates,
+            radius: 2000, // 2km radius
+            type: 'restaurant',
+            keyword: 'restaurant dining food',
+            fields: ['name', 'rating', 'user_ratings_total', 'price_level', 'place_id', 'geometry']
+        };
+
+        service.nearbySearch(request, (results, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                // Filter and sort restaurants by rating
+                const topRestaurants = results
+                    .filter(place => place.rating >= 4.0 && place.user_ratings_total >= 50)
+                    .sort((a, b) => (b.rating * Math.log10(b.user_ratings_total)) - (a.rating * Math.log10(a.user_ratings_total)))
+                    .slice(0, 4)
+                    .map(place => ({
+                        name: place.name,
+                        rating: place.rating,
+                        totalRatings: place.user_ratings_total,
+                        priceLevel: place.price_level,
+                        placeId: place.place_id,
+                        coordinates: {
+                            lat: place.geometry.location.lat(),
+                            lng: place.geometry.location.lng()
+                        }
+                    }));
+                
+                resolve(topRestaurants);
+            } else {
+                console.warn(`Places search failed for ${location}:`, status);
+                resolve([]);
+            }
+        });
+    });
+}
+
+// 2. UPDATE: Modify the displayResults function to include restaurants
+async function displayResults(data) {
+    const resultsDiv = document.getElementById('results');
+    
+    // Store data globally for PDF generation
+    window.currentItineraryData = data;
+    allLocationsData = [];
+    
+    // Group itinerary by days
+    const dayGroups = {};
+    data.itinerary.forEach(item => {
+        if (!dayGroups[item.day]) {
+            dayGroups[item.day] = [];
+        }
+        dayGroups[item.day].push(item);
+    });
+
+    let html = `
+        <div class="results-header">
+            <h2> Your ${data.destination} Itinerary</h2>
+            <div class="results-meta">
+                ${data.days} day${data.days > 1 ? 's' : ''} • ${data.totalLocations} locations • Generated ${new Date(data.generatedAt).toLocaleDateString()}
+            </div>
+        </div>
+    `;
+
+    // Generate HTML for each day
+    const sortedDays = Object.keys(dayGroups).sort();
+    for (let dayIndex = 0; dayIndex < sortedDays.length; dayIndex++) {
+        const day = sortedDays[dayIndex];
+        const dayColor = dayColors[dayIndex % dayColors.length];
+        
+        html += `<div class="day-section">
+            <div class="day-header">${day}</div>`;
+        
+        const dayLocations = dayGroups[day];
+        for (let locationIndex = 0; locationIndex < dayLocations.length; locationIndex++) {
+            const location = dayLocations[locationIndex];
+            const mapId = `map-${dayIndex}-${locationIndex}`;
+            
+            // Store location data for overview map
+            allLocationsData.push({
+                ...location,
+                dayIndex: dayIndex,
+                color: dayColor,
+                day: day
+            });
+            
+            html += `
+                <div class="location-card">
+                    <div class="location-name">📍 ${location.location}</div>
+                    <div class="location-description">${location.description}</div>
+                    
+                    <!-- Restaurant section will be populated after geocoding -->
+                    <div id="restaurants-${dayIndex}-${locationIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
+                    
+                    <div class="images-container">
+            `;
+            
+            if (location.images && location.images.length > 0) {
+                location.images.forEach(imageUrl => {
+                    html += `<img src="${imageUrl}" alt="${location.location}" class="location-image" loading="lazy">`;
+                });
+            } else {
+                html += `<div class="no-images">No images available</div>`;
+            }
+            
+            html += `</div>
+                    <div id="${mapId}" class="location-map"></div>
+                </div>`;
+        }
+        
+        html += `</div>`;
+    }
+
+    // Add overview map section
+    html += `
+        <div class="overview-map-section">
+            <div class="overview-map-header">
+                <h3>🗺️ Complete Itinerary Map</h3>
+                <p>All your destinations and restaurants marked by day</p>
+            </div>
+            <div id="overviewMap" class="overview-map"></div>
+            <div class="map-legend">
+                <strong>Legend:</strong>
+    `;
+    
+    // Add legend for each day
+    for (let i = 0; i < sortedDays.length; i++) {
+        const dayColor = dayColors[i % dayColors.length];
+        html += `
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: ${dayColor}"></div>
+                <span>${sortedDays[i]}</span>
+            </div>
+        `;
+    }
+    
+    html += `
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #FF4444"></div>
+                <span>🍽️ Restaurants</span>
+            </div>
+        </div></div>`;
+
+    // Add download section
+    html += `
+        <div class="download-section">
+            <button id="downloadPdfBtn" class="download-btn">
+                📄 Download PDF Itinerary
+            </button>
+            <p style="color: #666; margin-top: 10px; font-size: 14px;">
+                Get your complete travel plan as a PDF with images and restaurant recommendations
+            </p>
+        </div>
+    `;
+
+    resultsDiv.innerHTML = html;
+    resultsDiv.style.display = 'block';
+    
+    // Initialize maps with restaurants
+    console.log('Initializing maps with data:', { dayGroups, allLocationsCount: allLocationsData.length });
+    
+    await initializeMapsForResultsWithRestaurants(dayGroups);
+    
+    // Add event listener for download button
+    document.getElementById('downloadPdfBtn').addEventListener('click', generatePDF);
+    
+    // Scroll to results
+    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+// 3. UPDATE: New function to initialize maps with restaurants
+
+// 3. FIXED: Modified function to initialize maps with restaurants
+async function initializeMapsForResultsWithRestaurants(dayGroups) {
+    const sortedDays = Object.keys(dayGroups).sort();
+    
+    // First, initialize individual location maps with restaurants
+    for (let dayIndex = 0; dayIndex < sortedDays.length; dayIndex++) {
+        const day = sortedDays[dayIndex];
+        const dayLocations = dayGroups[day];
+        
+        for (let locationIndex = 0; locationIndex < dayLocations.length; locationIndex++) {
+            const location = dayLocations[locationIndex];
+            const mapId = `map-${dayIndex}-${locationIndex}`;
+            const restaurantContainerId = `restaurants-${dayIndex}-${locationIndex}`;
+            
+            if (googleMapsLoaded) {
+                await initializeMapWithRestaurants(mapId, [location], false, dayIndex, locationIndex, restaurantContainerId);
+            } else {
+                mapsToInitialize.push({
+                    elementId: mapId,
+                    locations: [location],
+                    isOverview: false,
+                    dayIndex: dayIndex,
+                    locationIndex: locationIndex,
+                    restaurantContainerId: restaurantContainerId
+                });
+            }
+        }
+    }
+    
+    // FIXED: Wait a moment to ensure all location processing is complete
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // FIXED: Re-populate allLocationsData to ensure it has all locations with their processed data
+    allLocationsData = [];
+    for (let dayIndex = 0; dayIndex < sortedDays.length; dayIndex++) {
+        const day = sortedDays[dayIndex];
+        const dayColor = dayColors[dayIndex % dayColors.length];
+        const dayLocations = dayGroups[day];
+        
+        dayLocations.forEach(location => {
+            allLocationsData.push({
+                ...location,
+                dayIndex: dayIndex,
+                color: dayColor,
+                day: day
+            });
+        });
+    }
+    
+    console.log('Overview map data:', allLocationsData); // Debug log
+    
+    // Initialize overview map with complete data
+    if (googleMapsLoaded && allLocationsData.length > 0) {
+        await initializeOverviewMap('overviewMap', allLocationsData);
+    } else {
+        mapsToInitialize.push({
+            elementId: 'overviewMap',
+            locations: allLocationsData,
+            isOverview: true
+        });
+    }
+}
+
+
+// NEW: Separate function specifically for overview map to handle all locations and restaurants
+async function initializeOverviewMap(elementId, locations) {
+    const mapElement = document.getElementById(elementId);
+    if (!mapElement || !window.google || !locations.length) {
+        console.warn(`Cannot initialize overview map: ${elementId}`, { 
+            mapElement: !!mapElement, 
+            google: !!window.google, 
+            locationsCount: locations.length 
+        });
+        return;
+    }
+
+    try {
+        const mapOptions = {
+            zoom: 12,
+            center: { lat: 0, lng: 0 },
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: [{
+                featureType: 'poi',
+                elementType: 'labels',
+                stylers: [{ visibility: 'on' }]
+            }]
+        };
+
+        const map = new google.maps.Map(mapElement, mapOptions);
+        const bounds = new google.maps.LatLngBounds();
+        const markers = [];
+        const routeCoordinates = [];
+
+        // Process each location
+        for (let i = 0; i < locations.length; i++) {
+            const location = locations[i];
+
+            try {
+                const coordinates = await geocodeLocation(location.location);
+             
+                if (coordinates) {
+                    const markerColor = location.color || dayColors[0];
+
+                    // Main location marker
+                    const marker = new google.maps.Marker({
+                        position: coordinates,
+                        map: map,
+                        title: location.location,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 12,
+                            fillColor: markerColor,
+                            fillOpacity: 1,
+                            strokeColor: '#ffffff',
+                            strokeWeight: 3
+                        }
+                    });
+
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="max-width: 300px;">
+                                <h3 style="margin: 0 0 10px 0; color: #333;">${location.location}</h3>
+                                <p style="margin: 0 0 8px 0; font-weight: bold; color: ${markerColor};">${location.day}</p>
+                                <p style="margin: 0; font-size: 14px; color: #666; line-height: 1.4;">${location.description.substring(0, 150)}${location.description.length > 150 ? '...' : ''}</p>
+                            </div>
+                        `
+                    });
+
+                    marker.addListener('click', () => {
+                        markers.forEach(m => {
+                            if (m.infoWindow) m.infoWindow.close();
+                        });
+                        infoWindow.open(map, marker);
+                    });
+
+                    marker.infoWindow = infoWindow;
+                    markers.push(marker);
+                    bounds.extend(coordinates);
+                    routeCoordinates.push(coordinates);
+
+                    // Try to find restaurants for overview map
+                    try {
+                        const restaurants = await findNearbyRestaurants(location.location, coordinates);
+                        if (restaurants.length > 0) {
+                            // Take only top 2 restaurants for overview to avoid clutter
+                            restaurants.slice(0, 2).forEach(restaurant => {
+                                const restaurantMarker = new google.maps.Marker({
+                                    position: restaurant.coordinates,
+                                    map: map,
+                                    title: restaurant.name,
+                                    icon: {
+                                        path: google.maps.SymbolPath.CIRCLE,
+                                        scale: 6,
+                                        fillColor: '#FF4444',
+                                        fillOpacity: 0.8,
+                                        strokeColor: '#ffffff',
+                                        strokeWeight: 2
+                                    }
+                                });
+
+                                const restaurantInfoWindow = new google.maps.InfoWindow({
+                                    content: `
+                                        <div style="max-width: 250px;">
+                                            <h4 style="margin: 0 0 8px 0; color: #333;">🍽️ ${restaurant.name}</h4>
+                                            <p style="margin: 0 0 5px 0; color: #FF4444; font-weight: bold;">⭐ ${restaurant.rating} (${restaurant.totalRatings} reviews)</p>
+                                            <p style="margin: 5px 0 0 0; font-size: 12px; color: #888;">Near: ${location.location}</p>
+                                        </div>
+                                    `
+                                });
+
+                                restaurantMarker.addListener('click', () => {
+                                    markers.forEach(m => {
+                                        if (m.infoWindow) m.infoWindow.close();
+                                    });
+                                    restaurantInfoWindow.open(map, restaurantMarker);
+                                });
+
+                                restaurantMarker.infoWindow = restaurantInfoWindow;
+                                markers.push(restaurantMarker);
+                                bounds.extend(restaurant.coordinates);
+                            });
+                        }
+                    } catch (restaurantError) {
+                        console.warn('Could not fetch restaurants for overview map:', restaurantError);
+                    }
+                }
+            } catch (geocodeError) {
+                console.warn(`Could not geocode location for overview: ${location.location}`, geocodeError);
+            }
+        }
+
+        // Draw polyline route connecting all main locations
+        if (routeCoordinates.length > 1) {
+            const routePath = new google.maps.Polyline({
+                path: routeCoordinates,
+                geodesic: true,
+                strokeColor: "#2c3e50",
+                strokeOpacity: 0.8,
+                strokeWeight: 4
+            });
+            routePath.setMap(map);
+        }
+
+        // Fit map to bounds
+        if (markers.length > 0) {
+            map.fitBounds(bounds);
+            google.maps.event.addListenerOnce(map, 'idle', () => {
+                const currentZoom = map.getZoom();
+                if (currentZoom > 16) {
+                    map.setZoom(14);
+                } else if (currentZoom < 8) {
+                    map.setZoom(10);
+                }
+            });
+        }
+
+        console.log(`✅ Overview map initialized with ${markers.length} markers`);
+
+    } catch (mapError) {
+        console.error(`Error initializing overview map:`, mapError);
+        mapElement.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; color: #666;">
+                <div style="text-align: center;">
+                    <p>🗺️ Overview map unavailable</p>
+                    <p style="font-size: 12px; margin-top: 5px;">Check console for details</p>
+                </div>
+            </div>
+        `;
+    }
+}
+
+
+
+// 4. UPDATE: New function to initialize maps with restaurants
+async function initializeMapWithRestaurants(elementId, locations, isOverview = false, dayIndex = 0, locationIndex = 0, restaurantContainerId = null) {
+
+
+
+    
+    const mapElement = document.getElementById(elementId);
+    if (!mapElement || !window.google) {
+        console.warn(`Cannot initialize map: ${elementId}`);
+        return;
+    }
+
+    try {
+        const mapOptions = {
+            zoom: isOverview ? 12 : 15,
+            center: { lat: 0, lng: 0 },
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: [{
+                featureType: 'poi',
+                elementType: 'labels',
+                stylers: [{ visibility: 'on' }]
+            }]
+        };
+
+        const map = new google.maps.Map(mapElement, mapOptions);
+        const bounds = new google.maps.LatLngBounds();
+        const markers = [];
+        const routeCoordinates = [];
+
+        for (let i = 0; i < locations.length; i++) {
+            const location = locations[i];
+
+            try {
+                const coordinates = await geocodeLocation(location.location);
+
+                if (coordinates) {
+                    const markerColor = isOverview ? (location.color || dayColors[0]) : '#667eea';
+
+                    // Main location marker
+                    const marker = new google.maps.Marker({
+                        position: coordinates,
+                        map: map,
+                        title: location.location,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 10,
+                            fillColor: markerColor,
+                            fillOpacity: 1,
+                            strokeColor: '#ffffff',
+                            strokeWeight: 2
+                        }
+                    });
+
+                    const infoWindow = new google.maps.InfoWindow({
+                        content: `
+                            <div style="max-width: 300px;">
+                                <h3 style="margin: 0 0 10px 0; color: #333;">${location.location}</h3>
+                                ${isOverview ? `<p style="margin: 0 0 8px 0; font-weight: bold; color: ${markerColor};">${location.day}</p>` : ''}
+                                <p style="margin: 0; font-size: 14px; color: #000000; line-height: 1.4;">${location.description.substring(0, 150)}${location.description.length > 150 ? '...' : ''}</p>
+                            </div>
+                        `
+                    });
+
+                    marker.addListener('click', () => {
+                        markers.forEach(m => {
+                            if (m.infoWindow) m.infoWindow.close();
+                        });
+                        infoWindow.open(map, marker);
+                    });
+
+                    marker.infoWindow = infoWindow;
+                    markers.push(marker);
+                    bounds.extend(coordinates);
+
+                    if (isOverview) {
+                        routeCoordinates.push(coordinates);
+                    }
+
+                    // Find and add nearby restaurants (only for individual location maps)
+                    if (!isOverview && restaurantContainerId) {
+                        const restaurants = await findNearbyRestaurants(location.location, coordinates);
+                        
+                        if (restaurants.length > 0) {
+                            // Update restaurant container with restaurant info
+                            updateRestaurantContainer(restaurantContainerId, restaurants);
+                            
+                            // Add restaurant markers to map
+                            restaurants.forEach(restaurant => {
+                                const restaurantMarker = new google.maps.Marker({
+                                    position: restaurant.coordinates,
+                                    map: map,
+                                    title: restaurant.name,
+                                    icon: {
+                                        path: google.maps.SymbolPath.CIRCLE,
+                                        scale: 7,
+                                        fillColor: '#FF4444',
+                                        fillOpacity: 0.9,
+                                        strokeColor: '#ffffff',
+                                        strokeWeight: 2
+                                    }
+                                });
+
+                                const restaurantInfoWindow = new google.maps.InfoWindow({
+                                    content: `
+                                        <div style="max-width: 250px;">
+                                            <h4 style="margin: 0 0 8px 0; color: #333;">🍽️ ${restaurant.name}</h4>
+                                            <p style="margin: 0 0 5px 0; color: #FF4444; font-weight: bold;">⭐ ${restaurant.rating} (${restaurant.totalRatings} reviews)</p>
+                                            ${restaurant.priceLevel ? `<p style="margin: 0; color: #666;">Price Level: ${'$'.repeat(restaurant.priceLevel)}</p>` : ''}
+                                        </div>
+                                    `
+                                });
+
+                                restaurantMarker.addListener('click', () => {
+                                    markers.forEach(m => {
+                                        if (m.infoWindow) m.infoWindow.close();
+                                    });
+                                    restaurantInfoWindow.open(map, restaurantMarker);
+                                });
+
+                                restaurantMarker.infoWindow = restaurantInfoWindow;
+                                markers.push(restaurantMarker);
+                                bounds.extend(restaurant.coordinates);
+                            });
+
+                            // Store restaurants data for PDF generation
+                            location.restaurants = restaurants;
+                        }
+                    }
+                }
+            } catch (geocodeError) {
+                console.warn(`Could not geocode location: ${location.location}`, geocodeError);
+            }
+        }
+
+        // Draw polyline route for overview map
+        if (isOverview && routeCoordinates.length > 1) {
+            const routePath = new google.maps.Polyline({
+                path: routeCoordinates,
+                geodesic: true,
+                strokeColor: "#050505",
+                strokeOpacity: 0.8,
+                strokeWeight: 4
+            });
+            routePath.setMap(map);
+        }
+
+        // Fit map to bounds
+        if (markers.length > 0) {
+            if (markers.length === 1) {
+                map.setCenter(markers[0].getPosition());
+                map.setZoom(isOverview ? 14 : 16);
+            } else {
+                map.fitBounds(bounds);
+                google.maps.event.addListenerOnce(map, 'idle', () => {
+                    if (map.getZoom() > (isOverview ? 16 : 18)) {
+                        map.setZoom(isOverview ? 14 : 16);
+                    }
+                });
+            }
+        }
+
+    } catch (mapError) {
+        console.error(`Error initializing map ${elementId}:`, mapError);
+        mapElement.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f8f9fa; color: #666;">
+                <div style="text-align: center;">
+                    <p>🗺️ Map unavailable</p>
+                    <p style="font-size: 12px; margin-top: 5px;">Check your Google Maps API key</p>
+                </div>
+            </div>
+        `;
+    }
+
+
+}
+
+// 5. NEW FUNCTION: Update restaurant container with restaurant information
+function updateRestaurantContainer(containerId, restaurants) {
+    const container = document.getElementById(containerId);
+    if (!container || restaurants.length === 0) return;
+
+    let restaurantHtml = `
+        <div class="restaurants-header">
+            <h4 style="color: #FF4444; margin: 0 0 10px 0; font-size: 1.1rem;">🍽️ Famous Restaurants Nearby</h4>
+        </div>
+        <div class="restaurants-list">
+    `;
+
+    restaurants.forEach(restaurant => {
+        const priceDisplay = restaurant.priceLevel ? ''.repeat(restaurant.priceLevel) : 'Price not available';
+        restaurantHtml += `
+            <div class="restaurant-item" style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <h5 style="margin: 0 0 5px 0; color: #ffffff; font-size: 0.95rem;">${restaurant.name}</h5>
+                        <p style="margin: 0; color: #FF4444; font-size: 0.85rem; font-weight: bold;">⭐ ${restaurant.rating} (${restaurant.totalRatings} reviews)</p>
+                    </div>
+                    <div style="color: #888; font-size: 0.8rem;">${priceDisplay}</div>
+                </div>
+            </div>
+        `;
+    });
+
+    restaurantHtml += `</div>`;
+    container.innerHTML = restaurantHtml;
+}
+
+        // Geocoding function to convert location names to coordinates
+
+async function geocodeLocation(locationName) {
+    try {
+        const encodedPlace = encodeURIComponent(locationName);
+        const response = await fetch(`${API_BASE_URL}/api/itinerary/geocode?place=${encodedPlace}`);
+        const data = await response.json();
+
+        if (data && data.results && data.results.length > 0) {
+            const loc = data.results[0].geometry.location;
+            return { lat: loc.lat, lng: loc.lng };
+        } else {
+            console.warn(`No geocoding results for ${locationName}`, data);
+            return null;
+        }
+    } catch (err) {
+        console.error(`Error during geocoding ${locationName}:`, err.message);
+        return null;
+    }
+}
+
+        // Test backend connection on page load
+        window.addEventListener('load', async function() {
+            try {
+                console.log('Testing backend connection...');
+                const response = await fetch(`${API_BASE_URL}/api/itinerary/health`);
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('✅ Backend connected successfully:', data);
+                } else {
+                    console.warn('⚠️ Backend health check failed:', response.status);
+                }
+            } catch (error) {
+                console.error('❌ Backend connection failed:', error.message);
+                // console.log('Make sure your backend is running on http://localhost:5000');
+            }
+        });
+
+        // PDF Generation Function (Updated to include map information)
+// PDF Generation Function (Fixed for proper character encoding)
+async function generatePDF() {
+    // Check if overview map exists and show adjustment reminder
+    const overviewMap = document.getElementById('overviewMap');
+    if (overviewMap) {
+        // Show user-friendly reminder
+        const userConfirmed = confirm(
+            "📍 MAP ADJUSTMENT REMINDER\n\n" +
+            "Before generating your PDF:\n" +
+            "• Please scroll down to the Overview Map\n" +
+            "• Zoom out if needed to ensure ALL locations are visible\n" +
+            "• Make sure the map shows your complete itinerary\n\n" +
+            "Click 'OK' when the map is properly adjusted, or 'Cancel' to abort."
+        );
+        
+        if (!userConfirmed) {
+            return; // User cancelled, don't generate PDF
+        }
+        
+        // Scroll to overview map to help user see it
+        overviewMap.scrollIntoView({ 
+            behavior: "smooth", 
+            block: "center" 
+        });
+        
+        // Wait a moment for smooth scrolling to complete
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Show a brief "Preparing..." message
+        const downloadBtn = document.getElementById('downloadPdfBtn');
+        const originalText = downloadBtn.innerHTML;
+        downloadBtn.disabled = true;
+        downloadBtn.innerHTML = '📋 Preparing PDF generation...';
+        
+        // Wait another moment for user to see the map
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        downloadBtn.innerHTML = '⏳ Generating PDF...';
+    }
+
+    // Make all content visible
+    document.querySelectorAll('.day-content').forEach(div => {
+        div.style.display = 'block';
+        div.style.opacity = '1';
+        div.style.visibility = 'visible';
+    });
+
+    // Allow maps to load
+    window.scrollTo(0, document.body.scrollHeight);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    const downloadBtn = document.getElementById('downloadPdfBtn');
+    const originalText = downloadBtn.innerHTML;
+    downloadBtn.disabled = true;
+    downloadBtn.innerHTML = '⏳ Generating PDF...';
+
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'a4');
+        
+        // Professional color scheme
+        const colors = {
+            primary: [41, 128, 185],    // Professional Blue
+            secondary: [52, 73, 94],    // Dark Gray
+            accent: [231, 76, 60],      // Red for highlights
+            text: [44, 62, 80],         // Dark Blue-Gray
+            light: [149, 165, 166],     // Light Gray
+            success: [39, 174, 96]      // Green for ratings
+        };
+
+        const margin = 20;
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const contentWidth = pageWidth - margin * 2;
+        let y = margin;
+
+        const itinerary = window.currentItineraryData?.itinerary || [];
+        const destination = window.currentItineraryData?.destination || 'Travel';
+
+        // Enhanced text cleaning function
+        function cleanText(str) {
+            if (!str) return '';
+            return str
+                .replace(/<\/?[^>]+(>|$)/g, '') // Remove HTML tags
+                .replace(/&[#\w]+;/g, '') // Remove HTML entities
+                // Remove corrupted characters and symbols
+                .replace(/[Ø=ÜÍ<ß}þ>Þª³ÝñË]+/g, '') // Remove specific corrupted chars
+                .replace(/[\u00C0-\u00FF]+/g, '') // Remove extended Latin chars
+                .replace(/[\u0100-\u017F]+/g, '') // Remove Latin Extended-A
+                .replace(/[\u0180-\u024F]+/g, '') // Remove Latin Extended-B
+                .replace(/[\u2000-\u206F]+/g, '') // Remove General Punctuation
+                .replace(/[\u2070-\u209F]+/g, '') // Remove Superscripts and Subscripts
+                .replace(/[\u20A0-\u20CF]+/g, '') // Remove Currency Symbols
+                .replace(/[\u2100-\u214F]+/g, '') // Remove Letterlike Symbols
+                .replace(/[\uFFF0-\uFFFF]+/g, '') // Remove Specials
+                .replace(/[\uFFFD]/g, '') // Remove replacement character
+                // Keep only basic ASCII printable characters, spaces, and common punctuation
+                .replace(/[^\x20-\x7E]/g, '')
+                .replace(/\s+/g, ' ') // Normalize whitespace
+                .replace(/^\s*[^\w\s]+\s*/, '') // Remove leading non-word characters
+                .replace(/\s*[^\w\s,.!?;:()]+\s*$/, '') // Remove trailing non-word characters
+                .trim();
+        }
+
+        function stripRichText(input) {
+            if (!input) return '';
+            const temp = document.createElement("div");
+            temp.innerHTML = input;
+            let text = temp.textContent || temp.innerText || "";
+            
+            // Additional cleaning for rich text
+            text = text
+                .replace(/[^\w\s.,!?;:()\-'"/&]/g, ' ') // Keep only alphanumeric, spaces, and basic punctuation
+                .replace(/\s+/g, ' ')
+                .trim();
+            
+            return cleanText(text);
+        }
+
+        // Clean restaurant data specifically
+        function cleanRestaurantData(restaurant) {
+            return {
+                name: stripRichText(restaurant.name || '').replace(/[^\w\s&'.-]/g, ''),
+                rating: restaurant.rating || 'N/A',
+                totalRatings: restaurant.totalRatings || '0'
+            };
+        }
+
+        function addNewPageIfNeeded(requiredSpace = 20) {
+            if (y + requiredSpace > pageHeight - margin) {
+                doc.addPage();
+                y = margin;
+                return true;
+            }
+            return false;
+        }
+
+        function drawHeader() {
+            // Header background
+            doc.setFillColor(...colors.primary);
+            doc.rect(0, 0, pageWidth, 35, 'F');
+            
+            // Title
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(24);
+            doc.setFont("helvetica", "bold");
+            doc.text(stripRichText(`${destination} Travel Itinerary`), margin, 25);
+            
+            // Subtitle
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            const currentDate = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            doc.text(`Generated on ${currentDate}`, margin, 32);
+            
+            return 45; // Return Y position after header
+        }
+
+        function drawFooter(pageNum, totalPages) {
+            const footerY = pageHeight - 15;
+            
+            // Footer line
+            doc.setDrawColor(...colors.light);
+            doc.setLineWidth(0.5);
+            doc.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
+            
+            // Page number
+            doc.setTextColor(...colors.light);
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Page ${pageNum} of ${totalPages}`, pageWidth - margin - 30, footerY);
+            
+            // Branding
+            doc.text('Professional Travel Itinerary', margin, footerY);
+        }
+
+        // Create PDF content first to count pages
+        const pdfContent = [];
+        
+        // Add days content
+        for (let i = 0; i < itinerary.length; i++) {
+            const item = itinerary[i];
+            pdfContent.push({
+                type: 'day',
+                data: item
+            });
+        }
+        
+        // Add map if available
+        const overviewMap = document.getElementById('overviewMap');
+        if (overviewMap) {
+            pdfContent.push({
+                type: 'map',
+                data: overviewMap
+            });
+        }
+        
+        // Add tips
+        pdfContent.push({
+            type: 'tips'
+        });
+
+        // First page
+        y = drawHeader();
+        let pageCount = 1;
+        
+        // Add a professional introduction
+        doc.setTextColor(...colors.text);
+        doc.setFontSize(12);
+        doc.setFont("helvetica", "normal");
+        const intro = `Welcome to your comprehensive travel guide for ${destination}. This itinerary has been carefully crafted to help you make the most of your journey, featuring must-visit attractions, recommended restaurants, and essential travel tips.`;
+        const introLines = doc.splitTextToSize(intro, contentWidth);
+        doc.text(introLines, margin, y);
+        y += introLines.length * 6 + 15;
+
+        // Process each day
+        for (let i = 0; i < itinerary.length; i++) {
+            const item = itinerary[i];
+            
+            addNewPageIfNeeded(30);
+            
+            // Day header with background
+            doc.setFillColor(...colors.primary);
+            doc.rect(margin - 5, y - 8, contentWidth + 10, 18, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(16);
+            doc.setFont("helvetica", "bold");
+            doc.text(stripRichText(item.day), margin, y + 5);
+            y += 25;
+
+            // Location with icon
+            doc.setTextColor(...colors.secondary);
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            const cleanLocation = stripRichText(item.location);
+            doc.text(`LOCATION: ${cleanLocation}`, margin, y);
+            y += 10;
+
+            // Description
+            doc.setTextColor(...colors.text);
+            doc.setFontSize(11);
+            doc.setFont("helvetica", "normal");
+            const description = stripRichText(item.description);
+            if (description && description.length > 0) {
+                const descLines = doc.splitTextToSize(description, contentWidth);
+                doc.text(descLines, margin, y);
+                y += descLines.length * 5 + 10;
+            }
+
+            // Restaurants section
+            if (item.restaurants && item.restaurants.length > 0) {
+                addNewPageIfNeeded(30);
+                
+                // Restaurant header
+                doc.setFillColor(248, 249, 250);
+                doc.rect(margin - 5, y - 5, contentWidth + 10, 12, 'F');
+                
+                doc.setTextColor(...colors.accent);
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text('RESTAURANTS NEARBY:', margin, y + 3);
+                y += 15;
+
+                // Restaurant list
+                for (const restaurant of item.restaurants) {
+                    if (addNewPageIfNeeded(15)) {
+                        // Redraw restaurant header if new page
+                        doc.setFillColor(248, 249, 250);
+                        doc.rect(margin - 5, y - 5, contentWidth + 10, 12, 'F');
+                        doc.setTextColor(...colors.accent);
+                        doc.setFontSize(12);
+                        doc.setFont("helvetica", "bold");
+                        doc.text('RESTAURANTS NEARBY (continued):', margin, y + 3);
+                        y += 15;
+                    }
+                    
+                    const cleanRestaurant = cleanRestaurantData(restaurant);
+                    
+                    // Restaurant name
+                    doc.setTextColor(...colors.text);
+                    doc.setFontSize(11);
+                    doc.setFont("helvetica", "bold");
+                    if (cleanRestaurant.name && cleanRestaurant.name.length > 0) {
+                        doc.text(`• ${cleanRestaurant.name}`, margin + 5, y);
+                        y += 6;
+                        
+                        // Rating
+                        doc.setTextColor(...colors.success);
+                        doc.setFontSize(10);
+                        doc.setFont("helvetica", "normal");
+                        doc.text(`RATING: ${cleanRestaurant.rating}/5 (${cleanRestaurant.totalRatings} reviews)`, margin + 10, y);
+                        y += 8;
+                    }
+                }
+            }
+            
+            y += 15; // Space between days
+        }
+
+        // Add overview map
+        if (overviewMap) {
+            try {
+                addNewPageIfNeeded(100);
+                
+                // Map section header
+                doc.setFillColor(...colors.primary);
+                doc.rect(margin - 5, y - 8, contentWidth + 10, 18, 'F');
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(16);
+                doc.setFont("helvetica", "bold");
+                doc.text("OVERVIEW MAP", margin, y + 5);
+                y += 25;
+
+                overviewMap.scrollIntoView({ behavior: "auto", block: "center" });
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                const canvas = await html2canvas(overviewMap, {
+                    backgroundColor: null,
+                    useCORS: true,
+                    scale: 2
+                });
+
+                const imgData = canvas.toDataURL("image/png", 0.8);
+                const mapHeight = 100;
+                
+                addNewPageIfNeeded(mapHeight + 10);
+                
+                // Add border around map
+                doc.setDrawColor(...colors.light);
+                doc.setLineWidth(1);
+                doc.rect(margin - 2, y - 2, contentWidth + 4, mapHeight + 4);
+                
+                doc.addImage(imgData, "PNG", margin, y, contentWidth, mapHeight);
+                y += mapHeight + 15;
+            } catch (err) {
+                console.warn("Failed to capture overview map:", err);
+            }
+        }
+
+        // Travel Tips & Essentials
+        addNewPageIfNeeded(80);
+        
+        // Tips header
+        doc.setFillColor(...colors.primary);
+        doc.rect(margin - 5, y - 8, contentWidth + 10, 18, 'F');
+        
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(16);
+        doc.setFont("helvetica", "bold");
+        doc.text("TRAVEL TIPS & ESSENTIALS", margin, y + 5);
+        y += 25;
+
+        const tips = [
+            { icon: "[PASSPORT]", text: "Bring your passport, visa, and printed travel insurance" },
+            { icon: "[PAYMENT]", text: "Carry local currency and an international payment card" },
+            { icon: "[ADAPTER]", text: "Pack travel adapters suitable for your destination" },
+            { icon: "[MOBILE]", text: "Download offline maps and translation apps" },
+            { icon: "[BATTERY]", text: "Bring power bank, sunscreen, and reusable water bottle" },
+            { icon: "[DOCS]", text: "Save digital and physical copies of all bookings" },
+            { icon: "[CULTURE]", text: "Research and respect local customs and dress codes" },
+            { icon: "[MEDICAL]", text: "Pack essential medications and basic first-aid supplies" }
+        ];
+
+        doc.setTextColor(...colors.text);
+        doc.setFontSize(11);
+        doc.setFont("helvetica", "normal");
+
+        tips.forEach(tip => {
+            addNewPageIfNeeded(10);
+            
+            // Icon and text
+            doc.setTextColor(...colors.accent);
+            doc.setFont("helvetica", "bold");
+            doc.text(tip.icon, margin, y);
+            doc.setTextColor(...colors.text);
+            doc.setFont("helvetica", "normal");
+            const tipText = doc.splitTextToSize(tip.text, contentWidth - 25);
+            doc.text(tipText, margin + 22, y);
+            y += Math.max(tipText.length * 5, 7);
+        });
+
+        // Count total pages
+        const totalPages = doc.internal.getNumberOfPages();
+        
+        // Add footers to all pages
+        for (let i = 1; i <= totalPages; i++) {
+            doc.setPage(i);
+            drawFooter(i, totalPages);
+        }
+
+        // Save the PDF
+        const filename = `${destination.replace(/[^a-zA-Z0-9]/g, '_')}_Travel_Itinerary.pdf`;
+        doc.save(filename);
+        
+        // console.log(`✅ Professional PDF generated: ${filename}`);
+        
+    } catch (error) {
+        console.error('❌ Error generating PDF:', error);
+        alert('Failed to generate PDF. Please try again.');
+    } finally {
+        downloadBtn.disabled = false;
+        downloadBtn.innerHTML = originalText;
+    }
+}
+async function loadImageAsBase64(imageUrl) {
+    return new Promise((resolve) => {
+        try {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            
+            const timeout = setTimeout(() => {
+                console.warn('Image loading timeout:', imageUrl);
+                resolve(null);
+            }, 8000);
+            
+            img.onload = function() {
+                clearTimeout(timeout);
+                try {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Resize image if it's too large
+                    const maxWidth = 800;
+                    const maxHeight = 600;
+                    let { width, height } = this;
+                    
+                    if (width > maxWidth || height > maxHeight) {
+                        const ratio = Math.min(maxWidth / width, maxHeight / height);
+                        width *= ratio;
+                        height *= ratio;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    ctx.drawImage(this, 0, 0, width, height);
+                    
+                    const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+                    resolve(dataURL);
+                } catch (canvasError) {
+                    console.warn('Canvas processing error:', canvasError);
+                    resolve(null);
+                }
+            };
+            
+            img.onerror = function() {
+                clearTimeout(timeout);
+                console.warn('Image load failed:', imageUrl);
+                resolve(null);
+            };
+            
+            // Add cache busting and try to load the image
+            img.src = imageUrl.includes('?') ? imageUrl + '&t=' + Date.now() : imageUrl + '?t=' + Date.now();
+            
+        } catch (error) {
+            console.warn('Image loading setup error:', error);
+            resolve(null);
+        }
+    });
+}
+    </script>
+   
+
+<script>
+  fetch(`${API_BASE_URL}/config/maps-api-key`)
+    .then(res => res.json())
+    .then(data => {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${data.key}&libraries=places&callback=initGoogleMaps`;
+      script.async = true;
+      document.head.appendChild(script);
+    })
+    .catch(err => console.error("Failed to load Maps API:", err));
+</script>
+
+
+
+<script>
+  // Lightbox zoom effect
+  document.addEventListener("click", function(e) {
+    if (e.target.classList.contains("location-image")) {
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      lightboxImg.src = e.target.src;
+      lightbox.style.display = "flex";
+      setTimeout(() => lightbox.classList.add("show"), 10); // Allow display before transition
+    }
+  });
+
+  document.getElementById("lightbox-close").addEventListener("click", function() {
+    document.getElementById("lightbox").style.display = "none";
+  });
+
+  document.getElementById("lightbox").addEventListener("click", function(e) {
+    if (e.target.id === "lightbox") {
+      e.currentTarget.style.display = "none";
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
+
+// Load environment variables FIRST with explicit path
+require("dotenv").config({ path: path.resolve(__dirname, '.env') });
+
+// Import routes
+const itineraryRoute = require("./routes/itinerary");
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Enhanced logging
+console.log("=== SERVER STARTUP ===");
+console.log("Timestamp:", new Date().toISOString());
+console.log("Node Version:", process.version);
+console.log("Environment:", process.env.NODE_ENV || 'development');
+console.log("Port:", PORT);
+console.log("Working Directory:", process.cwd());
+console.log("Env file path:", path.resolve(__dirname, '.env'));
+
+// Check if .env file exists
+const fs = require('fs');
+const envPath = path.resolve(__dirname, '.env');
+console.log("Env file exists:", fs.existsSync(envPath) ? "✅ Yes" : "❌ No");
+
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  const lines = envContent.split('\n').filter(line => line.trim() && !line.startsWith('#'));
+  console.log("Env file contains", lines.length, "configuration lines");
+  
+  // Check for required variables without exposing values
+  const hasGroqKey = envContent.includes('GROQ_API_KEY=');
+  const hasPexelsKey = envContent.includes('PEXELS_API_KEY=');
+  console.log("GROQ_API_KEY found in .env:", hasGroqKey ? "✅ Yes" : "❌ No");
+  console.log("PEXELS_API_KEY found in .env:", hasPexelsKey ? "✅ Yes" : "❌ No");
+}
+console.log("======================");
+
+// Middleware
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "*", // Allow all origins in development
+  credentials: true
+}));
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
+  if (req.method === 'POST') {
+    console.log("Request body keys:", Object.keys(req.body || {}));
+  }
+  next();
+});
+
+// Routes
+app.use("/api/itinerary", itineraryRoute);
+
+// Root endpoint with comprehensive information
+// app.get("/", (req, res) => {
+//   const serverInfo = {
+//     message: "Travel Itinerary API Server",
+//     status: "Running",
+//     timestamp: new Date().toISOString(),
+//     version: "1.0.0",
+//     endpoints: {
+//       itinerary: "POST /api/itinerary",
+//       health: "GET /api/itinerary/health",
+//       test: "GET /api/itinerary/test"
+//     },
+//     documentation: {
+//       createItinerary: {
+//         method: "POST",
+//         url: "/api/itinerary",
+//         body: {
+//           destination: "string (required) - The destination city/country",
+//           days: "number (required) - Number of days (1-30)"
+//         },
+//         example: {
+//           destination: "Paris, France",
+//           days: 5
+//         }
+//       }
+//     },
+//     environment: {
+//       nodeVersion: process.version,
+//       platform: process.platform,
+//       uptime: Math.floor(process.uptime())
+//     }
+//   };
+
+//   res.json(serverInfo);
+// });
+
+// Serve index.html at root
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "modern-sesign.html"));
+});
+app.get("/config/maps-api-key", (req, res) => {
+  res.json({ key: process.env.MAPS_FRONTEND_KEY || "" });
+});
+
+
+
+// Handle 404 for any other routes
+app.use((req, res) => {
+  console.log(`404 - Route not found: ${req.method} ${req.originalUrl}`);
+  res.status(404).json({
+    error: "Route not found",
+    success: false,
+    requestedPath: req.originalUrl,
+    availableEndpoints: [
+      "GET /",
+      "POST /api/itinerary",
+      "GET /api/itinerary/health",
+      "GET /api/itinerary/test"
+    ],
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Global error handler
+app.use((error, req, res, next) => {
+  console.error("=== GLOBAL ERROR HANDLER ===");
+  console.error("Timestamp:", new Date().toISOString());
+  console.error("Request:", req.method, req.originalUrl);
+  console.error("Error:", error.message);
+  console.error("Stack:", error.stack);
+  console.error("==============================");
+  
+  res.status(error.status || 500).json({
+    error: "Internal Server Error",
+    success: false,
+    message: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Graceful shutdown handling
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully');
+  process.exit(0);
+});
+
+// Unhandled promise rejection handler
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+// Uncaught exception handler
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  process.exit(1);
+});
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 API URL: http://localhost:${PORT}`);
+  console.log(`📝 Health Check: http://localhost:${PORT}/api/itinerary/health`);
+  console.log(`🧪 Test Endpoint: http://localhost:${PORT}/api/itinerary/test`);
+  console.log(`📚 Documentation: http://localhost:${PORT}/`);
+  console.log(`⏰ Started at: ${new Date().toISOString()}`);
+});
