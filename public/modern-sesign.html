@@ -9,53 +9,84 @@
      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
  
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+@font-face {
+  font-family: 'Montserrat SemiBold';
+  src: url('.style/font/Montserrat-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat Bold';
+  src: url('.style/font/Montserrat-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat Normal';
+  src: url('.style/font/Montserrat-Light.ttf') format('truetype');
+  /* font-weight: 700; */
+  /* font-style: normal; */
+}
+
+@font-face {
+  font-family: 'Helvetica Custom';
+  src: url('.style/font/Helvetica.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Helvetica Bold';
+  src: url('./style/font/Helvetica-Bold.ttf') format('truetype');
+  /* font-weight: normal; */
+  /* font-style: normal; */
+}
 
 
 /* Main body font */
 body {
-    font-family: 'Rajdhani', sans-serif;
+    /* font-family: 'Rajdhani', sans-serif; */
     font-weight: 400;
     /* ... keep your existing styles ... */
 }
 
 /* Main title */
 .header h1 {
-    font-family: 'Orbitron', monospace;
-    font-weight: 700;
-    letter-spacing: 1.2px;
+    font-family: 'Helvetica Bold', monospace;
+    font-weight: 800;
+    /* letter-spacing: 1.2px; */
     /* ... keep your existing gradient and animation styles ... */
 }
 #Main-title{
-    font-family: 'Orbitron', monospace;
+    font-family: 'Helvetica Bold', monospace;
     font-weight: 700;
 }
 /* Subtitle */
 .header p {
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: 400;
+    font-family: 'Montserrat Normal', sans-serif;
+    font-weight: 700;
     /* ... keep your existing styles ... */
 }
 #selection-days{
-    font-family: 'Orbitron', monospace;
+    font-family: 'Montserrat Normal', sans-serif;
     font-weight: 700;
-    letter-spacing: 1.2px;
+    
 }
-
-
 
 /* Form labels - Use Orbitron for tech feel */
 .form-group label {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Helvetica Bold', monospace;
     font-weight: 500;
     font-size: 0.85rem;
-    letter-spacing: 0.8px;
+    
     /* ... keep your existing styles ... */
 }
 
 /* Form inputs and select - Use Rajdhani for readability */
 .form-group input, .form-group select {
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Montserrat Normal', sans-serif;
     font-weight: 400;
     font-size: 16px;
     /* ... keep your existing styles ... */
@@ -63,14 +94,14 @@ body {
 
 /* Placeholder text */
 .form-group input::placeholder {
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Montserrat Normal', sans-serif;
     font-weight: 300;
     /* ... keep your existing styles ... */
 }
 
 /* Generate button - Use Orbitron for impact */
 .generate-btn {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Helvetica Bold', monospace;
     font-weight: 600;
     font-size: 15px;
     letter-spacing: 1.5px;
@@ -79,7 +110,7 @@ body {
 
 /* Download button - Also use Orbitron */
 .download-btn {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Helvetica Bold', monospace;
     font-weight: 500;
     font-size: 15px;
     letter-spacing: 1.2px;
@@ -88,51 +119,51 @@ body {
 
 /* Loading messages - Use Rajdhani */
 .loading p {
-    font-family: 'Rajdhani', sans-serif;
+     font-family: 'Montserrat Normal', sans-serif;
     font-weight: 500;
 }
 
 .loading p:last-child {
-    font-family: 'Rajdhani', sans-serif;
+     font-family: 'Montserrat Normal', sans-serif;
     font-weight: 400;
 }
 
 /* Results section fonts */
 .results-header h2 {
-    font-family: 'Orbitron', monospace;
+   font-family: 'Helvetica Bold', monospace;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    /* letter-spacing: 0.5px; */
 }
 
 .results-meta {
-    font-family: 'Rajdhani', sans-serif;
+     font-family: 'Montserrat Normal', sans-serif;
     font-weight: 500;
 }
 
 /* Day headers */
 .day-header {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Helvetica Bold', monospace;
     font-weight: 600;
-    letter-spacing: 0.8px;
+    /* letter-spacing: 0.8px; */
 }
 
 /* Location names */
 .location-name {
-    font-family: 'Orbitron', monospace;
+    font-family: 'Helvetica Bold', monospace;
     font-weight: 500;
-    letter-spacing: 0.5px;
+    /* letter-spacing: 0.5px; */
 }
 
 /* Location descriptions */
 .location-description {
-    font-family: 'Rajdhani', sans-serif;
+     font-family: 'Montserrat Normal', sans-serif;
     font-weight: 400;
     line-height: 1.6;
 }
 
 /* Error messages */
 .error {
-    font-family: 'Rajdhani', sans-serif;
+     font-family: 'Montserrat Normal', sans-serif;
     font-weight: 500;
 }
 
@@ -145,7 +176,8 @@ body {
 
         body {
             /* font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; */
-            background: #0a0a0a;
+            /* background: #0a0a0a; */
+            background: #ffffff;
             color: #ffffff;
             min-height: 100vh;
             padding: 20px;
@@ -189,24 +221,25 @@ body {
     100% { background-position: 0% center; }
 }
         .header p {
-            color: #888888;
+            color: #8d8787;
             font-size: 1.1rem;
             font-weight: 400;
         }
 
         .form-container {
-            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-            border: 1px solid #2a2a2a;
+            /* linear-gradient(147deg, #e3e0e0, #ffffff); */
+            background:  linear-gradient(147deg, #e3e0e0, #ffffff);
+            border: 1px solid #f3ecec;
             border-radius: 20px;
             padding: 40px;
             margin-bottom: 40px;
             box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 20px 40px rgb(104 104 104 / 40%),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
              backdrop-filter: blur(10px);
-            background-color: rgba(10, 10, 10, 0.65); /* translucent */
+            background-color: rgb(255 255 255 / 65%); /* translucent */
         }
 
         .form-container::before {
@@ -338,7 +371,9 @@ body {
                 opacity: 0;
             }
         }
-
+#destination::placeholder{
+    color: #8b8888;
+}
         /* Ensure form content is above rain */
         .form-container form {
             position: relative;
@@ -353,7 +388,7 @@ body {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #ffffff;
+            color: #4c4c4c;
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -362,25 +397,27 @@ body {
         .form-group input, .form-group select {
             width: 100%;
             padding: 16px 20px;
-            background: #111111;
-            border: 1px solid #333333;
+            background: #ffffff;
+            border: 1px solid #afadad;
             border-radius: 12px;
             font-size: 16px;
-            color: #ffffff;
+            color: #8b8888;
             transition: all 0.3s ease;
             font-family: inherit;
         }
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
-            border-color: #00d4ff;
-            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
-            background: #0a0a0a;
+            border-color: #b3b3b3;
+            /* box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1); */
+            background: #e7e7e7;
             
         }
 
         .form-group input::placeholder {
-            color: #666666;
+            /* color: #666666;
+             */
+             color: rgb(0, 0, 0)
         }
 
         .form-row {
@@ -440,14 +477,14 @@ body {
         .loading {
             text-align: center;
             padding: 40px;
-            background: #111111;
+            background: #e6e6e6;
             border-radius: 16px;
-            border: 1px solid #2a2a2a;
+            border: 1px solid #b9b8b8;
             margin-bottom: 20px;
         }
 
         .loading p {
-            color: #00d4ff;
+            color: #05b8db;
             font-size: 18px;
             margin-bottom: 8px;
         }
@@ -464,7 +501,7 @@ body {
             height: 40px;
             margin: 20px auto 0;
             border: 3px solid #333333;
-            border-top: 3px solid #00d4ff;
+            border-top: 3px solid #05b8db;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -485,8 +522,9 @@ body {
         }
 
         .results {
-            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-            border: 1px solid #2a2a2a;
+            background: linear-gradient(147deg, #e3e0e0, #ffffff);
+            /* background: linear-gradient(145deg, #1a1a1a, #0f0f0f); */
+            border: 1px solid #e5e5e5;
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
@@ -496,7 +534,7 @@ body {
             text-align: center;
             margin-bottom: 40px;
             padding-bottom: 30px;
-            border-bottom: 1px solid #2a2a2a;
+            border-bottom: 1px solid #c7c2c2;
             position: relative;
         }
 
@@ -512,15 +550,15 @@ body {
         }
 
         .results-header h2 {
-            color: #ffffff;
-            font-size: 2.2rem;
+            color: #323232;
+            font-size: 40px;
             font-weight: 700;
             margin-bottom: 12px;
             letter-spacing: -0.01em;
         }
 
         .results-meta {
-            color: #888888;
+            color: #686868;
             font-size: 16px;
             font-weight: 500;
         }
@@ -530,14 +568,15 @@ body {
         }
 
         .day-header {
-            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
-            color: #ffffff;
+            /* background: linear-gradient(147deg, #e3e0e0, #ffffff); */
+            background: linear-gradient(135deg, #d7d7d7, #ffffff);
+            color: #1e1d1d;
             padding: 20px 28px;
             border-radius: 16px;
             margin-bottom: 24px;
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 600;
-            border: 1px solid #3a3a3a;
+            border: 1px solid #e5e5e5;
             position: relative;
             overflow: hidden;
         }
@@ -553,8 +592,8 @@ body {
         }
 
         .location-card {
-            background: linear-gradient(145deg, #161616, #0d0d0d);
-            border: 1px solid #2a2a2a;
+            background: linear-gradient(147deg, #ebebeb, #ffffff);
+            border: 1px solid #d3cccc;
             border-radius: 16px;
             padding: 28px;
             margin-bottom: 24px;
@@ -563,24 +602,24 @@ body {
         }
 
         .location-card:hover {
-            border-color: #3a3a3a;
+            border-color: #dbcfcf;
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .location-name {
-            font-size: 1.4rem;
+            font-size: 26px;
             font-weight: 600;
-            color: #ffffff;
+            color: #323232;
             margin-bottom: 12px;
             letter-spacing: -0.01em;
         }
 
         .location-description {
-            color: #cccccc;
+            color: #707070;
             line-height: 1.7;
             margin-bottom: 20px;
-            font-size: 15px;
+            font-size: 19px;
         }
 
         .images-container {
@@ -619,10 +658,11 @@ body {
         }
 
         .download-btn {
-            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            background: linear-gradient(335deg, #0bbf08, #059904);
+            /* background: linear-gradient(135deg, #2a2a2a, #1a1a1a); */
             color: #ffffff;
             padding: 16px 32px;
-            border: 1px solid #3a3a3a;
+            border: 1px solid #ffffff;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
@@ -636,7 +676,7 @@ body {
         }
 
         .download-btn:hover {
-            background: linear-gradient(135deg, #3a3a3a, #2a2a2a);
+            background: linear-gradient(135deg, #096407, #047b03);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
@@ -663,22 +703,22 @@ body {
         }
 
         /* Scrollbar styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-        ::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* light grey */
+}
 
-        ::-webkit-scrollbar-thumb {
-            background: #3a3a3a;
-            border-radius: 4px;
-        }
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1; /* medium grey */
+  border-radius: 4px;
+}
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4a4a4a;
-        }
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8; /* darker on hover */
+}
 
         @media (max-width: 768px) {
             .form-row {
@@ -780,7 +820,7 @@ body {
         }
 
         .map-legend {
-            background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+            background: linear-gradient(135deg, #d7d3d3, #ffffff);
             padding: 15px;
             border-radius: 8px;
             margin-top: 15px;
@@ -809,6 +849,71 @@ body {
   display: flex;
   opacity: 1;
 }
+
+
+/* AI Summary Section */
+.summary-section {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background: #f3efef;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  color: #ccc;
+  font-family: 'Poppins', sans-serif;
+}
+
+.summary-section h4 {
+  color: #00e0ff;
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-top: 25px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
+  text-align: left;
+}
+
+.summary-section ul {
+  text-align: left;
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.summary-section li {
+  font-size: 19px;
+  margin-bottom: 8px;
+  line-height: 1.6;
+  color: #7f7f7f;
+}
+
+.summary-section p {
+font-family: 'Montserrat Normal', sans-serif;
+  text-align: left;
+  
+  color: #7f7f7f;
+  margin: 10px 0;
+  font-size: 19px;
+}
+
+.summary-section a {
+  color: #00b3ff;
+  text-decoration: underline;
+  font-size: 13px;
+}
+.ai-summary-box {
+  background: linear-gradient(145deg, #ebebeb, #ffffff);
+  border: 1px solid #dddddd;
+  border-radius: 16px;
+  padding: 30px;
+  margin-top: 20px;
+  text-align: left;
+  color: #cccccc;
+   font-family: 'Montserrat Normal', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  animation: fadeInUp 0.6s ease-out;
+}
+
 
 
 
@@ -905,8 +1010,10 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
+    /* rgba(255, 255, 255, 0.03) */
+    /* rgba(255, 255, 255, 0.03) */
     background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
@@ -916,8 +1023,8 @@ body {
     </style>
 </head>
 <body>
-    <div class="grid-overlay"></div>
-    <div class="digital-rain" id="digitalRain"></div>
+    <!-- <div class="grid-overlay"></div> -->
+    <!-- <div class="digital-rain" id="digitalRain"></div> -->
     <div class="container">
         <div class="header">
             <h1>AI Travel Itinerary Generator</h1>
@@ -925,12 +1032,12 @@ body {
         </div>
 
         <div class="form-container">
-            <div class="digital-rain" id="digitalRain"></div>
+            <!-- <div class="digital-rain" id="digitalRain"></div> -->
             <form id="itineraryForm">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="destination">Destination</label>
-                        <input type="text" id="destination" name="destination" 
+                        <input  type="text" id="destination" name="destination" 
                                placeholder="Enter your destination" required>
                     </div>
                     <div class="form-group">
@@ -942,6 +1049,7 @@ body {
                             <option value="3">3 Days</option>
                             <option value="4">4 Days</option>
                             <option value="5">5 Days</option>
+                            <option value="5">6 Days</option>
                             <option value="7">1 Week</option>
                             <option value="10">10 Days</option>
                             <option value="14">2 Weeks</option>
@@ -972,8 +1080,8 @@ body {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <script>
-        // const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
-        const API_BASE_URL = window.location.origin;
+        const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
+        // const API_BASE_URL = window.location.origin;
         let googleMapsLoaded = false;
         let mapsToInitialize = [];
         let allLocationsData = [];
@@ -1258,17 +1366,23 @@ html += `</div>`;
 
 
     }
+    html += `
+  <div class="summary-section" style="text-align: center; margin-top: 40px;">
+    <button id="get-insights" class="generate-btn" style="margin-bottom: 20px;">More Magic</button>
+    <div id="ai-summary" style="margin-top: 20px; color: #ccc;"></div>
+  </div>
+`;
 
     // Add overview map section
     html += `
         <div class="overview-map-section">
             <div class="overview-map-header">
-                <h3>🗺️ Complete Itinerary Map</h3>
-                <p>All your destinations and restaurants marked by day</p>
+                <h3> Complete Itinerary Map</h3>
+                <p style="color: #7f7f7f;">All your destinations and restaurants marked by day</p>
             </div>
             <div id="overviewMap" class="overview-map"></div>
             <div class="map-legend">
-                <strong>Legend:</strong>
+                <strong style="color: #303030; margin-top: 10px; font-size: 14px;">Legend:</strong>
     `;
     
     // Add legend for each day
@@ -1277,7 +1391,7 @@ html += `</div>`;
         html += `
             <div class="legend-item">
                 <div class="legend-color" style="background-color: ${dayColor}"></div>
-                <span>${sortedDays[i]}</span>
+                <span style="color: #303030; margin-top: 10px; font-size: 14px;">${sortedDays[i]}</span>
             </div>
         `;
     }
@@ -1285,13 +1399,16 @@ html += `</div>`;
     html += `
             <div class="legend-item">
                 <div class="legend-color" style="background-color: #FF4444"></div>
-                <span>🍽️ Restaurants</span>
+                <span style="color: #303030; margin-top: 10px; font-size: 14px;">🍽️ Restaurants</span>
             </div>
         </div></div>`;
+// color: #303030;
 
     // Add download section
     html += `
         <div class="download-section">
+
+
             <button id="downloadPdfBtn" class="download-btn">
                 📄 Download PDF Itinerary
             </button>
@@ -1302,6 +1419,7 @@ html += `</div>`;
     `;
 
     resultsDiv.innerHTML = html;
+    window.currentItineraryData = data;
     resultsDiv.style.display = 'block';
     
     // Initialize maps with restaurants
@@ -1315,7 +1433,47 @@ html += `</div>`;
     // Scroll to results
     resultsDiv.scrollIntoView({ behavior: 'smooth' });
 }
+document.addEventListener('click', async function (e) {
+  if (e.target && e.target.id === 'get-insights') {
+    const summaryBox = document.getElementById('ai-summary');
+    summaryBox.innerHTML = `<p style="color:#999;">⏳ Fetching expert insights...</p>`;
+    summaryBox.style.display = 'block';
 
+    try {
+      // Get the destination value - adjust this based on how you store the destination
+      // Option 1: If you have an input field with id 'destination'
+      const destinationInput = document.getElementById('destination');
+      const destinationValue = destinationInput ? destinationInput.value : '';
+      
+      // Option 2: If destination is stored in a different input field, replace 'your-input-id' with the actual id
+      // const destinationValue = document.getElementById('your-input-id').value;
+      
+      // Option 3: If destination is stored as a data attribute on the button
+      // const destinationValue = e.target.dataset.destination;
+      
+      // Option 4: If destination is stored in a global variable
+      // Make sure the global variable contains the string value, not the DOM element
+      
+      if (!destinationValue || destinationValue.trim() === '') {
+        summaryBox.innerHTML = `<p style="color:#ff6b6b;">⚠️ Please enter a destination first.</p>`;
+        return;
+      }
+
+      const res = await fetch(`${API_BASE_URL}/api/insights?destination=${encodeURIComponent(destinationValue)}`);
+      const data = await res.json();
+
+      if (res.ok && data?.success && data?.html) {
+        summaryBox.innerHTML = data.html;
+      } else {
+        summaryBox.innerHTML = `<p style="color:#ff6b6b;">⚠️ Could not load travel insights. Please try again.</p>`;
+        console.warn("AI Summary response error:", data);
+      }
+    } catch (err) {
+      summaryBox.innerHTML = `<p style="color:#ff6b6b;">⚠️ Could not load travel insights. Please try again.</p>`;
+      console.error("AI summary error:", err.message);
+    }
+  }
+});
 // 3. UPDATE: New function to initialize maps with restaurants
 
 // 3. FIXED: Modified function to initialize maps with restaurants
@@ -1742,10 +1900,10 @@ function updateRestaurantContainer(containerId, restaurants) {
     restaurants.forEach(restaurant => {
         const priceDisplay = restaurant.priceLevel ? ''.repeat(restaurant.priceLevel) : 'Price not available';
         restaurantHtml += `
-            <div class="restaurant-item" style="background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 8px;">
+            <div class="restaurant-item" style="background: #e3e3e3; border: 1px solid #d7d7d7; border-radius: 8px; padding: 12px; margin-bottom: 8px;">
                 <div style="display: flex; justify-content: space-between; align-items: start;">
                     <div>
-                        <h5 style="margin: 0 0 5px 0; color: #ffffff; font-size: 0.95rem;">${restaurant.name}</h5>
+                        <h5 style="margin: 0 0 5px 0; color: #444444; font-size: 0.95rem;">${restaurant.name}</h5>
                         <p style="margin: 0; color: #FF4444; font-size: 0.85rem; font-weight: bold;">⭐ ${restaurant.rating} (${restaurant.totalRatings} reviews)</p>
                     </div>
                     <div style="color: #888; font-size: 0.8rem;">${priceDisplay}</div>
@@ -1796,6 +1954,9 @@ async function geocodeLocation(locationName) {
             }
         });
 
+
+
+        
         // PDF Generation Function (Updated to include map information)
 // PDF Generation Function (Fixed for proper character encoding)
 async function generatePDF() {
@@ -2276,6 +2437,14 @@ async function loadImageAsBase64(imageUrl) {
     })
     .catch(err => console.error("Failed to load Maps API:", err));
 </script>
+
+
+
+<script async src="https://cse.google.com/cse.js?cx=53fdde1f2fd354ebe">
+</script>
+<!-- <div class="gcse-search"></div> -->
+
+
 
 
 

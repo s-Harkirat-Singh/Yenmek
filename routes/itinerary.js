@@ -106,30 +106,7 @@ async function getItineraryFromAI(destination, days) {
     throw new Error("Invalid Groq API key format. Key should start with 'gsk_'. Please verify your API key.");
   }
 
-//   const prompt = `You are a travel expert planning a ${days}-day itinerary for a traveler visiting ${destination}.
 
-// All locations MUST be strictly within ${destination}. Do not suggest places that exist in other countries, even if they share the same name.
-
-// For each day, suggest 2-3 important and famous locations that should not be missed. For every location, include:
-// - The name of the location
-// - Why it's important (history, culture, significance)
-// - What the user can do there (activities within 2-3 hours)
-
-// Make the descriptions concise but informative - 2-3 sentences maximum.
-
-// Prioritize famous landmarks, cultural experiences, and unique spots. Focus on must-visit places.
-
-// Format your response EXACTLY like this:
-
-// Day 1
-// Location: Red Fort
-// Description: Historic Mughal fortress and UNESCO World Heritage site. Explore the beautiful architecture, museums, and learn about India's rich history. Spend 2-3 hours walking through the complex.
-
-// Day 1  
-// Location: India Gate
-// Description: Iconic war memorial and popular gathering spot. Great for evening walks and photography. Visit nearby Rajpath for a complete experience.
-
-// Continue this format for all days...`;
 const prompt = `You are a travel expert planning a ${days}-day itinerary for a traveler visiting ${destination}. 
 For each day, suggest 2-3 important and famous locations that should not be missed. For every location, include:
 - The name of the location
@@ -382,13 +359,6 @@ router.get("/geocode", async (req, res) => {
     res.status(500).json({ error: "Geocoding failed" });
   }
 });
-
-
-
-
-
-
-
 
 
 // Health check endpoint
