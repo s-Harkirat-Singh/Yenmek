@@ -42,30 +42,27 @@ router.get('/', async (req, res) => {
     if (!bestMatch) return res.json({ success: false, error: 'No links found.' });
 
 const prompt = `
-You're a local travel expert. Summarize the *unique* travel insights from this blog about ${destination}:
+You're a travel expert. Summarize this blog about ${destination}:
 
 ${bestMatch.link}
 
-Exclude commonly-known tourist attractions that would already be in an itinerary.(fill missing parts using your own knowledge)
+Use this format (fill missing parts using your own knowledge):
 
-Instead, give:
-
-MUST-DO (less obvious picks):
+MUST-DO (Give some unique must to do things, if not continue with general response):
 - ...
 - ...
 
 HIDDEN GEM:
 ...
 
-LOCAL TIPS (uncommon knowledge):
+LOCAL TIPS:
 - ...
 - ...
 
 BEST FOOD TO EAT:
 ...
 
-Only return plain text in that format.
-
+Return only plain text in that format.
 
 `.trim();
 

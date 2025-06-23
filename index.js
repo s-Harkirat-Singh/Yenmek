@@ -201,9 +201,9 @@ process.on('uncaughtException', (error) => {
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌍 API URL: http://localhost:${PORT}`);
-  console.log(`📝 Health Check: http://localhost:${PORT}/api/itinerary/health`);
-  console.log(`🧪 Test Endpoint: http://localhost:${PORT}/api/itinerary/test`);
-  console.log(`📚 Documentation: http://localhost:${PORT}/`);
-  console.log(`⏰ Started at: ${new Date().toISOString()}`);
+  // console.log(`🌍 API URL: http://localhost:${PORT}`);
+  // console.log(`📝 Health Check: http://localhost:${PORT}/api/itinerary/health`);
+  // console.log(`🧪 Test Endpoint: http://localhost:${PORT}/api/itinerary/test`);
+  // console.log(`📚 Documentation: http://localhost:${PORT}/`);
+  // console.log(`⏰ Started at: ${new Date().toISOString()}`);
 });
