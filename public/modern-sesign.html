@@ -1109,8 +1109,8 @@ font-family: 'Montserrat Normal', sans-serif;
             hideResults();
 
             try {
-                console.log('Sending request to:', `${API_BASE_URL}/api/itinerary`);
-                console.log('Request data:', { destination, days });
+                // console.log('Sending request to:', `${API_BASE_URL}/api/itinerary`);
+                // console.log('Request data:', { destination, days });
 
                 const response = await fetch(`${API_BASE_URL}/api/itinerary`, {
                     method: 'POST',
@@ -1123,7 +1123,7 @@ font-family: 'Montserrat Normal', sans-serif;
                     })
                 });
 
-                console.log('Response status:', response.status);
+                // console.log('Response status:', response.status);
 
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -1131,7 +1131,7 @@ font-family: 'Montserrat Normal', sans-serif;
                 }
 
                 const data = await response.json();
-                console.log('Response data:', data);
+                // console.log('Response data:', data);
 
                 if (data.success) {
                     displayResults(data);
@@ -1400,7 +1400,7 @@ html += `</div>`;
     resultsDiv.style.display = 'block';
     
     // Initialize maps with restaurants
-    console.log('Initializing maps with data:', { dayGroups, allLocationsCount: allLocationsData.length });
+    // console.log('Initializing maps with data:', { dayGroups, allLocationsCount: allLocationsData.length });
     
     await initializeMapsForResultsWithRestaurants(dayGroups);
     
@@ -1502,7 +1502,7 @@ async function initializeMapsForResultsWithRestaurants(dayGroups) {
         });
     }
     
-    console.log('Overview map data:', allLocationsData); // Debug log
+    // console.log('Overview map data:', allLocationsData); // Debug log
     
     // Initialize overview map with complete data
     if (googleMapsLoaded && allLocationsData.length > 0) {
@@ -1669,7 +1669,7 @@ async function initializeOverviewMap(elementId, locations) {
             });
         }
 
-        console.log(`✅ Overview map initialized with ${markers.length} markers`);
+        // console.log(`✅ Overview map initialized with ${markers.length} markers`);
 
     } catch (mapError) {
         console.error(`Error initializing overview map:`, mapError);
@@ -1917,7 +1917,7 @@ async function geocodeLocation(locationName) {
         // Test backend connection on page load
         window.addEventListener('load', async function() {
             try {
-                console.log('Testing backend connection...');
+                // console.log('Testing backend connection...');
                 const response = await fetch(`${API_BASE_URL}/api/itinerary/health`);
                 if (response.ok) {
                     const data = await response.json();

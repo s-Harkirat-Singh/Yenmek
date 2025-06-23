@@ -42,27 +42,30 @@ router.get('/', async (req, res) => {
     if (!bestMatch) return res.json({ success: false, error: 'No links found.' });
 
 const prompt = `
-You're a travel expert. Summarize this blog about ${destination}:
+You're a local travel expert. Summarize the *unique* travel insights from this blog about ${destination}:
 
 ${bestMatch.link}
 
-Use this format (fill missing parts using your own knowledge):
+Exclude commonly-known tourist attractions that would already be in an itinerary.(fill missing parts using your own knowledge)
 
-MUST-DO:
+Instead, give:
+
+MUST-DO (less obvious picks):
 - ...
 - ...
 
 HIDDEN GEM:
 ...
 
-LOCAL TIPS:
+LOCAL TIPS (uncommon knowledge):
 - ...
 - ...
 
 BEST FOOD TO EAT:
 ...
 
-Return only plain text in that format.
+Only return plain text in that format.
+
 
 `.trim();
 
@@ -121,7 +124,7 @@ if (!content || typeof content !== 'string') {
 
 const summary = parseInsights(content.trim());
 
-console.log("✅ Raw AI Response:", content);
+// console.log("✅ Raw AI Response:", content);
 
 res.json({ success: true, html: buildHTML(summary, destination, bestMatch.link) });
 

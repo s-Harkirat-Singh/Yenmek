@@ -275,7 +275,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "Days must be a positive number between 1 and 30.", success: false });
     }
 
-    console.log(` Generating ${numDays}-day itinerary for ${destination}...`);
+    // console.log(` Generating ${numDays}-day itinerary for ${destination}...`);
     const rawText = await getItineraryFromAI(destination, numDays);
     const itinerary = parseItinerary(rawText);
     
@@ -287,17 +287,17 @@ router.post("/", async (req, res) => {
   });
 }
 
-    console.log("Fetching images for all locations using Google Places...");
+    // console.log("Fetching images for all locations using Google Places...");
     for (let i = 0; i < itinerary.length; i++) {
       const item = itinerary[i];
-      console.log(`Fetching Google Places images for: ${item.location} (${i + 1}/${itinerary.length})`);
+      // console.log(`Fetching Google Places images for: ${item.location} (${i + 1}/${itinerary.length})`);
       
       try {
         // Call the new function to get images from Google Places
         // Pass item.location and the overall destination as context
         item.images = await getImagesFromGooglePlaces(item.location, destination);
         
-        console.log(`✅ Found ${item.images.length} Google images for ${item.location}`);
+        // console.log(`✅ Found ${item.images.length} Google images for ${item.location}`);
       } catch (imageError) {
         console.error(`❌ Failed to fetch Google images for ${item.location}:`, imageError.message);
         item.images = []; // Fallback to empty array
