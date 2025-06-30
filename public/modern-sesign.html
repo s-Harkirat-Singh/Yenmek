@@ -842,8 +842,8 @@ body {
 }
 
 .summary-section h4 {
-  color: #00e0ff;
-  font-size: 20px;
+  color: #33577e;
+  font-size: 26px;
   margin-bottom: 10px;
   margin-top: 25px;
   border-bottom: 1px solid #333;
@@ -998,6 +998,63 @@ font-family: 'Montserrat Normal', sans-serif;
     z-index: 0;
 }
 
+#landing::placeholder{
+    color: #8b8888;
+    
+}
+
+
+.travel-summary {
+ padding: 30px;
+  margin-top: 16px;
+  text-align: left;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.travel-step {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e1e1e1;
+}
+
+.step-number {
+  font-weight: 600;
+  font-size: 20px;
+  color: #FF4444;
+  margin-bottom: 4px;
+}
+
+.step-details {
+text-align: left;
+    font-size: 19px;
+    line-height: 1.6;
+    color: #707070;
+}
+
+.label {
+  font-weight: 600;
+  color: #111827;
+  margin-right: 4px;
+}
+
+.meta {
+  margin-top: 6px;
+  font-size: 19px;
+  color: #6b7280;
+}
+
+.meta strong {
+  color: #374151;
+  font-weight: 500;
+}
+
+.divider {
+  margin: 0 8px;
+  color: #d1d5db;
+}
+
     </style>
 </head>
 <body>
@@ -1018,6 +1075,11 @@ font-family: 'Montserrat Normal', sans-serif;
                         <input  type="text" id="destination" name="destination" 
                                placeholder="Enter your destination" required>
                     </div>
+                    <div class="form-group">
+  <label for="landing">Landing City / Airport</label>
+  <input type="text" id="landing" name="landing" placeholder="Where will you land?" required>
+</div>
+
                     <div class="form-group">
                         <label for="days">Duration</label>
                         <select id="days" name="days" required>
@@ -1097,9 +1159,10 @@ font-family: 'Montserrat Normal', sans-serif;
             e.preventDefault();
             
             const destination = document.getElementById('destination').value.trim();
+            const landing = document.getElementById('landing').value.trim();
             const days = parseInt(document.getElementById('days').value);
             
-            if (!destination || !days) {
+            if (!destination || !days || !landing) {
                 showError('Please fill in all fields');
                 return;
             }
@@ -1119,9 +1182,10 @@ font-family: 'Montserrat Normal', sans-serif;
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        destination: destination,
-                        days: days
-                    })
+  destination,
+  days,
+  landing
+})
                 });
 
                 // console.log('Response status:', response.status);
@@ -1135,10 +1199,10 @@ font-family: 'Montserrat Normal', sans-serif;
                 // console.log('Response data:', data);
 
                 if (data.success) {
-                    displayResults(data);
-                } else {
-                    throw new Error(data.error || 'Failed to generate itinerary');
-                }
+    await displayResults(data); // ✅ await rendering
+} else {
+    throw new Error(data.error || 'Failed to generate itinerary');
+}
 
             } catch (error) {
                 console.error('Error:', error);
@@ -1225,192 +1289,117 @@ async function findNearbyRestaurants(location, coordinates) {
 
 // 2. UPDATE: Modify the displayResults function to include restaurants
 async function displayResults(data) {
-    const resultsDiv = document.getElementById('results');
-    
-    // Store data globally for PDF generation
-    window.currentItineraryData = data;
-    allLocationsData = [];
-    
-    // Group itinerary by days
-    const dayGroups = {};
-    data.itinerary.forEach(item => {
-        if (!dayGroups[item.day]) {
-            dayGroups[item.day] = [];
-        }
-        dayGroups[item.day].push(item);
-    });
+  const resultsDiv = document.getElementById('results');
 
-    let html = `
-        <div class="results-header">
-            <h2> Your ${data.destination} Itinerary</h2>
-            <div class="results-meta">
-                ${data.days} day${data.days > 1 ? 's' : ''} • ${data.totalLocations} locations • Generated ${new Date(data.generatedAt).toLocaleDateString()}
-            </div>
-        </div>
-    `;
+  // Prepare grouped data
+  const dayGroups = {};
+  data.itinerary.forEach(item => {
+    if (!dayGroups[item.day]) dayGroups[item.day] = [];
+    dayGroups[item.day].push(item);
+  });
 
-    // Generate HTML for each day
-    const sortedDays = Object.keys(dayGroups).sort();
-    for (let dayIndex = 0; dayIndex < sortedDays.length; dayIndex++) {
-        const day = sortedDays[dayIndex];
-        const dayColor = dayColors[dayIndex % dayColors.length];
-        
-        html += `<div class="day-section">
-            <div class="day-header">${day}</div>`;
-        
-        const dayLocations = dayGroups[day];
-        // for (let locationIndex = 0; locationIndex < dayLocations.length; locationIndex++) {
-        //     const location = dayLocations[locationIndex];
-        //     const mapId = `map-${dayIndex}-${locationIndex}`;
-            
-        //     // Store location data for overview map
-        //     allLocationsData.push({
-        //         ...location,
-        //         dayIndex: dayIndex,
-        //         color: dayColor,
-        //         day: day
-        //     });
-            
-        //     html += `
-        //         <div class="location-card">
-        //             <div class="location-name">📍 ${location.location}</div>
-        //             <div class="location-description">${location.description}</div>
-                    
-        //             <!-- Restaurant section will be populated after geocoding -->
-        //             <div id="restaurants-${dayIndex}-${locationIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
-                    
-        //             <div class="images-container">
-        //     `;
-            
-        //     if (location.images && location.images.length > 0) {
-        //         location.images.forEach(imageUrl => {
-        //             html += `<img src="${imageUrl}" alt="${location.location}" class="location-image" loading="lazy">`;
-        //         });
-        //     } else {
-        //         html += `<div class="no-images">No images available</div>`;
-        //     }
-            
-        //     html += `</div>
-        //             <div id="${mapId}" class="location-map"></div>
-        //         </div>`;
-        // }
-        
-        // html += `</div>`;
+  const sortedDays = Object.keys(dayGroups).sort();
+  let html = `
+    <div class="results-header">
+      <h2>Your ${data.destination} Itinerary</h2>
+      <div class="results-meta">
+        ${data.days} day${data.days > 1 ? 's' : ''} • ${data.totalLocations} locations • Generated ${new Date(data.generatedAt).toLocaleDateString()}
+      </div>
+    </div>
+  `;
 
-for (let locationIndex = 0; locationIndex < dayLocations.length; locationIndex++) {
-    const location = dayLocations[locationIndex];
-    const mapId = `map-${dayIndex}-${locationIndex}`;
+  // Just build the static content (no maps or async calls yet)
+  for (let dayIndex = 0; dayIndex < sortedDays.length; dayIndex++) {
+    const day = sortedDays[dayIndex];
+    const dayLocations = dayGroups[day];
 
-    // Store location data for overview map
-    allLocationsData.push({
-        ...location,
-        dayIndex: dayIndex,
-        color: dayColor,
-        day: day
-    });
-
-    html += `
+    html += `<div class="day-section"><div class="day-header">${day}</div>`;
+    for (let locIndex = 0; locIndex < dayLocations.length; locIndex++) {
+      const location = dayLocations[locIndex];
+      html += `
         <div class="location-card">
-            <div class="location-name">📍 ${location.location}</div>
-            <div class="location-description">${location.description}</div>
-
-            <!-- Restaurant section will be populated after geocoding -->
-            <div id="restaurants-${dayIndex}-${locationIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
-
-            <div class="images-container">
-    `;
-
-    if (location.images && location.images.length > 0) {
-        location.images.forEach(imageUrl => {
-            const refMatch = imageUrl.match(/photoreference=([^&]+)/);
-            const photoRef = refMatch ? refMatch[1] : null;
-
-            if (photoRef) {
-                html += `<img src="/api/photo?ref=${photoRef}" alt="${location.location}" class="location-image" loading="lazy">`;
-            } else {
-                html += `<div class="no-images">Invalid photo reference</div>`;
-            }
-        });
-    } else {
-        html += `<div class="no-images">No images available</div>`;
-    }
-
-    html += `</div>
-            <div id="${mapId}" class="location-map"></div>
-        </div>`;
-}
-
-html += `</div>`;
-
-
-    }
-    html += `
-  <div class="summary-section" style="text-align: center; margin-top: 40px;">
-    <button id="get-insights" class="generate-btn" style="margin-bottom: 20px;">More Magic</button>
-    <div id="ai-summary" style="margin-top: 20px; color: #ccc;"></div>
-  </div>
-`;
-
-    // Add overview map section
-    html += `
-        <div class="overview-map-section">
-            <div class="overview-map-header">
-                <h3> Complete Itinerary Map</h3>
-                <p style="color: #7f7f7f;">All your destinations and restaurants marked by day</p>
-            </div>
-            <div id="overviewMap" class="overview-map"></div>
-            <div class="map-legend">
-                <strong style="color: #303030; margin-top: 10px; font-size: 14px;">Legend:</strong>
-    `;
-    
-    // Add legend for each day
-    for (let i = 0; i < sortedDays.length; i++) {
-        const dayColor = dayColors[i % dayColors.length];
-        html += `
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: ${dayColor}"></div>
-                <span style="color: #303030; margin-top: 10px; font-size: 14px;">${sortedDays[i]}</span>
-            </div>
-        `;
-    }
-    
-    html += `
-            <div class="legend-item">
-                <div class="legend-color" style="background-color: #FF4444"></div>
-                <span style="color: #303030; margin-top: 10px; font-size: 14px;">🍽️ Restaurants</span>
-            </div>
-        </div></div>`;
-// color: #303030;
-
-    // Add download section
-    html += `
-        <div class="download-section">
-
-
-            <button id="downloadPdfBtn" class="download-btn">
-                📄 Download PDF Itinerary
-            </button>
-            <p style="color: #666; margin-top: 10px; font-size: 14px;">
-                Get your complete travel plan as a PDF with images and restaurant recommendations
-            </p>
+          <div class="location-name">📍 ${location.location}</div>
+          <div class="location-description">${location.description}</div>
+          <div id="restaurants-${dayIndex}-${locIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
+          <div class="images-container">
+            ${location.images?.map(img => `<img src="/api/photo?ref=${img.split('photoreference=')[1]}" class="location-image" />`).join('') || '<div class="no-images">No images available</div>'}
+          </div>
+          <div id="map-${dayIndex}-${locIndex}" class="location-map"></div>
         </div>
-    `;
+      `;
+    }
+    html += `<div id="distance-summary-${dayIndex}" class="summary-section"></div></div>`;
+  }
 
-    resultsDiv.innerHTML = html;
-    window.currentItineraryData = data;
-    resultsDiv.style.display = 'block';
-    
-    // Initialize maps with restaurants
-    // console.log('Initializing maps with data:', { dayGroups, allLocationsCount: allLocationsData.length });
-    
-    await initializeMapsForResultsWithRestaurants(dayGroups);
-    
-    // Add event listener for download button
-    document.getElementById('downloadPdfBtn').addEventListener('click', generatePDF);
-    
-    // Scroll to results
-    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+  // Add buttons & overview map area
+  html += `
+    <div class="summary-section" style="text-align: center;">
+      <button id="get-insights" class="generate-btn">More Magic</button>
+      <div id="ai-summary" style="margin-top: 20px;"></div>
+    </div>
+    <div class="overview-map-section">
+      <div class="overview-map-header">
+        <h3>Complete Itinerary Map</h3>
+        <p>All your destinations and restaurants marked by day</p>
+      </div>
+      <div id="overviewMap" class="overview-map"></div>
+    </div>
+    <div class="download-section">
+      <button id="downloadPdfBtn" class="download-btn">📄 Download PDF Itinerary</button>
+    </div>
+  `;
+
+  // Set content and show it
+  resultsDiv.innerHTML = html;
+  resultsDiv.style.display = 'block';
+
+  // ✅ Hide loader now — initial content is ready
+  showLoading(false);
+
+  // Smooth scroll
+  resultsDiv.scrollIntoView({ behavior: 'smooth' });
+
+  // Then continue with maps and distances
+  await initializeMapsForResultsWithRestaurants(dayGroups);
+
+  for (let i = 0; i < sortedDays.length; i++) {
+    const day = sortedDays[i];
+    const dayLocations = dayGroups[day];
+
+    getDistancesBetweenLocations(dayLocations).then(distances => {
+      const el = document.getElementById(`distance-summary-${i}`);
+      if (!el) return;
+      let summary = `
+  <h4>Travel Summary for ${day}</h4>
+  <div class="travel-summary">
+`;
+distances.forEach((d, index) => {
+  summary += `
+    <div class="travel-step">
+      <div class="step-number">Step ${index + 1}</div>
+      <div class="step-details">
+        <div><span class="label">From:</span> ${d.from}</div>
+        <div><span class="label">To:</span> ${d.to}</div>
+        <div class="meta">
+          <span>Distance: <strong>${d.distanceText}</strong></span>
+          <span class="divider">|</span>
+          <span>Estimated Time: <strong>${d.durationText}</strong></span>
+        </div>
+      </div>
+    </div>
+  `;
+});
+summary += `</div>`;
+
+      el.innerHTML = summary;
+    });
+  }
+
+  // Add PDF download listener
+  document.getElementById('downloadPdfBtn').addEventListener('click', generatePDF);
+  window.currentItineraryData = data;
 }
+
 document.addEventListener('click', async function (e) {
   if (e.target && e.target.id === 'get-insights') {
     const summaryBox = document.getElementById('ai-summary');
@@ -1914,6 +1903,31 @@ async function geocodeLocation(locationName) {
         return null;
     }
 }
+async function getDistancesBetweenLocations(dayLocations) {
+  const distancePromises = [];
+
+  for (let i = 0; i < dayLocations.length - 1; i++) {
+    const from = dayLocations[i].location;
+    const to = dayLocations[i + 1].location;
+
+    distancePromises.push(
+      fetch(`${API_BASE_URL}/api/itinerary/google-distance?origin=${encodeURIComponent(from)}&destination=${encodeURIComponent(to)}`)
+        .then(res => res.json())
+        .then(data => ({
+          from,
+          to,
+          distanceText: data.distanceText || "N/A",
+          durationText: data.durationText || "N/A"
+        }))
+        .catch(err => {
+          console.error("❌ Failed to fetch Google distance:", err);
+          return { from, to, distanceText: "N/A", durationText: "N/A" };
+        })
+    );
+  }
+
+  return Promise.all(distancePromises);
+}
 
         // Test backend connection on page load
         window.addEventListener('load', async function() {
@@ -1938,412 +1952,233 @@ async function geocodeLocation(locationName) {
         // PDF Generation Function (Updated to include map information)
 // PDF Generation Function (Fixed for proper character encoding)
 async function generatePDF() {
-    // Check if overview map exists and show adjustment reminder
-    const overviewMap = document.getElementById('overviewMap');
-    if (overviewMap) {
-        // Show user-friendly reminder
-        const userConfirmed = confirm(
-            "📍 MAP ADJUSTMENT REMINDER\n\n" +
-            "Before generating your PDF:\n" +
-            "• Please scroll down to the Overview Map\n" +
-            "• Zoom out if needed to ensure ALL locations are visible\n" +
-            "• Make sure the map shows your complete itinerary\n\n" +
-            "Click 'OK' when the map is properly adjusted, or 'Cancel' to abort."
-        );
-        
-        if (!userConfirmed) {
-            return; // User cancelled, don't generate PDF
-        }
-        
-        // Scroll to overview map to help user see it
-        overviewMap.scrollIntoView({ 
-            behavior: "smooth", 
-            block: "center" 
-        });
-        
-        // Wait a moment for smooth scrolling to complete
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Show a brief "Preparing..." message
-        const downloadBtn = document.getElementById('downloadPdfBtn');
-        const originalText = downloadBtn.innerHTML;
-        downloadBtn.disabled = true;
-        downloadBtn.innerHTML = '📋 Preparing PDF generation...';
-        
-        // Wait another moment for user to see the map
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        downloadBtn.innerHTML = '⏳ Generating PDF...';
-    }
+  const overviewMap = document.getElementById('overviewMap');
+  if (overviewMap) {
+    const confirmed = confirm(
+      "MAP ADJUSTMENT REMINDER\n\n" +
+      "Before generating your PDF:\n" +
+      "• Scroll down to the Overview Map\n" +
+      "• Zoom out if needed to ensure ALL locations are visible\n" +
+      "• Ensure it shows your full itinerary\n\n" +
+      "Click 'OK' to continue or 'Cancel' to stop."
+    );
+    if (!confirmed) return;
+    overviewMap.scrollIntoView({ behavior: "smooth", block: "center" });
+    await new Promise(res => setTimeout(res, 1000));
+  }
 
-    // Make all content visible
-    document.querySelectorAll('.day-content').forEach(div => {
-        div.style.display = 'block';
-        div.style.opacity = '1';
-        div.style.visibility = 'visible';
+  const downloadBtn = document.getElementById('downloadPdfBtn');
+  const originalText = downloadBtn.innerHTML;
+  downloadBtn.disabled = true;
+  downloadBtn.innerHTML = 'Generating PDF...';
+
+  await new Promise(res => setTimeout(res, 1000));
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+
+    const margin = 20;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const contentWidth = pageWidth - margin * 2;
+    let y = margin;
+
+    const colors = {
+      primary: [44, 62, 80],
+      secondary: [127, 140, 141],
+      text: [52, 73, 94],
+      light: [189, 195, 199],
+      accent: [41, 128, 185]
+    };
+
+    const destinationInput = document.getElementById('destination');
+    const destination = destinationInput ? destinationInput.value.trim() : 'Your Travel Itinerary';
+    const itinerary = window.currentItineraryData?.itinerary || [];
+
+    const clean = str => str.replace(/[^\x00-\x7F]/g, '').replace(/\s+/g, ' ').trim();
+
+    const addNewPageIfNeeded = (height = 20) => {
+      if (y + height > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+    };
+
+    const drawHeader = () => {
+      doc.setFillColor(...colors.primary);
+      doc.rect(0, 0, pageWidth, 30, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(18);
+      doc.text(`${destination} Travel Itinerary`, margin, 20);
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.text(`Generated on ${new Date().toLocaleDateString()}`, pageWidth - margin - 50, 20);
+      return 40;
+    };
+
+    const drawSection = (title) => {
+      addNewPageIfNeeded(20);
+      doc.setDrawColor(...colors.light);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 8;
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(...colors.primary);
+      doc.setFontSize(12);
+      doc.text(title, margin, y);
+      y += 12;
+    };
+
+    const drawSubHeader = (text) => {
+      addNewPageIfNeeded(10);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(...colors.secondary);
+      doc.text(text, margin, y);
+      y += 8;
+    };
+
+    const drawText = (text) => {
+      addNewPageIfNeeded(12);
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(...colors.text);
+      const lines = doc.splitTextToSize(clean(text), contentWidth);
+      doc.text(lines, margin, y);
+      y += lines.length * 4 + 4;
+    };
+
+    const drawFooter = (pageNum, totalPages) => {
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(...colors.light);
+      doc.text(`Page ${pageNum} of ${totalPages}`, pageWidth - margin - 20, pageHeight - 10);
+    };
+
+    // --- Start PDF ---
+    y = drawHeader();
+
+    drawText(`Welcome to your comprehensive travel guide for ${destination}. This itinerary includes must-visit locations, top restaurants, and helpful travel tips.`);
+
+    itinerary.forEach(day => {
+      drawSection(day.day);
+
+      if (day.location) {
+        drawSubHeader("LOCATION");
+        drawText(day.location);
+      }
+
+      if (day.description) {
+        drawSubHeader("DESCRIPTION");
+        drawText(day.description);
+      }
+
+      if (day.restaurants?.length > 0) {
+        drawSubHeader("RESTAURANTS");
+        day.restaurants.forEach(r => {
+          addNewPageIfNeeded(10);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(9);
+          doc.setTextColor(...colors.text);
+          doc.text(`• ${clean(r.name)}`, margin + 3, y);
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(8);
+          doc.setTextColor(...colors.accent);
+          doc.text(`Rating: ${r.rating}/5 (${r.totalRatings})`, margin + 6, y + 4);
+          y += 10;
+        });
+      }
+
+      y += 6;
     });
 
-    // Allow maps to load
-    window.scrollTo(0, document.body.scrollHeight);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Add Overview Map
+    if (overviewMap) {
+      drawSection("OVERVIEW MAP");
+      // Scroll to make sure the map is fully visible
+overviewMap.scrollIntoView({ behavior: "instant", block: "center" });
+await new Promise(res => setTimeout(res, 1500)); // wait longer for tiles
 
-    const downloadBtn = document.getElementById('downloadPdfBtn');
-    const originalText = downloadBtn.innerHTML;
-    downloadBtn.disabled = true;
-    downloadBtn.innerHTML = '⏳ Generating PDF...';
+const mapCanvas = await html2canvas(overviewMap, {
+  backgroundColor: "#ffffff",
+  useCORS: true,
+  scale: 2, // higher scale for better resolution
+  logging: false,
+  windowWidth: overviewMap.scrollWidth,
+  windowHeight: overviewMap.scrollHeight
+});
 
-    try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'mm', 'a4');
-        
-        // Professional color scheme
-        const colors = {
-            primary: [41, 128, 185],    // Professional Blue
-            secondary: [52, 73, 94],    // Dark Gray
-            accent: [231, 76, 60],      // Red for highlights
-            text: [44, 62, 80],         // Dark Blue-Gray
-            light: [149, 165, 166],     // Light Gray
-            success: [39, 174, 96]      // Green for ratings
-        };
+const imgData = mapCanvas.toDataURL("image/png");
+const mapAspect = mapCanvas.height / mapCanvas.width;
+const displayHeight = contentWidth * mapAspect;
 
-        const margin = 20;
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
-        const contentWidth = pageWidth - margin * 2;
-        let y = margin;
+addNewPageIfNeeded(displayHeight + 10);
+doc.addImage(imgData, "PNG", margin, y, contentWidth, displayHeight);
+y += displayHeight + 10;
 
-        const itinerary = window.currentItineraryData?.itinerary || [];
-        const destination = window.currentItineraryData?.destination || 'Travel';
-
-        // Enhanced text cleaning function
-        function cleanText(str) {
-            if (!str) return '';
-            return str
-                .replace(/<\/?[^>]+(>|$)/g, '') // Remove HTML tags
-                .replace(/&[#\w]+;/g, '') // Remove HTML entities
-                // Remove corrupted characters and symbols
-                .replace(/[Ø=ÜÍ<ß}þ>Þª³ÝñË]+/g, '') // Remove specific corrupted chars
-                .replace(/[\u00C0-\u00FF]+/g, '') // Remove extended Latin chars
-                .replace(/[\u0100-\u017F]+/g, '') // Remove Latin Extended-A
-                .replace(/[\u0180-\u024F]+/g, '') // Remove Latin Extended-B
-                .replace(/[\u2000-\u206F]+/g, '') // Remove General Punctuation
-                .replace(/[\u2070-\u209F]+/g, '') // Remove Superscripts and Subscripts
-                .replace(/[\u20A0-\u20CF]+/g, '') // Remove Currency Symbols
-                .replace(/[\u2100-\u214F]+/g, '') // Remove Letterlike Symbols
-                .replace(/[\uFFF0-\uFFFF]+/g, '') // Remove Specials
-                .replace(/[\uFFFD]/g, '') // Remove replacement character
-                // Keep only basic ASCII printable characters, spaces, and common punctuation
-                .replace(/[^\x20-\x7E]/g, '')
-                .replace(/\s+/g, ' ') // Normalize whitespace
-                .replace(/^\s*[^\w\s]+\s*/, '') // Remove leading non-word characters
-                .replace(/\s*[^\w\s,.!?;:()]+\s*$/, '') // Remove trailing non-word characters
-                .trim();
-        }
-
-        function stripRichText(input) {
-            if (!input) return '';
-            const temp = document.createElement("div");
-            temp.innerHTML = input;
-            let text = temp.textContent || temp.innerText || "";
-            
-            // Additional cleaning for rich text
-            text = text
-                .replace(/[^\w\s.,!?;:()\-'"/&]/g, ' ') // Keep only alphanumeric, spaces, and basic punctuation
-                .replace(/\s+/g, ' ')
-                .trim();
-            
-            return cleanText(text);
-        }
-
-        // Clean restaurant data specifically
-        function cleanRestaurantData(restaurant) {
-            return {
-                name: stripRichText(restaurant.name || '').replace(/[^\w\s&'.-]/g, ''),
-                rating: restaurant.rating || 'N/A',
-                totalRatings: restaurant.totalRatings || '0'
-            };
-        }
-
-        function addNewPageIfNeeded(requiredSpace = 20) {
-            if (y + requiredSpace > pageHeight - margin) {
-                doc.addPage();
-                y = margin;
-                return true;
-            }
-            return false;
-        }
-
-        function drawHeader() {
-            // Header background
-            doc.setFillColor(...colors.primary);
-            doc.rect(0, 0, pageWidth, 35, 'F');
-            
-            // Title
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(24);
-            doc.setFont("helvetica", "bold");
-            doc.text(stripRichText(`${destination} Travel Itinerary`), margin, 25);
-            
-            // Subtitle
-            doc.setFontSize(12);
-            doc.setFont("helvetica", "normal");
-            const currentDate = new Date().toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            doc.text(`Generated on ${currentDate}`, margin, 32);
-            
-            return 45; // Return Y position after header
-        }
-
-        function drawFooter(pageNum, totalPages) {
-            const footerY = pageHeight - 15;
-            
-            // Footer line
-            doc.setDrawColor(...colors.light);
-            doc.setLineWidth(0.5);
-            doc.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
-            
-            // Page number
-            doc.setTextColor(...colors.light);
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "normal");
-            doc.text(`Page ${pageNum} of ${totalPages}`, pageWidth - margin - 30, footerY);
-            
-            // Branding
-            doc.text('Professional Travel Itinerary', margin, footerY);
-        }
-
-        // Create PDF content first to count pages
-        const pdfContent = [];
-        
-        // Add days content
-        for (let i = 0; i < itinerary.length; i++) {
-            const item = itinerary[i];
-            pdfContent.push({
-                type: 'day',
-                data: item
-            });
-        }
-        
-        // Add map if available
-        const overviewMap = document.getElementById('overviewMap');
-        if (overviewMap) {
-            pdfContent.push({
-                type: 'map',
-                data: overviewMap
-            });
-        }
-        
-        // Add tips
-        pdfContent.push({
-            type: 'tips'
-        });
-
-        // First page
-        y = drawHeader();
-        let pageCount = 1;
-        
-        // Add a professional introduction
-        doc.setTextColor(...colors.text);
-        doc.setFontSize(12);
-        doc.setFont("helvetica", "normal");
-        const intro = `Welcome to your comprehensive travel guide for ${destination}. This itinerary has been carefully crafted to help you make the most of your journey, featuring must-visit attractions, recommended restaurants, and essential travel tips.`;
-        const introLines = doc.splitTextToSize(intro, contentWidth);
-        doc.text(introLines, margin, y);
-        y += introLines.length * 6 + 15;
-
-        // Process each day
-        for (let i = 0; i < itinerary.length; i++) {
-            const item = itinerary[i];
-            
-            addNewPageIfNeeded(30);
-            
-            // Day header with background
-            doc.setFillColor(...colors.primary);
-            doc.rect(margin - 5, y - 8, contentWidth + 10, 18, 'F');
-            
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(16);
-            doc.setFont("helvetica", "bold");
-            doc.text(stripRichText(item.day), margin, y + 5);
-            y += 25;
-
-            // Location with icon
-            doc.setTextColor(...colors.secondary);
-            doc.setFontSize(14);
-            doc.setFont("helvetica", "bold");
-            const cleanLocation = stripRichText(item.location);
-            doc.text(`LOCATION: ${cleanLocation}`, margin, y);
-            y += 10;
-
-            // Description
-            doc.setTextColor(...colors.text);
-            doc.setFontSize(11);
-            doc.setFont("helvetica", "normal");
-            const description = stripRichText(item.description);
-            if (description && description.length > 0) {
-                const descLines = doc.splitTextToSize(description, contentWidth);
-                doc.text(descLines, margin, y);
-                y += descLines.length * 5 + 10;
-            }
-
-            // Restaurants section
-            if (item.restaurants && item.restaurants.length > 0) {
-                addNewPageIfNeeded(30);
-                
-                // Restaurant header
-                doc.setFillColor(248, 249, 250);
-                doc.rect(margin - 5, y - 5, contentWidth + 10, 12, 'F');
-                
-                doc.setTextColor(...colors.accent);
-                doc.setFontSize(12);
-                doc.setFont("helvetica", "bold");
-                doc.text('RESTAURANTS NEARBY:', margin, y + 3);
-                y += 15;
-
-                // Restaurant list
-                for (const restaurant of item.restaurants) {
-                    if (addNewPageIfNeeded(15)) {
-                        // Redraw restaurant header if new page
-                        doc.setFillColor(248, 249, 250);
-                        doc.rect(margin - 5, y - 5, contentWidth + 10, 12, 'F');
-                        doc.setTextColor(...colors.accent);
-                        doc.setFontSize(12);
-                        doc.setFont("helvetica", "bold");
-                        doc.text('RESTAURANTS NEARBY (continued):', margin, y + 3);
-                        y += 15;
-                    }
-                    
-                    const cleanRestaurant = cleanRestaurantData(restaurant);
-                    
-                    // Restaurant name
-                    doc.setTextColor(...colors.text);
-                    doc.setFontSize(11);
-                    doc.setFont("helvetica", "bold");
-                    if (cleanRestaurant.name && cleanRestaurant.name.length > 0) {
-                        doc.text(`• ${cleanRestaurant.name}`, margin + 5, y);
-                        y += 6;
-                        
-                        // Rating
-                        doc.setTextColor(...colors.success);
-                        doc.setFontSize(10);
-                        doc.setFont("helvetica", "normal");
-                        doc.text(`RATING: ${cleanRestaurant.rating}/5 (${cleanRestaurant.totalRatings} reviews)`, margin + 10, y);
-                        y += 8;
-                    }
-                }
-            }
-            
-            y += 15; // Space between days
-        }
-
-        // Add overview map
-        if (overviewMap) {
-            try {
-                addNewPageIfNeeded(100);
-                
-                // Map section header
-                doc.setFillColor(...colors.primary);
-                doc.rect(margin - 5, y - 8, contentWidth + 10, 18, 'F');
-                
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(16);
-                doc.setFont("helvetica", "bold");
-                doc.text("OVERVIEW MAP", margin, y + 5);
-                y += 25;
-
-                overviewMap.scrollIntoView({ behavior: "auto", block: "center" });
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                const canvas = await html2canvas(overviewMap, {
-                    backgroundColor: null,
-                    useCORS: true,
-                    scale: 2
-                });
-
-                const imgData = canvas.toDataURL("image/png", 0.8);
-                const mapHeight = 100;
-                
-                addNewPageIfNeeded(mapHeight + 10);
-                
-                // Add border around map
-                doc.setDrawColor(...colors.light);
-                doc.setLineWidth(1);
-                doc.rect(margin - 2, y - 2, contentWidth + 4, mapHeight + 4);
-                
-                doc.addImage(imgData, "PNG", margin, y, contentWidth, mapHeight);
-                y += mapHeight + 15;
-            } catch (err) {
-                console.warn("Failed to capture overview map:", err);
-            }
-        }
-
-        // Travel Tips & Essentials
-        addNewPageIfNeeded(80);
-        
-        // Tips header
-        doc.setFillColor(...colors.primary);
-        doc.rect(margin - 5, y - 8, contentWidth + 10, 18, 'F');
-        
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(16);
-        doc.setFont("helvetica", "bold");
-        doc.text("TRAVEL TIPS & ESSENTIALS", margin, y + 5);
-        y += 25;
-
-        const tips = [
-            { icon: "[PASSPORT]", text: "Bring your passport, visa, and printed travel insurance" },
-            { icon: "[PAYMENT]", text: "Carry local currency and an international payment card" },
-            { icon: "[ADAPTER]", text: "Pack travel adapters suitable for your destination" },
-            { icon: "[MOBILE]", text: "Download offline maps and translation apps" },
-            { icon: "[BATTERY]", text: "Bring power bank, sunscreen, and reusable water bottle" },
-            { icon: "[DOCS]", text: "Save digital and physical copies of all bookings" },
-            { icon: "[CULTURE]", text: "Research and respect local customs and dress codes" },
-            { icon: "[MEDICAL]", text: "Pack essential medications and basic first-aid supplies" }
-        ];
-
-        doc.setTextColor(...colors.text);
-        doc.setFontSize(11);
-        doc.setFont("helvetica", "normal");
-
-        tips.forEach(tip => {
-            addNewPageIfNeeded(10);
-            
-            // Icon and text
-            doc.setTextColor(...colors.accent);
-            doc.setFont("helvetica", "bold");
-            doc.text(tip.icon, margin, y);
-            doc.setTextColor(...colors.text);
-            doc.setFont("helvetica", "normal");
-            const tipText = doc.splitTextToSize(tip.text, contentWidth - 25);
-            doc.text(tipText, margin + 22, y);
-            y += Math.max(tipText.length * 5, 7);
-        });
-
-        // Count total pages
-        const totalPages = doc.internal.getNumberOfPages();
-        
-        // Add footers to all pages
-        for (let i = 1; i <= totalPages; i++) {
-            doc.setPage(i);
-            drawFooter(i, totalPages);
-        }
-
-        // Save the PDF
-        const filename = `${destination.replace(/[^a-zA-Z0-9]/g, '_')}_Travel_Itinerary.pdf`;
-        doc.save(filename);
-        
-        // console.log(`✅ Professional PDF generated: ${filename}`);
-        
-    } catch (error) {
-        console.error('❌ Error generating PDF:', error);
-        alert('Failed to generate PDF. Please try again.');
-    } finally {
-        downloadBtn.disabled = false;
-        downloadBtn.innerHTML = originalText;
     }
+
+    // Travel Tips
+    drawSection("TRAVEL TIPS");
+    const tips = [
+      "Bring your passport, visa, and travel insurance",
+      "Carry local currency and an international card",
+      "Pack travel adapters suitable for your destination",
+      "Download offline maps and language apps",
+      "Bring a power bank, sunscreen, and reusable water bottle",
+      "Save both digital and physical copies of bookings",
+      "Respect local customs and dress appropriately",
+      "Carry essential medications and a basic first-aid kit"
+    ];
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(...colors.text);
+    tips.forEach(tip => {
+      addNewPageIfNeeded(6);
+      doc.text(`• ${tip}`, margin + 2, y);
+      y += 6;
+    });
+
+    // Page numbers
+    const total = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= total; i++) {
+      doc.setPage(i);
+      drawFooter(i, total);
+    }
+
+    const filename = `${destination.replace(/[^\w\s]/g, '').replace(/\s+/g, '_')}_Travel_Itinerary.pdf`;
+    doc.save(filename);
+
+  } catch (err) {
+    console.error("PDF error:", err);
+    alert("PDF generation failed: " + err.message);
+  } finally {
+    downloadBtn.disabled = false;
+    downloadBtn.innerHTML = originalText;
+  }
+}
+
+function debugItineraryData() {
+    console.log('=== DEBUGGING ITINERARY DATA ===');
+    console.log('window.currentItineraryData:', window.currentItineraryData);
+    console.log('window.itineraryData:', window.itineraryData);
+    
+    // Check DOM elements
+    const dayElements = document.querySelectorAll('.day-content, .itinerary-day, [class*="day"]');
+    console.log('Day elements found:', dayElements.length);
+    
+    dayElements.forEach((el, i) => {
+        console.log(`Day ${i + 1} element:`, el);
+        console.log('Text content:', el.textContent.substring(0, 100) + '...');
+    });
+    
+    return {
+        currentItineraryData: window.currentItineraryData,
+        itineraryData: window.itineraryData,
+        dayElements: dayElements.length
+    };
 }
 async function loadImageAsBase64(imageUrl) {
     return new Promise((resolve) => {

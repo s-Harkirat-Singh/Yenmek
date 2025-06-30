@@ -46,9 +46,9 @@ You're a travel expert. Summarize this blog about ${destination}:
 
 ${bestMatch.link}
 
-Use this format (fill missing parts using your own knowledge):
+Use this format (fill missing parts using your own accurate knowledge):
 
-MUST-DO (Give some unique must to do things, if not continue with general response):
+MUST-DO (Give some unique, underrated must to do things, if not continue with own accurate knowledge):
 - ...
 - ...
 

@@ -52,7 +52,7 @@ async function getImagesFromGooglePlaces(locationName, destinationContext) {
     const placeData = await placeResponse.json();
 
     if (placeData.status !== "OK" || !placeData.candidates || placeData.candidates.length === 0) {
-      console.warn(`No place found or error for "${searchQuery}":`, placeData.status, placeData.error_message || '');
+      // console.warn(`No place found or error for "${searchQuery}":`, placeData.status, placeData.error_message || '');
       
       if (destinationContext && destinationContext.trim() !== '' && placeData.status !== "ZERO_RESULTS") { 
         // console.log(`Retrying search for "${locationName}" without destination context due to status: ${placeData.status}`);
@@ -96,7 +96,7 @@ async function getImagesFromGooglePlaces(locationName, destinationContext) {
 }
 
 
-async function getItineraryFromAI(destination, days) {
+async function getItineraryFromAI(destination, days, landing) {
 
   if (!GROQ_API_KEY) {
     throw new Error("Groq API key is not configured. Please check your .env file and ensure GROQ_API_KEY is set.");
@@ -107,16 +107,25 @@ async function getItineraryFromAI(destination, days) {
   }
 
 
-const prompt = `You are a travel expert planning a ${days}-day itinerary for a traveler visiting ${destination}. 
-For each day, suggest 2-3 important and famous locations that should not be missed. For every location, include:
-- The name of the location
-- Why it's important (history, culture, significance)
-- What the user can do there (activities within 2-3 hours)
+const prompt = `You are a travel expert planning a ${days}-day itinerary for a traveler visiting ${destination}.
+They will land in ${landing}, so start Day 1 near ${landing}. Then gradually explore other areas prioritize famous landmarks,cultural experience and some must visit unique spots.
+
+Each day, suggest 2-3 famous places. For each, include:
+- The full name (with city and country, as shown on Google Maps)
+- Why it’s important (history/culture)
+- What the traveler can do in 2–3 hours
+
+CRITICAL RULES:
+- Each day’s locations must be within **15–25 km** of each other.
+- Day-to-day transition (Day N last to Day N+1 first) must be within **40–50 km** max.
+- Total city-to-city movement across the trip must not exceed **50–60 km**, and only once or twice.
+- DO NOT jump long distances (more than 50 km) between days — **keep a logical, realistic path**.
+- Do not suggest places outside ${destination}.
 
 Prioritize famous landmarks, cultural experiences, and unique spots. Focus on must-visit places.
 
 Return each location with its full name including city and country. For example:
-"Rock Garden of Chandigarh, Chandigarh, India"
+"Rock Garden, Chandigarh, India"
 
 Use specific Google-mappable names for each location. Try to Avoid vague region names. Prefer names that match how they appear in Google Maps or Google Places.
 
@@ -265,18 +274,18 @@ function parseItinerary(rawText) {
 router.post("/", async (req, res) => {
   try {
     console.log("=== NEW ITINERARY REQUEST ===");
-    const { destination, days } = req.body;
+    const { destination, days, landing } = req.body;
 
-    if (!destination || !days) {
-      return res.status(400).json({ error: "Destination and number of days are required.", success: false });
-    }
+    if (!destination || !days || !landing) {
+  return res.status(400).json({ error: "Destination, landing city, and number of days are required.", success: false });
+}
     const numDays = parseInt(days);
     if (isNaN(numDays) || numDays <= 0 || numDays > 30) {
       return res.status(400).json({ error: "Days must be a positive number between 1 and 30.", success: false });
     }
 
     // console.log(` Generating ${numDays}-day itinerary for ${destination}...`);
-    const rawText = await getItineraryFromAI(destination, numDays);
+    const rawText = await getItineraryFromAI(destination, numDays,landing);
     const itinerary = parseItinerary(rawText);
     
     if (itinerary.length === 0) {
@@ -359,6 +368,35 @@ router.get("/geocode", async (req, res) => {
     res.status(500).json({ error: "Geocoding failed" });
   }
 });
+// /api/itinerary/google-distance
+router.get("/google-distance", async (req, res) => {
+  const { origin, destination } = req.query;
+
+  if (!origin || !destination) {
+    return res.status(400).json({ error: "Missing origin or destination" });
+  }
+
+  const url = `https://maps.googleapis.com/maps/api/distancematrix/json?origins=${encodeURIComponent(origin)}&destinations=${encodeURIComponent(destination)}&mode=driving&key=${process.env.MAPS_BACKEND_KEY}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const element = data.rows?.[0]?.elements?.[0];
+    if (!element || element.status !== "OK") {
+      return res.json({ distanceText: "Unavailable", durationText: "Unavailable" });
+    }
+
+    res.json({
+      distanceText: element.distance.text,
+      durationText: element.duration.text
+    });
+  } catch (err) {
+    console.error("❌ Google Distance API error:", err);
+    res.status(500).json({ error: "Distance fetch failed" });
+  }
+});
+
 
 
 // Health check endpoint
