@@ -96,7 +96,7 @@ async function getImagesFromGooglePlaces(locationName, destinationContext) {
 }
 
 
-async function getItineraryFromAI(destination, days, landing) {
+async function getItineraryFromAI(destination, days, landing,excludeStates) {
 
   if (!GROQ_API_KEY) {
     throw new Error("Groq API key is not configured. Please check your .env file and ensure GROQ_API_KEY is set.");
@@ -105,10 +105,13 @@ async function getItineraryFromAI(destination, days, landing) {
   if (!GROQ_API_KEY.startsWith('gsk_')) {
     throw new Error("Invalid Groq API key format. Key should start with 'gsk_'. Please verify your API key.");
   }
-
+let excludePrompt = "";
+if (excludeStates?.length) {
+  excludePrompt = `Do not add this location ${excludeStates.join(", ")} , any province or city related to it in the whole itinerary .`;
+}
 
 const prompt = `You are a travel expert planning a ${days}-day itinerary for a traveler visiting ${destination}.
-They will land in ${landing}, so start Day 1 near ${landing}. Then gradually explore other areas prioritize famous landmarks,cultural experience and some must visit unique spots.
+They will land in ${landing}, so start Day 1 near ${landing}, ${excludePrompt}. Then gradually explore other areas prioritize famous landmarks,cultural experience and some must visit unique spots.
 
 Each day, suggest 2-3 famous places. For each, include:
 - The full name (with city and country, as shown on Google Maps)
@@ -124,13 +127,13 @@ CRITICAL RULES:
 
 Prioritize famous landmarks, cultural experiences, and unique spots. Focus on must-visit places.
 
-Return each location with its full name including city and country. For example:
-"Rock Garden, Chandigarh, India"
+Return each location with its full name including city, state/province and country. For example:
+"Rock Garden, Chandigarh, India", or "Golden Temple,Punjab, India 
 
 Use specific Google-mappable names for each location. Try to Avoid vague region names. Prefer names that match how they appear in Google Maps or Google Places.
 
 
-⚠️ IMPORTANT:
+ IMPORTANT:
 - Only include locations INSIDE ${destination}.
 - Output must be valid JSON. No markdown, no explanations, no notes.
 - Do NOT include places from other countries, even if they have the same name.
@@ -140,17 +143,17 @@ JSON format example:
 [
   {
     "day": "Day 1",
-    "location": "Hassan II Mosque, country name",
+    "location": "Hassan II Mosque, state name, country name",
     "description": "One of the largest mosques in the world, located by the Atlantic Ocean. Tourists can admire its architecture and sea views."
   },
   {
     "day": "Day 1",
-    "location": "Rick’s Café Casablanca, country name",
+    "location": "Rick’s Café Casablanca,state name, country name",
     "description": "Inspired by the movie Casablanca, this café recreates the ambiance with Moroccan cuisine and music."
   },
   {
     "day": "Day 2",
-    "location": "Chefchaouen (The Blue City), country name",
+    "location": "Chefchaouen (The Blue City),state name, country name",
     "description": "Famous for its vibrant blue-painted streets and buildings. Ideal for walking tours and photography."
   }
 ]
@@ -274,7 +277,7 @@ function parseItinerary(rawText) {
 router.post("/", async (req, res) => {
   try {
     console.log("=== NEW ITINERARY REQUEST ===");
-    const { destination, days, landing } = req.body;
+    const { destination, days, landing, excludeStates } = req.body;
 
     if (!destination || !days || !landing) {
   return res.status(400).json({ error: "Destination, landing city, and number of days are required.", success: false });
@@ -285,7 +288,10 @@ router.post("/", async (req, res) => {
     }
 
     // console.log(` Generating ${numDays}-day itinerary for ${destination}...`);
-    const rawText = await getItineraryFromAI(destination, numDays,landing);
+    console.log("🧾 Received excludeStates:", excludeStates);
+
+    const rawText = await getItineraryFromAI(destination, numDays,landing,excludeStates);
+
     const itinerary = parseItinerary(rawText);
     
     if (itinerary.length === 0) {
@@ -397,6 +403,103 @@ router.get("/google-distance", async (req, res) => {
   }
 });
 
+// ========== REPLACE LOCATION FEATURE ==========
+
+router.post("/replace-location", async (req, res) => {
+  const { currentLocation, destination, day, preference, existingLocations } = req.body;
+
+if (typeof currentLocation === "undefined" || !destination || !day || !preference) {
+  return res.status(400).json({ error: "Missing required fields" });
+}
+
+  const apiKey = process.env.GROQ_EDIT_API_KEY; // your SECOND API key
+
+  if (!apiKey || !apiKey.startsWith('gsk_')) {
+    return res.status(401).json({ error: "Missing or invalid GROQ_EDIT_API_KEY in env" });
+  }
+const exclusionText = existingLocations && existingLocations.length
+  ? `Avoid suggesting any of these places: ${existingLocations.join(", ")}.`
+  : "";
+
+const prompt = `
+You are a travel planner helping a user in ${destination}. On ${day}, they currently have "${currentLocation}" scheduled in their itinerary.
+
+They want to replace it with a **real place that is specifically a "${preference}"** — not something with a similar vibe.
+
+Your response must follow these strict rules:
+1. The new place must match the exact category "${preference}" — not metaphorical or vibe-based alternatives.
+2. It must be:
+   - A real, publicly accessible place
+   - Listed and findable on Google Maps
+   - Located within ${destination}
+   - A known physical place with great and good amount of visitor reviews
+3. ${exclusionText}
+Return strictly formatted JSON:
+
+{
+  "location": "Exact Place Name, City, Country",
+  "description": "1–2 sentences explaining why it's a good fit"
+}
+`;
+
+  try {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "llama3-8b-8192",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.6,
+        max_tokens: 300
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return res.status(response.status).json({ error: `Groq API Error: ${errorText}` });
+    }
+
+    const data = await response.json();
+    const rawContent = data.choices[0].message.content.trim();
+
+// Extract the first JSON block from the text
+const jsonMatch = rawContent.match(/\{[\s\S]*?\}/);
+
+if (!jsonMatch) {
+  console.error("❌ Could not extract JSON from response:", rawContent);
+  return res.status(500).json({ error: "Invalid format returned by Groq AI" });
+}
+
+const result = JSON.parse(jsonMatch[0]);
+
+
+    if (!result.location || !result.description) {
+      return res.status(500).json({ error: "Incomplete response from Groq" });
+    }
+
+   let images = [];
+try {
+  images = await getImagesFromGooglePlaces(result.location, destination);
+} catch (imgErr) {
+  console.warn(`Failed to fetch image for ${result.location}:`, imgErr.message);
+}
+
+res.json({
+  success: true,
+  newLocation: result.location,
+  newDescription: result.description,
+  images
+});
+
+
+  } catch (err) {
+    console.error("Replace location error:", err.message);
+    res.status(500).json({ error: "Server error replacing location" });
+  }
+});
 
 
 // Health check endpoint

@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./style/font.css">
     <link rel="icon" href="./img/ChatGPT Image Jun 22, 2025, 03_50_49 AM.png" type="image/x-icon">
 
-    <title id="Main-title">AI Travel Itinerary Generator</title>
+    <title id="Main-title" >AI Travel Itinerary Generator</title>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
  
@@ -42,6 +42,7 @@ body {
 #Main-title{
     font-family: 'Helvetica Bold', monospace;
     font-weight: 700;
+    padding-top: 4rem;
 }
 /* Subtitle */
 .header p {
@@ -298,40 +299,6 @@ body {
             margin-right: 8px;
         }
 
-
-
-        /* Digital Rain Background */
-        .digital-rain {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .rain-column {
-            position: absolute;
-            top: -100%;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1;
-            opacity: 0.15;
-            animation: fall linear infinite;
-            color: #00d4ff;
-        }
-
-        .rain-column:nth-child(even) {
-            color: #7c3aed;
-            opacity: 0.1;
-        }
-
-        .rain-column:nth-child(3n) {
-            color: #ffffff;
-            opacity: 0.08;
-        }
 
         @keyframes fall {
             0% {
@@ -892,44 +859,57 @@ font-family: 'Montserrat Normal', sans-serif;
   animation: fadeInUp 0.6s ease-out;
 }
 
-
-
-
-
-/* Digital Rain Fullscreen Background */
-.digital-rain {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    pointer-events: none;
-    z-index: 0;
-    background: transparent;
+.checkbox-group {
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 16px 20px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 10px;
+  width: 100%; 
+  max-width: 100%; 
+  box-sizing: border-box; 
+  overflow-x: hidden; 
 }
 
-.rain-column {
-    position: absolute;
-    top: -100%;
-    white-space: pre;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.1;
-    opacity: 0.12; /* increased visibility */
-    animation: fall linear infinite;
-    color: #00bfff; /* strong blue */
+.checkbox-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 15px;
+  font-weight: 500;
+}
+.checkbox-group label:hover {
+  background-color: #eef3ff;
+  border-radius: 8px;
 }
 
-.rain-column:nth-child(even) {
-    color: #00aaff;
-    opacity: 0.10;
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
 }
 
-.rain-column:nth-child(3n) {
-    color: #0088ff;
-    opacity: 0.08;
+.form-group {
+  flex: 1;
+  min-width: 220px;
 }
+
+#stateExclusionGroup {
+  margin-top: 16px;
+}
+
+.checkbox-group {
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 16px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+
+
 
 @keyframes fall {
     0% {
@@ -1055,14 +1035,121 @@ text-align: left;
   color: #d1d5db;
 }
 
+.hidden {
+  display: none !important;
+}
+
+.modal {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+.floating-user-menu {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.floating-user-menu button {
+  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  border: none;
+  color: white;
+  font-size: 18px;
+  padding: 10px 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  overflow: visible;
+  padding-bottom: 8px; 
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.menu-dropdown a,
+.menu-dropdown button {
+  padding: 10px 16px;
+  text-align: left;
+  background: white;
+  color: #333;
+  border: none;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.menu-dropdown a:hover,
+.menu-dropdown button:hover {
+  background: #f5f5f5;
+}
+
+.menu-dropdown.hidden {
+  display: none;
+}
+
+.floating-save-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  transition: opacity 0.3s ease;
+}
+
+.floating-save-btn.hidden {
+  display: none;
+}
+
+
     </style>
 </head>
 <body>
+
+<div class="floating-user-menu">
+  <button id="userMenuToggle" title="Menu">☰</button>
+  <div id="userMenuDropdown" class="menu-dropdown hidden">
+    <div id="userEmail" style="padding: 10px 16px; font-weight: bold; color: #565656;">👤 Checking...</div>
+
+    <!-- Auth-based options -->
+    <a href="dashboard.html" id="dashboardLink">📋 Dashboard</a>
+    <a href="#" id="logoutLink" onclick="logout()">🔒 Logout</a>
+    <a href="#" id="loginLink" style="display: none;">🔐 Login</a>
+  </div>
+</div>
+
+
+
+
     <!-- <div class="grid-overlay"></div> -->
     <!-- <div class="digital-rain" id="digitalRain"></div> -->
     <div class="container">
         <div class="header">
-            <h1>AI Travel Itinerary Generator</h1>
+            <h1 style="padding-top: 4rem;">AI Travel Itinerary Generator</h1>
             <p>Intelligent travel planning powered by Yenmek</p>
         </div>
 
@@ -1096,6 +1183,11 @@ text-align: left;
                         </select>
                     </div>
                 </div>
+                <div class="form-group" id="stateExclusionGroup" style="display: none; width: 100%;">
+  <label>Exclude States/Provinces</label>
+  <div class="checkbox-group" id="checkboxGroup"></div>
+  <small style="color: red;">You can exclude certain regions from your trip</small>
+</div>
                 <button type="submit" class="generate-btn" id="generateBtn">
                     Generate Itinerary
                 </button>
@@ -1115,13 +1207,87 @@ text-align: left;
   <span id="lightbox-close" style="position:absolute; top:20px; right:30px; font-size:40px; color:white; cursor:pointer;">&times;</span>
   <img id="lightbox-img" src="" alt="Zoomed" style="max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.4);">
 </div>
-  
+<div id="editLocationModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>Edit Location</h3>
+    <p id="editLocationCurrentLoc">Current location: <span></span></p>
+    <input type="text" id="editLocationPreference" placeholder="e.g. museum, beach, park" />
+    <div class="modal-actions">
+      <button id="editLocationSubmitBtn">Replace</button>
+      <button id="editLocationCancelBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🔐 Firebase Auth Login/Signup -->
+<div id="auth-section" style="display:none; max-width: 400px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: fixed; top: 20%; left: 50%; transform: translateX(-50%); z-index: 9999;">
+  <h3 style="text-align: center; color: #333;">Login / Sign Up</h3>
+
+  <input id="email" type="email" placeholder="Email" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc;">
+  <input id="password" type="password" placeholder="Password" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc;">
+
+  <!-- ✅ Insert this block -->
+  <div id="auth-buttons">
+    <button id="authActionBtn" style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 8px; margin-bottom: 10px;">Login</button>
+    <p style="text-align: center;">Don't have an account? <a href="#" onclick="toggleAuthMode()">Sign Up</a></p>
+  </div>
+
+  <button onclick="hideAuthForm()" style="margin-top: 10px; width: 100%; padding: 10px; border: none; background: #ddd; border-radius: 8px;">Cancel</button>
+
+  <p id="auth-message" style="color: red; text-align: center; margin-top: 10px;"></p>
+</div>
+
+<button id="saveFloatingBtn" class="floating-save-btn" style="display: none; border: none;">
+  ⎙ Save
+</button>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="./js/excludedData.js"></script>
+
+<script>
+  let itinerarySaved = false;
+</script>
     
     <script>
-        // const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
-        const API_BASE_URL = window.location.origin;
+  function sanitizeItinerary(itineraryArray) {
+  return itineraryArray.map((item) => {
+    const cleanedItem = {};
+
+    // Copy only known-safe fields
+    cleanedItem.day = item.day || "";
+    cleanedItem.location = item.location || "";
+    cleanedItem.description = item.description || "";
+
+    cleanedItem.images = Array.isArray(item.images)
+      ? item.images.filter(img => typeof img === "string" && img !== "")
+      : [];
+
+    cleanedItem.restaurants = Array.isArray(item.restaurants)
+      ? item.restaurants.filter(r => typeof r === "string" && r !== "")
+      : [];
+
+    return cleanedItem;
+  });
+}
+
+
+    </script>
+    <script>
+      function requireLogin() {
+  const user = firebase.auth().currentUser;
+  if (!user) {
+    alert("Please log in to use this feature.");
+    showAuthForm(); // 🔐 Trigger login form
+    return false;
+  }
+  return true;
+}
+
+    </script>
+    <script>
+        const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
+        // const API_BASE_URL = window.location.origin;
         let googleMapsLoaded = false;
         let mapsToInitialize = [];
         let allLocationsData = [];
@@ -1154,10 +1320,29 @@ text-align: left;
             '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
             '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
         ];
+function checkItineraryLimit() {
+  const user = firebase.auth().currentUser;
+
+  if (user) {
+    return true; // ✅ Unlimited for logged-in users
+  }
+
+  let count = parseInt(localStorage.getItem("itineraryCount") || "0");
+
+  if (count >= 3) {
+    alert("🚫 You’ve reached your free limit of 3 itineraries.\nPlease log in to continue.");
+    showAuthForm(); // 🔐 Triggers login/signup form
+    return false;
+  }
+
+  // Increase and store
+  localStorage.setItem("itineraryCount", count + 1);
+  return true;
+}
 
         document.getElementById('itineraryForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+            if (!checkItineraryLimit()) return;
             const destination = document.getElementById('destination').value.trim();
             const landing = document.getElementById('landing').value.trim();
             const days = parseInt(document.getElementById('days').value);
@@ -1166,6 +1351,7 @@ text-align: left;
                 showError('Please fill in all fields');
                 return;
             }
+         const excludeStates = Array.from(document.querySelectorAll('input[name="excludeStates"]:checked')).map(cb => cb.value);
 
             // Show loading state
             showLoading(true);
@@ -1184,7 +1370,8 @@ text-align: left;
                     body: JSON.stringify({
   destination,
   days,
-  landing
+  landing,
+  excludeStates
 })
                 });
 
@@ -1198,11 +1385,46 @@ text-align: left;
                 const data = await response.json();
                 // console.log('Response data:', data);
 
-                if (data.success) {
-    await displayResults(data); // ✅ await rendering
+if (data.success) {
+  await displayResults(data);
+  document.getElementById("saveFloatingBtn").style.display = "block";
+ 
+  const user = firebase.auth().currentUser;
+  console.log("🔍 Sending this to Firestore:", {
+  destination: data.destination,
+  days: data.days,
+  generatedAt: new Date().toISOString(),
+  itinerary: sanitizeItinerary(data.itinerary)
+});
+
+if (user) {
+  try {
+    const uid = user.uid;
+    const cleanedItinerary = sanitizeItinerary(data.itinerary);
+    await firebase.firestore()
+      .collection("users")
+      .doc(uid)
+      .collection("itineraries")
+      .add({
+        destination: data.destination,
+        days: data.days,
+        generatedAt: new Date().toISOString(),
+        itinerary: sanitizeItinerary(data.itinerary)
+      });
+  //  console.log("Cleaned itinerary:", sanitizeItinerary(data.itinerary));
+
+    // console.log("Itinerary saved to Firestore");
+  } catch (saveError) {
+    console.error("Failed to save itinerary:", saveError.message);
+  }
 } else {
-    throw new Error(data.error || 'Failed to generate itinerary');
+    console.warn("User not logged in, skipping save.");
+  }
+
+} else {
+  throw new Error(data.error || 'Failed to generate itinerary');
 }
+
 
             } catch (error) {
                 console.error('Error:', error);
@@ -1324,13 +1546,21 @@ async function displayResults(data) {
           <div class="images-container">
             ${location.images?.map(img => `<img src="/api/photo?ref=${img.split('photoreference=')[1]}" class="location-image" />`).join('') || '<div class="no-images">No images available</div>'}
           </div>
-          <div id="map-${dayIndex}-${locIndex}" class="location-map"></div>
+           <button class="edit-btn" data-day="${location.day}" data-location="${location.location}">✏️</button>
+          <button class="delete-btn text-red-500 hover:text-red-700" data-day="${day}" data-location="${location.location}">
+  ❌
+</button>
+
+
+          <div id="map-${dayIndex}-${locIndex}"  class="location-map"></div>
         </div>
       `;
     }
     html += `<div id="distance-summary-${dayIndex}" class="summary-section"></div></div>`;
   }
-
+// <button class="add-location-btn text-green-600 hover:text-green-800" data-day="${day}">
+//   ➕ Add Location
+// </button>
   // Add buttons & overview map area
   html += `
     <div class="summary-section" style="text-align: center;">
@@ -1395,8 +1625,20 @@ summary += `</div>`;
     });
   }
 
-  // Add PDF download listener
-  document.getElementById('downloadPdfBtn').addEventListener('click', generatePDF);
+
+document.getElementById("downloadPdfBtn").addEventListener("click", async () => {
+  if (!requireLogin()) return;
+
+  
+  if (!window.itinerarySaved && window.lastItineraryData) {
+    await saveItineraryToFirebase(window.lastItineraryData);
+    window.itinerarySaved = true;
+  }
+
+  generatePDF();
+});
+
+
   window.currentItineraryData = data;
 }
 
@@ -2237,7 +2479,536 @@ async function loadImageAsBase64(imageUrl) {
     });
 }
     </script>
-   
+
+<script>
+  // Wait until DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    const destinationInput = document.getElementById("destination");
+    const exclusionGroup = document.getElementById("stateExclusionGroup");
+    const stateSelect = document.getElementById("excludeStates");
+
+    destinationInput.addEventListener("blur", function () {
+      const destination = this.value.trim();
+
+      if (window.exclusionData && window.exclusionData[destination]) {
+        exclusionGroup.style.display = "block";
+        stateSelect.innerHTML = ""; // Clear previous options
+
+        window.exclusionData[destination].forEach(state => {
+          const option = document.createElement("option");
+          option.value = state;
+          option.textContent = state;
+          stateSelect.appendChild(option);
+        });
+      } else {
+        exclusionGroup.style.display = "none";
+        stateSelect.innerHTML = "";
+      }
+    });
+  });
+</script>
+
+<script>
+  const destinationInput = document.getElementById('destination');
+  const stateGroup = document.getElementById('stateExclusionGroup');
+  const excludeSelect = document.getElementById('excludeStates');
+
+  destinationInput.addEventListener('blur', function () {
+    const country = destinationInput.value.trim();
+    const states = exclusionData[country];
+
+    excludeSelect.innerHTML = ''; // Clear previous
+
+    if (states) {
+      stateGroup.style.display = 'block';
+      states.forEach(state => {
+        const option = document.createElement('option');
+        option.value = state;
+        option.textContent = state;
+        excludeSelect.appendChild(option);
+      });
+    } else {
+      stateGroup.style.display = 'none';
+    }
+  });
+</script>
+<script>
+document.getElementById("destination").addEventListener("blur", function () {
+  const country = this.value.trim();
+  if (window.exclusionData?.[country]) {
+    renderExcludeCheckboxes(country);
+    document.getElementById("stateExclusionGroup").style.display = "block";
+  } else {
+    document.getElementById("stateExclusionGroup").style.display = "none";
+  }
+});
+
+
+    function renderExcludeCheckboxes(country) {
+  const group = document.getElementById("checkboxGroup");
+  group.innerHTML = "";
+
+  const states = window.exclusionData?.[country] || [];
+  if (states.length === 0) {
+    group.innerHTML = "<p style='color:#777;'>No states/provinces available for exclusion.</p>";
+    return;
+  }
+
+  states.forEach(state => {
+    const label = document.createElement("label");
+    label.innerHTML = `
+      <input type="checkbox" name="excludeStates" value="${state}"> ${state}
+    `;
+    group.appendChild(label);
+  });
+}
+
+</script>   
+
+
+
+<script>
+
+window.addEventListener('load', function () {
+const editModal = document.getElementById("editLocationModal");
+const cancelBtn = document.getElementById("editLocationCancelBtn");
+const submitBtn = document.getElementById("editLocationSubmitBtn");
+const preferenceInput = document.getElementById("editLocationPreference");
+const modalTitle = editModal.querySelector("h3");
+const suggestionInput = document.getElementById("editLocationPreference");
+const currentLocSpan = document.getElementById("editLocationCurrentLoc").querySelector("span");
+
+let currentEditLocation = "";
+let currentEditDay = "";
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("edit-btn")) {
+    if (!requireLogin()) return; // 🔒 Require login
+
+    currentEditLocation = e.target.dataset.location;
+    currentEditDay = e.target.dataset.day;
+    currentLocSpan.textContent = currentEditLocation;
+    preferenceInput.value = "";
+    editModal.classList.remove("hidden");
+  }
+});
+
+
+cancelBtn.addEventListener("click", () => {
+  editModal.classList.add("hidden");
+  preferenceInput.value = "";
+  currentLocSpan.textContent = "";
+  currentEditLocation = "";
+  currentEditDay = "";
+});
+
+submitBtn.addEventListener("click", async () => {
+  const preference = preferenceInput.value.trim();
+  if (!preference) return alert("Please enter your preference");
+  const allLocations = Array.from(document.querySelectorAll(".location-name")).map(el =>
+  el.textContent.replace("📍", "").trim()
+);
+  try {
+  const res = await fetch(`${API_BASE_URL}/api/itinerary/replace-location`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    currentLocation: currentEditLocation,
+    destination: document.getElementById("destination").value,
+    day: currentEditDay,
+    preference: preference,
+    existingLocations: allLocations
+  })
+});
+
+    const data = await res.json();
+    if (!data.success) return alert("Failed to replace location");
+
+    updateItineraryLocation(
+  currentEditDay,
+  currentEditLocation,
+  data.newLocation,
+  data.newDescription,
+  data.images
+);
+refreshOverviewMapFromDOM();
+    // ✅ Reset modal state
+    editModal.classList.add("hidden");
+    preferenceInput.value = "";
+    currentLocSpan.textContent = "";
+    currentEditLocation = "";
+    currentEditDay = "";
+  } catch (err) {
+    console.error("Error replacing location:", err);
+    alert("Something went wrong.");
+  }
+
+});
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("delete-btn")) {
+    if (!requireLogin()) return; // 🔒 Block unauthenticated delete
+
+    const card = e.target.closest(".location-card");
+    const day = e.target.dataset.day;
+
+    if (confirm(`Are you sure you want to delete?`)) {
+      card.remove();
+      refreshOverviewMapFromDOM();
+    }
+  }
+});
+
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("add-location-btn")) {
+    if (!requireLogin()) return; // 🔒 Block if not logged in
+
+    currentEditLocation = null;
+    currentEditDay = e.target.dataset.day;
+
+    // Reset modal
+    suggestionInput.value = "";
+    modalTitle.textContent = `Add a new location to ${currentEditDay}`;
+    submitBtn.textContent = "Add";
+    document.getElementById("editLocationCurrentLoc").style.display = "none";
+    editModal.classList.remove("hidden");
+  }
+});
+
+
+
+
+function updateItineraryLocation(day, oldLocation, newLocation, newDescription) {
+  const cards = document.querySelectorAll(".location-card");
+
+  cards.forEach((card, index) => {
+    const nameElem = card.querySelector(".location-name");
+    const btn = card.querySelector(".edit-btn");
+
+    const locDay = btn?.dataset.day;
+    const btnLocation = btn?.dataset.location;
+
+    if (locDay === day && btnLocation === oldLocation) {
+      nameElem.textContent = "📍 " + newLocation;
+      card.querySelector(".location-description").textContent = newDescription;
+      btn.dataset.location = newLocation;
+
+      // ✅ Re-initialize Google Map
+      const mapId = card.querySelector(".location-map")?.id;
+      const restaurantContainerId = card.querySelector(".restaurants-section")?.id;
+
+      if (mapId && googleMapsLoaded) {
+        const locationObj = {
+          location: newLocation,
+          description: newDescription,
+          day: locDay
+        };
+
+        initializeMapWithRestaurants(
+          mapId,
+          [locationObj],
+          false, // isOverview
+          parseInt(locDay.replace("Day", "")) - 1 || 0,
+          index,
+          restaurantContainerId
+        );
+      }
+    }
+  });
+}
+})
+function refreshOverviewMapFromDOM() {
+  const cards = document.querySelectorAll(".location-card");
+  const newOverviewData = [];
+
+  cards.forEach((card, index) => {
+    const name = card.querySelector(".location-name")?.textContent?.replace("📍", "").trim();
+    const description = card.querySelector(".location-description")?.textContent?.trim();
+    const day = card.querySelector(".edit-btn")?.dataset.day;
+
+    if (name && description && day) {
+      newOverviewData.push({
+        location: name,
+        description,
+        day: day,
+        dayIndex: parseInt(day.replace("Day", "")) - 1 || 0,
+        color: dayColors[(parseInt(day.replace("Day", "")) - 1) % dayColors.length]
+      });
+    }
+  });
+
+  if (window.google && newOverviewData.length > 0) {
+    initializeOverviewMap("overviewMap", newOverviewData);
+  }
+}
+
+
+</script>
+
+<script>
+    function addNewLocationCard(day, location, description) {
+  const container = document.querySelector(`[data-day-container="${day}"]`);
+  if (!container) return;
+
+  const card = document.createElement("div");
+  card.classList.add("location-card");
+
+  card.innerHTML = `
+    <div class="flex justify-between items-center">
+      <h4 class="location-name text-lg font-semibold">📍 ${location}</h4>
+      <div class="space-x-2">
+        <button class="edit-btn text-blue-500 hover:text-blue-700" data-day="${day}" data-location="${location}">✏️</button>
+        <button class="delete-btn text-red-500 hover:text-red-700" data-day="${day}" data-location="${location}">❌</button>
+      </div>
+    </div>
+    <p class="location-description">${description}</p>
+    <div class="location-map mt-2" style="height: 200px; border-radius: 8px;"></div>
+  `;
+
+  container.appendChild(card);
+
+  // You can initialize map + restaurants here if needed
+  geocodeLocation(location).then(coords => {
+    if (coords) {
+      const mapId = `map-${day}-${Date.now()}`;
+      card.querySelector(".location-map").id = mapId;
+
+      initializeMapWithRestaurants(
+        mapId,
+        [{ location, description, day }],
+        false,
+        parseInt(day.replace("Day", "")) - 1 || 0,
+        container.querySelectorAll(".location-card").length - 1,
+        ""
+      );
+    }
+  });
+}
+
+</script>
+
+// backend firebase starts from here 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyDycfEJMTSVX0nzVMHWB0lVuvVYX8vkZyw",
+  authDomain: "yenmek-itinerary.firebaseapp.com",
+  projectId: "yenmek-itinerary",
+  storageBucket: "yenmek-itinerary.firebasestorage.app",
+  messagingSenderId: "523846800906",
+  appId: "1:523846800906:web:1501bf4f94577aaf5371f3"
+};
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+</script>
+
+<script>
+  let isLoginMode = true;
+
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const authActionBtn = document.getElementById("authActionBtn");
+  const authMessage = document.getElementById("auth-message");
+
+  authActionBtn.addEventListener("click", async () => {
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    try {
+      let userCredential;
+
+      if (isLoginMode) {
+        userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+      } else {
+        userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+      }
+
+      const user = userCredential.user;
+      authMessage.style.color = "green";
+      authMessage.textContent = isLoginMode
+        ? `Welcome back, ${user.email}`
+        : `Account created: ${user.email}`;
+
+      localStorage.setItem("userUID", user.uid);
+      hideAuthForm();
+    } catch (error) {
+      authMessage.style.color = "red";
+
+      if (error.code === 'auth/user-not-found') {
+        authMessage.textContent = "User not found. Try signing up.";
+      } else if (error.code === 'auth/email-already-in-use') {
+        authMessage.textContent = "Email already registered. Try logging in.";
+      } else if (error.code === 'auth/wrong-password') {
+        authMessage.textContent = "Incorrect password. Try again.";
+      } else {
+        authMessage.textContent = error.message;
+      }
+    }
+  });
+
+  function toggleAuthMode() {
+    isLoginMode = !isLoginMode;
+
+    authActionBtn.textContent = isLoginMode ? "Login" : "Sign Up";
+
+    document.querySelector("#auth-buttons p").innerHTML = isLoginMode
+      ? `Don't have an account? <a href="#" onclick="toggleAuthMode()">Sign Up</a>`
+      : `Already have an account? <a href="#" onclick="toggleAuthMode()">Login</a>`;
+
+    authMessage.textContent = "";
+  }
+
+firebase.auth().onAuthStateChanged(user => {
+  const emailDisplay = document.getElementById("userEmail");
+  const dashboardLink = document.getElementById("dashboardLink");
+  const logoutLink = document.getElementById("logoutLink");
+  const loginLink = document.getElementById("loginLink");
+
+  if (user) {
+    console.log("🔐 Authenticated:", user.email);
+    localStorage.setItem("userUID", user.uid);
+
+    emailDisplay.textContent = `👤 ${user.email}`;
+    dashboardLink.style.display = "block";
+    logoutLink.style.display = "block";
+    loginLink.style.display = "none";
+  } else {
+    console.log("👤 Not logged in");
+    localStorage.removeItem("userUID");
+
+    emailDisplay.textContent = "👤 Not logged in";
+    dashboardLink.style.display = "none";
+    logoutLink.style.display = "none";
+    loginLink.style.display = "block";
+  }
+});
+
+
+
+  function hideAuthForm() {
+    document.getElementById("auth-section").style.display = "none";
+  }
+
+  function showAuthForm() {
+    document.getElementById("auth-section").style.display = "block";
+  }
+</script>
+
+<script>
+  const statusText = document.getElementById("status-text");
+const logoutBtn = document.getElementById("logoutBtn");
+
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    console.log("🔐 Authenticated:", user.email);
+    localStorage.setItem("userUID", user.uid);
+    document.getElementById("auth-section").style.display = "none";
+
+    // ✅ Update UI
+    statusText.textContent = `Hello, ${user.email}`;
+    logoutBtn.style.display = "inline-block";
+
+    // Reset count
+    localStorage.removeItem("itineraryCount");
+  } else {
+    console.log("👤 Not logged in");
+    localStorage.removeItem("userUID");
+
+    // ✅ Update UI
+    statusText.innerHTML = `<a href="#" onclick="showAuthForm()">Login / Sign Up</a>`;
+    logoutBtn.style.display = "none";
+  }
+});
+
+function logout() {
+  firebase.auth().signOut()
+    .then(() => {
+      alert("You’ve been logged out.");
+    })
+    .catch((error) => {
+      console.error("Logout error:", error.message);
+    });
+}
+
+</script>
+
+<script>
+  document.getElementById("userMenuToggle").addEventListener("click", () => {
+    document.getElementById("userMenuDropdown").classList.toggle("hidden");
+  });
+
+  document.addEventListener("click", function (e) {
+    const toggle = document.getElementById("userMenuToggle");
+    const menu = document.getElementById("userMenuDropdown");
+    if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.add("hidden");
+    }
+  });
+
+  // Show user email if logged in
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById("userEmail").textContent = `👤 ${user.email}`;
+    } else {
+      document.getElementById("userEmail").textContent = `Not logged in`;
+    }
+  });
+</script>
+<script>
+ 
+  document.getElementById("loginLink").addEventListener("click", (e) => {
+    e.preventDefault();
+    showAuthForm();
+    document.getElementById("userMenuDropdown").classList.add("hidden");
+  });
+</script>
+<script>
+  document.getElementById("saveFloatingBtn").addEventListener("click", async () => {
+  try {
+    await saveItineraryToFirebase(); // Reuse your existing save function
+    alert("Itinerary saved to your account!");
+  } catch (err) {
+    alert("Failed to save itinerary. Try again.");
+    console.error(err);
+  }
+});
+
+</script>
+
+<script>
+async function saveItineraryToFirebase(data) {
+  const user = firebase.auth().currentUser;
+  if (!user) {
+    console.warn("User not logged in — skipping save.");
+    return;
+  }
+
+  try {
+    const cleanedItinerary = sanitizeItinerary(data.itinerary);
+    const uid = user.uid;
+    await firebase.firestore()
+      .collection("users")
+      .doc(uid)
+      .collection("itineraries")
+      .add({
+        destination: data.destination,
+        days: data.days,
+        generatedAt: new Date().toISOString(),
+        itinerary: cleanedItinerary
+      });
+
+    console.log("Itinerary saved to Firestore (via manual save)");
+  } catch (err) {
+    console.error(" Failed to manually save itinerary:", err.message);
+  }
+}
+</script>
 
 <script>
   fetch(`${API_BASE_URL}/config/maps-api-key`)
@@ -2257,10 +3028,6 @@ async function loadImageAsBase64(imageUrl) {
 </script>
 <!-- <div class="gcse-search"></div> -->
 
-
-
-
-
 <script>
   // Lightbox zoom effect
   document.addEventListener("click", function(e) {
@@ -2269,7 +3036,7 @@ async function loadImageAsBase64(imageUrl) {
       const lightboxImg = document.getElementById("lightbox-img");
       lightboxImg.src = e.target.src;
       lightbox.style.display = "flex";
-      setTimeout(() => lightbox.classList.add("show"), 10); // Allow display before transition
+      setTimeout(() => lightbox.classList.add("show"), 10); 
     }
   });
 
@@ -2283,6 +3050,7 @@ async function loadImageAsBase64(imageUrl) {
     }
   });
 </script>
+
 
 </body>
 </html>

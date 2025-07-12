@@ -19,17 +19,17 @@ router.get('/check-ip', async (req, res) => {
     // Check IPv6
     try {
       const ipv6Response = await axios.get('https://api6.ipify.org?format=json');
-      console.log('IPv6 Address:', ipv6Response.data.ip);
+      // console.log('IPv6 Address:', ipv6Response.data.ip);
     } catch (err) {
-      console.log('IPv6 check failed:', err.message);
+      // console.log('IPv6 check failed:', err.message);
     }
 
     // Alternative IP check
     try {
       const altResponse = await axios.get('https://httpbin.org/ip');
-      console.log('Alternative IP check:', altResponse.data);
+      // console.log('Alternative IP check:', altResponse.data);
     } catch (err) {
-      console.log('Alternative IP check failed:', err.message);
+      // console.log('Alternative IP check failed:', err.message);
     }
 
     res.json({ 
@@ -51,11 +51,11 @@ router.get('/', async (req, res) => {
   }
 
   // Log request details
-  console.log('=== REQUEST INFO ===');
-  console.log('Request IP (from req.ip):', req.ip);
-  console.log('Request IPs (from req.ips):', req.ips);
-  console.log('X-Forwarded-For:', req.headers['x-forwarded-for']);
-  console.log('X-Real-IP:', req.headers['x-real-ip']);
+  // console.log('=== REQUEST INFO ===');
+  // console.log('Request IP (from req.ip):', req.ip);
+  // console.log('Request IPs (from req.ips):', req.ips);
+  // console.log('X-Forwarded-For:', req.headers['x-forwarded-for']);
+  // console.log('X-Real-IP:', req.headers['x-real-ip']);
 
   const query = `things to do in ${destination} site:thrillophilia.com`;
   const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${process.env.MAPS_BACKEND_KEY}&cx=${process.env.GOOGLE_CSE_ID}`;

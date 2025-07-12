@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Itineraries | Dashboard</title>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <!-- Basic styling -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+
+header {
+  background: linear-gradient(to right, #00c6ff, #0072ff); /* match main gradient */
+  color: white;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+header div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+.trip-card {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.trip-card h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.trip-meta {
+  color: #777;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.trip-card button {
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+.delete-btn {
+  background: #ff5252;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.download-btn {
+  background: white;
+  border: 1px solid #4CAF50;
+  color: #4CAF50;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout-btn {
+  background: #ffffff22;
+  color: white;
+  padding: 6px 12px;
+  border: 1px solid white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.logout-btn {
+  background: #ff4d4d;
+}
+
+.logout-btn:hover {
+  background: #e60000;
+}
+
+.back-btn {
+  background: #0072ff;
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  background: #0056cc;
+}
+
+
+.logout-btn,
+.back-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .trip-card {
+    padding: 12px;
+  }
+
+  .trip-card h3 {
+    font-size: 16px;
+  }
+
+  .trip-meta {
+    font-size: 13px;
+  }
+
+  .trip-card button,
+  .download-btn {
+    width: 100%;
+    margin-right: 0;
+  }
+
+  .logout-btn,
+  .back-btn {
+    width: 100%;
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  header div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  header div {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.logout-btn,
+.back-btn {
+  width: auto;
+}
+}
+  </style>
+</head>
+
+<body>
+ <header>
+  <div><strong>My Itineraries</strong></div>
+  <div style="display: flex; gap: 10px; align-items: center;">
+    
+    <span id="userEmail">...</span>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+    <a href="modern-sesign.html" class="back-btn" style="background: #2196F3; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none;">Back</a>
+  </div>
+</header>
+
+
+  <div class="container">
+    <h2> Your Saved Trips</h2>
+    <div id="itineraryList">
+      <!-- Itineraries will be inserted here -->
+    </div>
+  </div>
+
+  <!-- Firebase Config (Replace with your own) -->
+  <script>
+  const firebaseConfig = {
+  apiKey: "AIzaSyDycfEJMTSVX0nzVMHWB0lVuvVYX8vkZyw",
+  authDomain: "yenmek-itinerary.firebaseapp.com",
+  projectId: "yenmek-itinerary",
+  storageBucket: "yenmek-itinerary.firebasestorage.app",
+  messagingSenderId: "523846800906",
+  appId: "1:523846800906:web:1501bf4f94577aaf5371f3"
+};
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+
+<script>
+  // Wait for Firebase to load
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      console.log("🔐 Authenticated:", user.email);
+      document.getElementById("userEmail").textContent = user.email;
+      // Next: fetch itineraries
+    } else {
+      console.warn("⛔ Not logged in. Redirecting...");
+      window.location.href = "modern-sesign.html"; // or your login page
+    }
+  });
+
+  function logout() {
+    firebase.auth().signOut().then(() => {
+      window.location.href = "modern-sesign.html"; // redirect after logout
+    });
+  }
+</script>
+<script>
+    firebase.auth().onAuthStateChanged(async user => {
+  if (user) {
+    console.log("🔐 Authenticated:", user.email);
+    document.getElementById("userEmail").textContent = user.email;
+
+    const uid = user.uid;
+    const itineraryList = document.getElementById("itineraryList");
+    itineraryList.innerHTML = "<p>Loading your itineraries...</p>";
+
+    try {
+      const snapshot = await firebase.firestore()
+        .collection("users")
+        .doc(uid)
+        .collection("itineraries")
+        .orderBy("generatedAt", "desc")
+        .get();
+
+      if (snapshot.empty) {
+        itineraryList.innerHTML = "<p>No itineraries found.</p>";
+        return;
+      }
+
+      itineraryList.innerHTML = ""; // clear loading message
+
+      snapshot.forEach(doc => {
+        const trip = doc.data();
+        const card = document.createElement("div");
+        card.className = "trip-card";
+
+        const date = new Date(trip.generatedAt).toLocaleString();
+
+        card.innerHTML = `
+          <h3>${trip.destination}</h3>
+          <div class="trip-meta">Days: ${trip.days} | Created: ${date}</div>
+          <button class="delete-btn" data-id="${doc.id}">Delete</button>
+          <button class="download-btn">Download PDF</button>
+
+        `;
+
+        itineraryList.appendChild(card);
+        const downloadBtn = card.querySelector(".download-btn");
+        downloadBtn.addEventListener("click", () => {
+        downloadSavedItineraryAsPDF(trip);
+});
+      });
+// Listen for delete button clicks (event delegation)
+document.getElementById("itineraryList").addEventListener("click", async (e) => {
+  if (e.target.classList.contains("delete-btn")) {
+    const docId = e.target.dataset.id;
+    const confirmed = confirm("Are you sure you want to delete this itinerary?");
+
+    if (!confirmed) return;
+
+    try {
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+
+      await firebase.firestore()
+        .collection("users")
+        .doc(user.uid)
+        .collection("itineraries")
+        .doc(docId)
+        .delete();
+
+      console.log(`🗑️ Deleted itinerary: ${docId}`);
+      // Refresh dashboard by reloading page
+      e.target.closest(".trip-card").remove();
+
+
+    } catch (error) {
+      console.error("❌ Failed to delete itinerary:", error.message);
+      alert("Failed to delete. Please try again.");
+    }
+  }
+});
+
+    } catch (error) {
+      console.error("❌ Failed to load itineraries:", error.message);
+      itineraryList.innerHTML = "<p>Error loading itineraries.</p>";
+    }
+
+  } else {
+    console.warn("⛔ Not logged in. Redirecting...");
+    window.location.href = "modern-sesign.html";
+  }
+});
+
+</script>
+<script>
+    async function downloadSavedItineraryAsPDF(itineraryData) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p', 'mm', 'a4');
+
+  const margin = 20;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const contentWidth = pageWidth - margin * 2;
+  let y = margin;
+
+  const clean = str => str.replace(/[^\x00-\x7F]/g, '').replace(/\s+/g, ' ').trim();
+
+  const drawHeader = () => {
+    doc.setFillColor(44, 62, 80);
+    doc.rect(0, 0, pageWidth, 30, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text(`${itineraryData.destination} Travel Itinerary`, margin, 20);
+    y = 40;
+  };
+
+  const drawText = (text, fontSize = 9) => {
+    const lines = doc.splitTextToSize(clean(text), contentWidth);
+    doc.setFontSize(fontSize);
+    doc.setTextColor(52, 73, 94);
+    lines.forEach(line => {
+      if (y > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += 6;
+    });
+    y += 4;
+  };
+
+  drawHeader();
+
+  drawText(`Generated on: ${itineraryData.generatedAt}`);
+  drawText(`This itinerary includes must-visit locations, descriptions, and local tips.`);
+
+  itineraryData.itinerary.forEach(day => {
+    drawText(`\n🗓 ${day.day}`, 11);
+    drawText(`📍 ${day.location}`);
+    drawText(`📘 ${day.description}`);
+
+    if (Array.isArray(day.restaurants) && day.restaurants.length > 0) {
+      drawText(`🍽 Restaurants:`);
+      day.restaurants.forEach(r => drawText(`- ${r}`));
+    }
+  });
+
+  doc.save(`${itineraryData.destination}_Itinerary.pdf`);
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+Hi! I’ve built a full itinerary generator web app that currently uses Firebase Auth and Firestore to:
+
+✅ Let users generate itineraries  
+✅ Save them under their account (auth-required)  
+✅ Display saved itineraries in a dashboard  
+✅ Delete and download PDFs of itineraries  
+✅ Use a floating menu for login/logout/dashboard  
+
+Now, I want to migrate this project from Firebase to **MongoDB Atlas** as the backend database.
+
+📦 Here’s how the app currently works:
+
+- `modern-sesign.html`: main itinerary generator
+  - Users can generate 3 itineraries without login
+  - Beyond that, they must log in to add/delete/replace locations or download PDF
+  - Uses `showAuthForm()` for login/signup with Firebase Auth
+
+- `dashboard.html`: displays saved itineraries
+  - Shows only trips saved by the authenticated user
+  - Allows deletion and PDF download
+  - Protected by Firebase Auth
+
+🔐 Authentication:
+- Currently using Firebase Auth (email/password)
+- Auth status controls access to all major features
+
+🗂 Data structure in Firestore:
+
+
+📦 What I want to do:
+- Replace Firebase Auth with my own Express + JWT-based auth
+- Replace Firestore with MongoDB Atlas
+- Set up my own backend (Node.js + Express) to handle:
+  - Sign up / log in
+  - Itinerary CRUD (Create/Read/Update/Delete)
+- Still keep frontend in HTML/JS (can fetch from backend with `fetch()`)
+
+Can you help me migrate this to a full **MongoDB Atlas + Express.js backend setup** with the same frontend functionality?
+
+Let’s start with the backend structure, then auth, and API routes for saving/fetching itineraries.
