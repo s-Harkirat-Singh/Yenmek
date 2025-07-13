@@ -574,13 +574,13 @@ body {
         }
 
         .location-image {
-            /* width: 100%; */
-            height: 120px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 1px solid;
-            transition: all 0.3s ease;
-            filter: brightness(0.9);
+           
+           width: 100%;
+           height: 13rem; 
+           object-fit: cover; 
+           border-radius: 12px;
+           display: block;
+           background-color: #f2f2f2;
         }
 
         .location-image:hover {
@@ -588,7 +588,11 @@ body {
             filter: brightness(1);
             border-color: #00d4ff;
         }
-
+        .image-wrapper {
+           height: 13rem;
+           overflow: hidden;
+           border-radius: 12px;
+        }
         .no-images {
             color: #666666;
             font-style: italic;
@@ -687,7 +691,7 @@ body {
             }
             
             .location-image {
-                height: 100px;
+                height: 11rem;
             }
         }
 
@@ -1124,6 +1128,49 @@ text-align: left;
 .floating-save-btn.hidden {
   display: none;
 }
+#auth-section {
+  display: none;
+  max-width: 90%;
+  width: 360px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+#toggleAuthMode {
+  color: #555;
+  font-size: 14px;
+  text-align: center;
+  display: block;
+  margin-top: 10px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#toggleAuthMode:hover {
+  color: #111;
+}
+
+
+#auth-section input,
+#auth-section button {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+#auth-section button:hover {
+  opacity: 0.9;
+}
 
 
     </style>
@@ -1136,9 +1183,9 @@ text-align: left;
     <div id="userEmail" style="padding: 10px 16px; font-weight: bold; color: #565656;">👤 Checking...</div>
 
     <!-- Auth-based options -->
-    <a href="dashboard.html" id="dashboardLink">📋 Dashboard</a>
-    <a href="#" id="logoutLink" onclick="logout()">🔒 Logout</a>
-    <a href="#" id="loginLink" style="display: none;">🔐 Login</a>
+    <a href="dashboard.html" id="dashboardLink">Dashboard</a>
+    <a href="#" id="logoutLink" onclick="logout()">Logout</a>
+    <a href="#" id="loginLink" style="display: none;">Login</a>
   </div>
 </div>
 
@@ -1220,25 +1267,92 @@ text-align: left;
 </div>
 
 <!-- 🔐 Firebase Auth Login/Signup -->
-<div id="auth-section" style="display:none; max-width: 400px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: fixed; top: 20%; left: 50%; transform: translateX(-50%); z-index: 9999;">
-  <h3 style="text-align: center; color: #333;">Login / Sign Up</h3>
+<div id="auth-section" style="
+  display: none;
+  max-width: 90%;
+  width: 360px;
+  margin: 20px auto;
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  box-sizing: border-box;
+">
 
-  <input id="email" type="email" placeholder="Email" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #ccc;">
-  <input id="password" type="password" placeholder="Password" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc;">
+  <h3 style="text-align: center; color: #222; font-size: 20px; margin-bottom: 16px;">
+    <span id="auth-mode-title">Login</span> to Your Account
+  </h3>
 
-  <!-- ✅ Insert this block -->
+  <input id="email" type="email" placeholder="Email" style="
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  ">
+
+  <input id="password" type="password" placeholder="Password" style="
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  ">
+
   <div id="auth-buttons">
-    <button id="authActionBtn" style="width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 8px; margin-bottom: 10px;">Login</button>
-    <p style="text-align: center;">Don't have an account? <a href="#" onclick="toggleAuthMode()">Sign Up</a></p>
+    <button id="authActionBtn" style="
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #0072ff, #00c6ff);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 15px;
+      margin-bottom: 12px;
+    ">Login</button>
+
+    <p style="text-align: center; font-size: 14px; color: #444;">
+      <span id="auth-toggle-text">Don’t have an account?</span>
+      <a href="#" onclick="toggleAuthMode()" style="
+        color: #0072ff;
+        font-weight: 500;
+        text-decoration: none;
+        margin-left: 5px;
+      ">Sign Up</a>
+    </p>
   </div>
 
-  <button onclick="hideAuthForm()" style="margin-top: 10px; width: 100%; padding: 10px; border: none; background: #ddd; border-radius: 8px;">Cancel</button>
+  <button onclick="hideAuthForm()" style="
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #eee;
+    color: #333;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+  ">Cancel</button>
 
-  <p id="auth-message" style="color: red; text-align: center; margin-top: 10px;"></p>
+  <p id="auth-message" style="
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 13px;
+  "></p>
 </div>
 
+
 <button id="saveFloatingBtn" class="floating-save-btn" style="display: none; border: none;">
-  ⎙ Save
+  ⎙ Save Itinerary
 </button>
 
 
@@ -1286,8 +1400,8 @@ text-align: left;
 
     </script>
     <script>
-        // const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
-        const API_BASE_URL = window.location.origin;
+        const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
+        // const API_BASE_URL = window.location.origin;
         let googleMapsLoaded = false;
         let mapsToInitialize = [];
         let allLocationsData = [];
@@ -1330,7 +1444,7 @@ function checkItineraryLimit() {
   let count = parseInt(localStorage.getItem("itineraryCount") || "0");
 
   if (count >= 3) {
-    alert("🚫 You’ve reached your free limit of 3 itineraries.\nPlease log in to continue.");
+    alert("You’ve reached your free limit of 3 itineraries.\nPlease log in to continue.");
     showAuthForm(); // 🔐 Triggers login/signup form
     return false;
   }
@@ -1544,7 +1658,9 @@ async function displayResults(data) {
           <div class="location-description">${location.description}</div>
           <div id="restaurants-${dayIndex}-${locIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
           <div class="images-container">
+             <div class="image-wrapper">
             ${location.images?.map(img => `<img src="/api/photo?ref=${img.split('photoreference=')[1]}" class="location-image" />`).join('') || '<div class="no-images">No images available</div>'}
+             </div>
           </div>
            <button class="edit-btn" data-day="${location.day}" data-location="${location.location}">✏️</button>
           <button class="delete-btn text-red-500 hover:text-red-700" data-day="${day}" data-location="${location.location}">
@@ -2170,6 +2286,42 @@ async function getDistancesBetweenLocations(dayLocations) {
 
   return Promise.all(distancePromises);
 }
+async function refreshDistancesAfterEdit() {
+  const daySections = document.querySelectorAll(".day-section");
+
+  for (let section of daySections) {
+    const travelBox = section.querySelector(".travel-box");
+    const locationNames = Array.from(section.querySelectorAll(".location-name")).map(el =>
+      el.textContent.replace("📍", "").trim()
+    );
+
+    if (travelBox && locationNames.length > 1) {
+      const distances = await getDistancesBetweenLocations(locationNames);
+      let summary = `<div class="travel-box-content">`;
+
+      distances.forEach((d, index) => {
+        summary += `
+          <div class="travel-step">
+            <div class="step-number">Step ${index + 1}</div>
+            <div class="step-details">
+              <div><span class="label">From:</span> ${d.from}</div>
+              <div><span class="label">To:</span> ${d.to}</div>
+              <div class="meta">
+                <span>Distance: <strong>${d.distanceText}</strong></span>
+                <span class="divider">|</span>
+                <span>Estimated Time: <strong>${d.durationText}</strong></span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      summary += `</div>`;
+      travelBox.innerHTML = summary;
+    }
+  }
+}
+
 
         // Test backend connection on page load
         window.addEventListener('load', async function() {
@@ -2632,6 +2784,7 @@ submitBtn.addEventListener("click", async () => {
   data.images
 );
 refreshOverviewMapFromDOM();
+refreshDistancesAfterEdit();
     // ✅ Reset modal state
     editModal.classList.add("hidden");
     preferenceInput.value = "";
@@ -2678,7 +2831,7 @@ document.addEventListener("click", function (e) {
 
 
 
-function updateItineraryLocation(day, oldLocation, newLocation, newDescription) {
+function updateItineraryLocation(day, oldLocation, newLocation, newDescription, images) {
   const cards = document.querySelectorAll(".location-card");
 
   cards.forEach((card, index) => {
@@ -2696,7 +2849,10 @@ function updateItineraryLocation(day, oldLocation, newLocation, newDescription) 
       // ✅ Re-initialize Google Map
       const mapId = card.querySelector(".location-map")?.id;
       const restaurantContainerId = card.querySelector(".restaurants-section")?.id;
-
+      const imageElem = card.querySelector(".location-image");
+      if (imageElem && Array.isArray(images) && images.length > 0) {
+          imageElem.src = images[0];
+      }
       if (mapId && googleMapsLoaded) {
         const locationObj = {
           location: newLocation,
@@ -2715,6 +2871,7 @@ function updateItineraryLocation(day, oldLocation, newLocation, newDescription) 
       }
     }
   });
+  refreshDistancesAfterEdit();
 }
 })
 function refreshOverviewMapFromDOM() {
@@ -2787,7 +2944,7 @@ function refreshOverviewMapFromDOM() {
 
 </script>
 
-// backend firebase starts from here 
+<!-- backend start from here -->
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -2844,25 +3001,39 @@ function refreshOverviewMapFromDOM() {
         authMessage.textContent = "User not found. Try signing up.";
       } else if (error.code === 'auth/email-already-in-use') {
         authMessage.textContent = "Email already registered. Try logging in.";
-      } else if (error.code === 'auth/wrong-password') {
+      } else if (
+        error.code === 'auth/wrong-password' ||
+        error.code === 'auth/invalid-credential') {
         authMessage.textContent = "Incorrect password. Try again.";
-      } else {
+} 
+else if (error.code === 'auth/too-many-requests') {
+  authMessage.textContent = "Too many failed attempts. Please wait a moment and try again.";
+}
+else {
         authMessage.textContent = error.message;
       }
     }
   });
 
-  function toggleAuthMode() {
-    isLoginMode = !isLoginMode;
+function toggleAuthMode() {
+  isLoginMode = !isLoginMode;
 
-    authActionBtn.textContent = isLoginMode ? "Login" : "Sign Up";
+  
+  authActionBtn.textContent = isLoginMode ? "Login" : "Sign Up";
 
-    document.querySelector("#auth-buttons p").innerHTML = isLoginMode
-      ? `Don't have an account? <a href="#" onclick="toggleAuthMode()">Sign Up</a>`
-      : `Already have an account? <a href="#" onclick="toggleAuthMode()">Login</a>`;
+  
+  const linkStyle = "color: #0072ff; font-weight: 500; text-decoration: none; margin-left: 5px;";
+  document.querySelector("#auth-buttons p").innerHTML = isLoginMode
+    ? `Don't have an account?<a href="#" onclick="toggleAuthMode()" style="${linkStyle}">Sign Up</a>`
+    : `Already have an account?<a href="#" onclick="toggleAuthMode()" style="${linkStyle}">Login</a>`;
 
-    authMessage.textContent = "";
-  }
+ 
+  document.getElementById("auth-mode-title").textContent = isLoginMode ? "Login" : "Sign Up";
+
+
+  authMessage.textContent = "";
+}
+
 
 firebase.auth().onAuthStateChanged(user => {
   const emailDisplay = document.getElementById("userEmail");
@@ -2871,7 +3042,7 @@ firebase.auth().onAuthStateChanged(user => {
   const loginLink = document.getElementById("loginLink");
 
   if (user) {
-    console.log("🔐 Authenticated:", user.email);
+    console.log("Authenticated:", user.email);
     localStorage.setItem("userUID", user.uid);
 
     emailDisplay.textContent = `👤 ${user.email}`;
