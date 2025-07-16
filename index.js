@@ -70,48 +70,48 @@ app.use('/api/insights', insightRoute);
 // Root endpoint with comprehensive information
 
 
-app.get("/", (req, res) => {
-  const serverInfo = {
-    message: "Travel Itinerary API Server",
-    status: "Running",
-    timestamp: new Date().toISOString(),
-    version: "1.0.0",
-    endpoints: {
-      itinerary: "POST /api/itinerary",
-      health: "GET /api/itinerary/health",
-      test: "GET /api/itinerary/test"
-    },
-    documentation: {
-      createItinerary: {
-        method: "POST",
-        url: "/api/itinerary",
-        body: {
-          destination: "string (required) - The destination city/country",
-          days: "number (required) - Number of days (1-30)"
-        },
-        example: {
-          destination: "Paris, France",
-          days: 5
-        }
-      }
-    },
-    environment: {
-      nodeVersion: process.version,
-      platform: process.platform,
-      uptime: Math.floor(process.uptime())
-    }
-  };
+// app.get("/", (req, res) => {
+//   const serverInfo = {
+//     message: "Travel Itinerary API Server",
+//     status: "Running",
+//     timestamp: new Date().toISOString(),
+//     version: "1.0.0",
+//     endpoints: {
+//       itinerary: "POST /api/itinerary",
+//       health: "GET /api/itinerary/health",
+//       test: "GET /api/itinerary/test"
+//     },
+//     documentation: {
+//       createItinerary: {
+//         method: "POST",
+//         url: "/api/itinerary",
+//         body: {
+//           destination: "string (required) - The destination city/country",
+//           days: "number (required) - Number of days (1-30)"
+//         },
+//         example: {
+//           destination: "Paris, France",
+//           days: 5
+//         }
+//       }
+//     },
+//     environment: {
+//       nodeVersion: process.version,
+//       platform: process.platform,
+//       uptime: Math.floor(process.uptime())
+//     }
+//   };
 
-  res.json(serverInfo);
-});
+//   res.json(serverInfo);
+// });
 
 
 
 
 // Serve index.html at root
-// app.get("/", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "modern-sesign.html"));
-// });
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "modern-sesign.html"));
+});
 
 
 app.get("/config/maps-api-key", (req, res) => {
