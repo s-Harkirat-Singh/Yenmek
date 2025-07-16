@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style/font.css">
     <link rel="icon" href="./img/ChatGPT Image Jun 22, 2025, 03_50_49 AM.png" type="image/x-icon">
-
+    <meta name='impact-site-verification' value='c7a2e43b-2afb-42c9-a6d0-e114e2dd977e'>
+    
     <title id="Main-title" >AI Travel Itinerary Generator</title>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -177,8 +178,8 @@ body {
             position: relative;
         }
 
-        .header::before {
-            content: '';
+        /* .header::before {
+            /* content: '';
             position: absolute;
             top: -20px;
             left: 50%;
@@ -186,8 +187,8 @@ body {
             width: 60px;
             height: 4px;
             background: linear-gradient(90deg, #00d4ff, #7c3aed);
-            border-radius: 2px;
-        }
+            /* border-radius: 2px; 
+        } */
 
         .header h1 {
               background: linear-gradient(135deg, #00d4ff, #7c3aed, #ffffff);
@@ -1174,41 +1175,7 @@ text-align: left;
 #auth-section button:hover {
   opacity: 0.9;
 }
-.background-slideshow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: -1;
-}
 
-.background-slideshow .slide {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 1.5s ease-in-out;
-}
-
-.background-slideshow .slide.active {
-  opacity: 1;
-}
-.background-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.63); /* soft bluish-dark overlay */
-  z-index: 1;
-}
-.background-slideshow.hide,
-.background-overlay.hide {
-  display: none !important;
-}
 #results {
   margin-top: 80px;
   z-index: 2;
@@ -1353,12 +1320,12 @@ text-align: left;
 <body>
 <div class="background-slideshow">
   <div class="background-overlay"></div>
-  <img src="./img/img6.jpg" class="slide active" />
+  <!-- <img src="./img/img6.jpg" class="slide active" />
   <img src="./img/img2.jpg" class="slide" />
   <img src="./img/img3.jpg" class="slide" />
   <img src="./img/img4.jpg" class="slide" />
 
-  <img src="./img/img5.jpg" class="slide" />
+  <img src="./img/img5.jpg" class="slide" /> -->
  
 
 
@@ -1381,7 +1348,7 @@ text-align: left;
     <!-- <div class="grid-overlay"></div> -->
     <!-- <div class="digital-rain" id="digitalRain"></div> -->
     <div class="container">
-        <div class="header">
+        <div class="header" style="margin-top: 6rem;">
             <h1 style="padding-top: 4rem;">AI Travel Itinerary Generator</h1>
             <p>Intelligent travel planning powered by Yenmek</p>
         </div>
@@ -1551,15 +1518,7 @@ text-align: left;
 <script>
   let itinerarySaved = false;
 </script>
-<script>
-  const slides = document.querySelectorAll('.background-slideshow .slide');
-  let index = 0;
-  setInterval(() => {
-    slides[index].classList.remove('active');
-    index = (index + 1) % slides.length;
-    slides[index].classList.add('active');
-  }, 7000); // change every 7 seconds
-</script>
+
 
     <script>
   function sanitizeItinerary(itineraryArray) {
@@ -1909,8 +1868,7 @@ async function displayResults(data) {
   // Set content and show it
   resultsDiv.innerHTML = html;
   resultsDiv.style.display = 'block';
-  document.querySelector('.background-slideshow')?.classList.add('hide');
-  document.querySelector('.background-overlay')?.classList.add('hide');
+
 
 attachHotelDropdownListeners();
   //  Hide loader now — initial content is ready
