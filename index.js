@@ -70,48 +70,48 @@ app.use('/api/insights', insightRoute);
 // Root endpoint with comprehensive information
 
 
-// app.get("/", (req, res) => {
-//   const serverInfo = {
-//     message: "Travel Itinerary API Server",
-//     status: "Running",
-//     timestamp: new Date().toISOString(),
-//     version: "1.0.0",
-//     endpoints: {
-//       itinerary: "POST /api/itinerary",
-//       health: "GET /api/itinerary/health",
-//       test: "GET /api/itinerary/test"
-//     },
-//     documentation: {
-//       createItinerary: {
-//         method: "POST",
-//         url: "/api/itinerary",
-//         body: {
-//           destination: "string (required) - The destination city/country",
-//           days: "number (required) - Number of days (1-30)"
-//         },
-//         example: {
-//           destination: "Paris, France",
-//           days: 5
-//         }
-//       }
-//     },
-//     environment: {
-//       nodeVersion: process.version,
-//       platform: process.platform,
-//       uptime: Math.floor(process.uptime())
-//     }
-//   };
+app.get("/", (req, res) => {
+  const serverInfo = {
+    message: "Travel Itinerary API Server",
+    status: "Running",
+    timestamp: new Date().toISOString(),
+    version: "1.0.0",
+    endpoints: {
+      itinerary: "POST /api/itinerary",
+      health: "GET /api/itinerary/health",
+      test: "GET /api/itinerary/test"
+    },
+    documentation: {
+      createItinerary: {
+        method: "POST",
+        url: "/api/itinerary",
+        body: {
+          destination: "string (required) - The destination city/country",
+          days: "number (required) - Number of days (1-30)"
+        },
+        example: {
+          destination: "Paris, France",
+          days: 5
+        }
+      }
+    },
+    environment: {
+      nodeVersion: process.version,
+      platform: process.platform,
+      uptime: Math.floor(process.uptime())
+    }
+  };
 
-//   res.json(serverInfo);
-// });
+  res.json(serverInfo);
+});
 
 
 
 
 // Serve index.html at root
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "modern-sesign.html"));
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "modern-sesign.html"));
+// });
 
 
 app.get("/config/maps-api-key", (req, res) => {
@@ -142,6 +142,64 @@ app.get("/api/photo", async (req, res) => {
     res.status(500).send("Failed to fetch photo");
   }
 });
+app.get('/api/reverse-geocode', async (req, res) => {
+  const { lat, lng } = req.query;
+  const apiKey = process.env.OPENCAGE_API_KEY;
+
+  if (!lat || !lng || !apiKey) {
+    return res.status(400).json({ error: 'Missing required parameters' });
+  }
+
+  try {
+    const url = `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${apiKey}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    const components = data.results[0]?.components;
+    const location = components.city || components.town || components.state || components.country || "India";
+
+    res.json({ location });
+  } catch (err) {
+    res.status(500).json({ error: 'Reverse geocoding failed', details: err.message });
+  }
+});
+
+
+app.get('/api/hotels', async (req, res) => {
+  const { location, lat, lng, checkIn, checkOut } = req.query;
+  const token = process.env.HOTELLOOK_API_KEY;
+console.log("TOKEN FROM ENV:", token);
+
+  if (!checkIn || !checkOut || !token || (!location && (!lat || !lng))) {
+    return res.status(400).json({
+      error: 'Missing required parameters',
+      debug: {
+        checkIn,
+        checkOut,
+        location,
+        lat,
+        lng,
+        tokenExists: !!token
+      }
+    });
+  }
+console.log("TOKEN FROM ENV:", token);
+
+  const locationQuery = location ? location : `${lat},${lng}`;
+  const url = `https://engine.hotellook.com/api/v2/cache.json?location=${locationQuery}&currency=inr&limit=4&checkIn=${checkIn}&checkOut=${checkOut}&token=${token}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (Array.isArray(data)) return res.json(data);
+    if (Array.isArray(data.results)) return res.json(data.results);
+    return res.json([]);
+  } catch (error) {
+    res.status(500).json({ error: 'API fetch failed', details: error.message });
+  }
+});
+
 
 
 // Handle 404 for any other routes
@@ -202,10 +260,10 @@ process.on('uncaughtException', (error) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  // console.log(`🌍 API URL: http://localhost:${PORT}`);
-  // console.log(`📝 Health Check: http://localhost:${PORT}/api/itinerary/health`);
-  // console.log(`🧪 Test Endpoint: http://localhost:${PORT}/api/itinerary/test`);
-  // console.log(`📚 Documentation: http://localhost:${PORT}/`);
-  // console.log(`⏰ Started at: ${new Date().toISOString()}`);
+  console.log(` Server running on port ${PORT}`);
+  // console.log(` API URL: http://localhost:${PORT}`);
+  // console.log(` Health Check: http://localhost:${PORT}/api/itinerary/health`);
+  // console.log(` Test Endpoint: http://localhost:${PORT}/api/itinerary/test`);
+  // console.log(`Documentation: http://localhost:${PORT}/`);
+  // console.log(`Started at: ${new Date().toISOString()}`);
 });

