@@ -15,15 +15,17 @@
 
 @font-face {
   font-family: 'Montserrat Normal';
-  src: url('/style/font/Montserrat-Light.ttf') format('truetype');
+  src: url('./style/font/Montserrat-Light.ttf') format('truetype');
  
 }
-
-
+@font-face{
+  font-family: 'HK Gothic';
+  src:url('./style/font/new/HK\ Gothic\ Bold.otf')
+}
 
 @font-face {
   font-family: 'Helvetica Bold';
-  src: url('/style/font/Montserrat-Bold.ttf') format('truetype');
+  src: url('./style/font/Montserrat-Bold.ttf') format('truetype');
  
 }
 
@@ -37,8 +39,9 @@ body {
 
 /* Main title */
 .header h1 {
-    font-family: 'Helvetica Bold', monospace;
+    font-family: 'HK Gothic';
     font-weight: 800;
+    font-size: 63px;
    
 }
 #Main-title{
@@ -113,7 +116,7 @@ body {
 
 .results-header h2 {
    font-family: 'Helvetica Bold', monospace;
-    font-weight: 700;
+    font-weight: 400;
     /* letter-spacing: 0.5px; */
 }
 
@@ -125,14 +128,14 @@ body {
 
 .day-header {
     font-family: 'Helvetica Bold', monospace;
-    font-weight: 600;
+    font-weight: 400;
     /* letter-spacing: 0.8px; */
 }
 
 
 .location-name {
     font-family: 'Helvetica Bold', monospace;
-    font-weight: 500;
+    font-weight: 400;
     /* letter-spacing: 0.5px; */
 }
 
@@ -163,7 +166,7 @@ body {
   min-height: 100vh;
   flex-direction: column;
   padding: 20px;
-  background-color: #fff;
+  background-color: #dbd9d966;
   position: relative;
 }
 
@@ -192,7 +195,7 @@ body {
         } */
 
         .header h1 {
-              background: linear-gradient(135deg, #00d4ff, #7c3aed, #ffffff);
+             background: linear-gradient(135deg, #cbcbcb, #ffffff);
     background-size: 200% auto;
     animation: pulseGradient 5s ease infinite;
     -webkit-background-clip: text;
@@ -205,13 +208,13 @@ body {
     100% { background-position: 0% center; }
 }
         .header p {
-            color: #ffffff;
+            color: #e6e9e9;
             font-size: 1.1rem;
             font-weight: 400;
         }
 
      .form-container {
-  background: rgba(255, 255, 255, 0);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.13);
   box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
@@ -229,7 +232,7 @@ body {
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+            background: linear-gradient(90deg, transparent, #003459, transparent);
             opacity: 0.6;
         }
 
@@ -261,7 +264,7 @@ body {
             /* color: #333;
             font-size: 1.8rem;*/
             margin-bottom: 10px; 
-            background: linear-gradient(135deg, #00d4ff, #7c3aed, #ffffff);
+            background: linear-gradient(135deg, #062135, #035a77);
     background-size: 200% auto;
     animation: pulseGradient 5s ease infinite;
     -webkit-background-clip: text;
@@ -334,7 +337,7 @@ body {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #ffffff;
+            color: #00000069;
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -376,7 +379,7 @@ body {
         }
 
         .generate-btn {
-            background: linear-gradient(135deg, #00d4ff, #7c3aed);
+            background: linear-gradient(135deg, #062135, #035a77);
             color: white;
             padding: 18px 32px;
             border: none;
@@ -421,41 +424,66 @@ body {
         }
 
         .loading {
-            text-align: center;
-            padding: 40px;
-            background: #e6e6e6;
-            border-radius: 16px;
-            border: 1px solid #b9b8b8;
-            margin-bottom: 20px;
-        }
+  text-align: center;
+  padding: 50px 30px;
+  background: #f9f9f9;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  margin: 40px auto;
+  max-width: 400px;
+  animation: fadeIn 0.6s ease-out;
+}
 
-        .loading p {
-            color: #05b8db;
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
+.loader-title {
+  color: #05b8db;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
 
-        .loading p:last-child {
-            color: #888888;
-            font-size: 14px;
-        }
+.loader-sub {
+  color: #444;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
 
-        .loading::after {
-            content: '';
-            display: block;
-            width: 40px;
-            height: 40px;
-            margin: 20px auto 0;
-            border: 3px solid #333333;
-            border-top: 3px solid #05b8db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+.loader-hint {
+  color: #888;
+  font-size: 13px;
+}
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+/* Glowing dot animation */
+.loader-animation {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #045772;
+  margin: 0 auto 20px;
+  box-shadow: 0 0 0 0 rgba(1, 133, 160, 0.7);
+  animation: pulse 1.4s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(3, 134, 160, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 20px rgba(5, 184, 219, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(5, 184, 219, 0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
         .error {
             background: linear-gradient(145deg, #2a1a1a, #1a0f0f);
@@ -492,7 +520,7 @@ body {
             transform: translateX(-50%);
             width: 60px;
             height: 2px;
-            background: linear-gradient(90deg, #00d4ff, #7c3aed);
+            background: linear-gradient(135deg, #062135, #035a77);
         }
 
         .results-header h2 {
@@ -534,7 +562,7 @@ body {
             left: 0;
             width: 4px;
             height: 100%;
-            background: linear-gradient(180deg, #00d4ff, #7c3aed);
+            background: linear-gradient(135deg, #062135, #035a77);
         }
 
         .location-card {
@@ -1067,7 +1095,7 @@ text-align: left;
 }
 
 .floating-user-menu button {
-  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  background: linear-gradient(135deg, #062135, #035a77);
   border: none;
   color: white;
   font-size: 18px;
@@ -1119,7 +1147,7 @@ text-align: left;
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  background: linear-gradient(135deg, #062135, #035a77);
   color: white;
   padding: 12px 18px;
   border-radius: 30px;
@@ -1203,13 +1231,13 @@ text-align: left;
 }
 
 .modern-btn.primary {
-  background: linear-gradient(135deg, #00d4ff, #7c3aed);
+  background: linear-gradient(135deg, #062135, #035a77);
   color: white;
   box-shadow: 0 4px 14px rgba(0, 212, 255, 0.3);
 }
 
 .modern-btn.primary:hover {
-  background: linear-gradient(135deg, #009bdc, #5e2ce2);
+  background: linear-gradient(135deg, #062135, #035a77);
   transform: translateY(-1px);
 }
 
@@ -1308,6 +1336,48 @@ text-align: left;
   margin: 0;
 }
 
+.background-arc-shape {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  .background-arc-shape {
+    height: 90vh;
+  }
+}
+.background-arc-shape svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.arc-bg-image {
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+}
+
+.arc-bg-image.active {
+  opacity: 1;
+}
+.split-flap-heading::after {
+  content: '|';
+  animation: blink 1.2s ease-in-out infinite;
+  margin-left: 5px;
+  color: #000;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
     </style>
     <script data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
   (function () {
@@ -1348,10 +1418,33 @@ text-align: left;
 
     <!-- <div class="grid-overlay"></div> -->
     <!-- <div class="digital-rain" id="digitalRain"></div> -->
+<div class="background-arc-shape">
+  <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+    <defs>
+      <mask id="arc-mask">
+        <path d="M0,0 H100 V80 Q50,100 0,80 Z" fill="white" />
+      </mask>
+    </defs>
+
+    <!-- Multiple images layered on top of each other -->
+    <image class="arc-bg-image" href="./img/nature-3616194_1280.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" mask="url(#arc-mask)" />
+    <image class="arc-bg-image active" href="./img/img4.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" mask="url(#arc-mask)" />
+    <image class="arc-bg-image" href="./img/img2.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" mask="url(#arc-mask)" />
+    <image class="arc-bg-image" href="./img/img5.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" mask="url(#arc-mask)" />
+    <image class="arc-bg-image" href="./img/img6.jpg" x="0" y="0" width="100" height="100" preserveAspectRatio="xMidYMid slice" mask="url(#arc-mask)" />
+
+    <!-- Black overlay -->
+    <rect x="0" y="0" width="100" height="100" fill="black" opacity="0.5" mask="url(#arc-mask)" />
+  </svg>
+</div>
+
+
+
     <div class="container">
-        <div class="header" style="margin-top: 6rem;">
-            <h1 style="padding-top: 4rem;">AI Travel Itinerary Generator</h1>
-            <p>Intelligent travel planning powered by Yenmek</p>
+        <div class="header" style="margin-top: 3rem;">
+            <h1 style="padding-top: 5rem;" id="splitFlap" class="split-flap-heading">Trips That Think Ahead</h1>
+            <p style="    margin-top: 30px;">Intelligent travel planning powered by Yenmek</p>
+
         </div>
 
         <div class="form-container">
@@ -1395,10 +1488,13 @@ text-align: left;
             </form>
         </div>
   
-        <div id="loading" class="loading" style="display: none;">
-            <p>Processing your request</p>
-            <p>AI is analyzing optimal routes and destinations</p>
-        </div>
+       <div id="loading" class="loading" style="display: none;">
+  <div class="loader-animation"></div>
+  <p class="loader-title" style="color: #003459;">Analyzing your trip...</p>
+  <p class="loader-sub">Our AI is calculating the smartest route.</p>
+  <p class="loader-hint">Sit tight. This won't take long. </p>
+</div>
+
 
         <div id="error" class="error" style="display: none;"></div>
 
@@ -1519,6 +1615,74 @@ text-align: left;
 <script>
   let itinerarySaved = false;
 </script>
+<script>
+  const images = document.querySelectorAll('.arc-bg-image');
+  let current = 0;
+
+  setInterval(() => {
+    images[current].classList.remove('active');
+    current = (current + 1) % images.length;
+    images[current].classList.add('active');
+  }, 5000); // every 5 seconds
+</script>
+<script>
+  const textList = [
+    "Plan in Seconds",
+    "AI Knows the Way",
+    "One Tap to Travel",
+    "Go Beyond Maps"
+  ];
+
+  const element = document.getElementById('splitFlap');
+  let currentTextIndex = 0;
+  let currentText = '';
+  let charIndex = 0;
+  let isDeleting = false;
+  let typingSpeed = 80; // default speed
+  let lastTime = 0;
+
+  function type(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    const delta = timestamp - lastTime;
+
+    if (delta > typingSpeed) {
+      const fullText = textList[currentTextIndex];
+
+      if (isDeleting) {
+        charIndex--;
+        currentText = fullText.substring(0, charIndex);
+      } else {
+        charIndex++;
+        currentText = fullText.substring(0, charIndex);
+      }
+
+      element.textContent = currentText;
+
+      lastTime = timestamp;
+
+      // Adjust speed based on action
+      typingSpeed = isDeleting ? 40 : 90;
+
+      // Pause before delete
+      if (!isDeleting && currentText === fullText) {
+        typingSpeed = 1500;
+        isDeleting = true;
+      }
+
+      // Pause before typing next
+      if (isDeleting && currentText === '') {
+        isDeleting = false;
+        currentTextIndex = (currentTextIndex + 1) % textList.length;
+        typingSpeed = 300;
+      }
+    }
+
+    requestAnimationFrame(type);
+  }
+
+  requestAnimationFrame(type);
+</script>
+
 
 
     <script>
@@ -1837,12 +2001,7 @@ async function displayResults(data) {
      
 
     }
-     html += `
-  <div class="day-hotel-section" data-day="${dayIndex}" data-fetched="false">
-    <div class="day-dropdown" style="color: black;">▼ Want hotels for ${day}?</div>
-    <div class="hotel-list" style="display: none; color: black; "></div>
-  </div>
-`;
+ 
     html += `<div id="distance-summary-${dayIndex}" class="summary-section"></div></div>`;
   }
 // <button class="add-location-btn text-green-600 hover:text-green-800" data-day="${day}">
@@ -1871,7 +2030,7 @@ async function displayResults(data) {
   resultsDiv.style.display = 'block';
 
 
-attachHotelDropdownListeners();
+
   //  Hide loader now — initial content is ready
   showLoading(false);
 
@@ -3130,70 +3289,6 @@ function refreshOverviewMapFromDOM() {
 </script>
 
 <!-- hotel reccomendations  -->
-<script>
-  function attachHotelDropdownListeners() {
-  document.querySelectorAll('.day-dropdown').forEach(dropdown => {
-    dropdown.addEventListener('click', async () => {
-      const section = dropdown.closest('.day-hotel-section');
-      const hotelList = section.querySelector('.hotel-list');
-
-      const alreadyFetched = section.dataset.fetched === "true";
-      const dayIndex = section.dataset.day;
-
-      hotelList.style.display = hotelList.style.display === 'none' ? 'block' : 'none';
-
-      if (alreadyFetched) return;
-
-      const lat = 28.6139;
-      const lng = 77.2090;
-      const checkIn = "2025-07-20";
-      const checkOut = "2025-07-21";
-
-   const url = `http://localhost:5000/api/hotels?lat=28.6139&lng=77.2090&checkIn=2025-07-20&checkOut=2025-07-21`;
-
-
-
-
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-
-        const hotels = Array.isArray(data)
-          ? data
-          : Array.isArray(data.results)
-            ? data.results
-            : [];
-
-        if (!hotels.length) {
-          hotelList.innerHTML = `<p>No hotels found.</p>`;
-          return;
-        }
-
-        hotels.forEach(hotel => {
-          const card = document.createElement('div');
-          card.classList.add('hotel-card');
-          card.innerHTML = `
-            <h4>${hotel.hotelName}</h4>
-            <p>Price: ₹${Math.round(hotel.priceFrom)}</p>
-            <p>Rating: ${'⭐'.repeat(hotel.stars || 0)}</p>
-            <p>Location: ${hotel.location?.name || 'N/A'}, ${hotel.location?.country || ''}</p>
-          `;
-          hotelList.appendChild(card);
-        });
-
-        section.dataset.fetched = "true";
-
-      } catch (err) {
-        console.error("Fetch error:", err);
-        hotelList.innerHTML = `<p>Error fetching hotels: ${err.message}</p>`;
-      }
-    });
-  });
-}
-
-</script>
-
-
 <!-- backend start from here -->
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>

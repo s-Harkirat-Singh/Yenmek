@@ -165,42 +165,6 @@ app.get('/api/reverse-geocode', async (req, res) => {
 });
 
 
-app.get('/api/hotels', async (req, res) => {
-  const { location, lat, lng, checkIn, checkOut } = req.query;
-  const token = process.env.HOTELLOOK_API_KEY;
-console.log("TOKEN FROM ENV:", token);
-
-  if (!checkIn || !checkOut || !token || (!location && (!lat || !lng))) {
-    return res.status(400).json({
-      error: 'Missing required parameters',
-      debug: {
-        checkIn,
-        checkOut,
-        location,
-        lat,
-        lng,
-        tokenExists: !!token
-      }
-    });
-  }
-console.log("TOKEN FROM ENV:", token);
-
-  const locationQuery = location ? location : `${lat},${lng}`;
-  const url = `https://engine.hotellook.com/api/v2/cache.json?location=${locationQuery}&currency=inr&limit=4&checkIn=${checkIn}&checkOut=${checkOut}&token=${token}`;
-
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (Array.isArray(data)) return res.json(data);
-    if (Array.isArray(data.results)) return res.json(data.results);
-    return res.json([]);
-  } catch (error) {
-    res.status(500).json({ error: 'API fetch failed', details: error.message });
-  }
-});
-
-
 
 // Handle 404 for any other routes
 app.use((req, res) => {
