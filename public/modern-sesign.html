@@ -379,7 +379,7 @@ body {
         }
 
         .generate-btn {
-            background: linear-gradient(135deg, #062135, #035a77);
+            background: linear-gradient(135deg, #035a77);
             color: white;
             padding: 18px 32px;
             border: none;
@@ -412,7 +412,7 @@ body {
 
         .generate-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(3, 90, 119, 0.4);
         }
 
         .generate-btn:disabled {
@@ -604,7 +604,7 @@ body {
 
         .location-image {
            
-           width: 100%;
+           width: 29%;
            height: 13rem; 
            object-fit: cover; 
            border-radius: 12px;
@@ -721,6 +721,7 @@ body {
             
             .location-image {
                 height: 11rem;
+                width: 17rem;
             }
         }
 
@@ -1378,6 +1379,50 @@ text-align: left;
   50% { opacity: 0; }
 }
 
+
+/* logo  */
+.top-brand-bar {
+  top: -4px;
+  height: 5.5rem;
+  position: absolute;
+  z-index: 2;
+  width: 100%;
+  background: linear-gradient(90deg, #ffffff1c, #ffffff1c);
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.brand-logo-centered {
+  border-radius: 30px;
+  height: 47px;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand-name {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+
     </style>
     <script data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
   (function () {
@@ -1389,6 +1434,11 @@ text-align: left;
 </script>
 </head>
 <body>
+<div class="top-brand-bar">
+  <img src="./img/ChatGPT Image Jun 22, 2025, 03_50_49 AM.png" alt="Logo" class="brand-logo-centered" />
+</div>
+
+
 <div class="background-slideshow">
   <div class="background-overlay"></div>
   <!-- <img src="./img/img6.jpg" class="slide active" />
@@ -1563,7 +1613,7 @@ text-align: left;
     <button id="authActionBtn" style="
       width: 100%;
       padding: 12px;
-      background: linear-gradient(to right, #0072ff, #00c6ff);
+      background: linear-gradient(135deg, #062135, #035a77);
       color: white;
       border: none;
       border-radius: 8px;
@@ -1714,7 +1764,7 @@ text-align: left;
   const user = firebase.auth().currentUser;
   if (!user) {
     alert("Please log in to use this feature.");
-    showAuthForm(); // 🔐 Trigger login form
+    showAuthForm(); //  Trigger login form
     return false;
   }
   return true;
