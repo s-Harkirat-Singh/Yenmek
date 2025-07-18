@@ -227,6 +227,23 @@ body {
   position: relative;
   z-index: 2;
 }
+@media screen and (max-width: 480px) {
+  .form-container {
+    margin-top: 2rem !important;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  .form-container {
+    margin-top: 4rem;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .form-container {
+    margin-top: 5rem;
+  }
+}
 
 
         .form-container::before {
@@ -1009,7 +1026,7 @@ font-family: 'Montserrat Normal', sans-serif;
     position: relative;
     z-index: 2;
     min-height: 100vh;
-    padding-bottom: 80px;
+    padding-bottom: 12rem;
     justify-content: center;
     align-items: center;
 
@@ -1566,7 +1583,9 @@ text-align: left;
                 font-size: 36px;
                 margin: 1px;
             }
-            
+            .container{
+            padding-bottom: 4rem;
+            }
             
             
             .top, .bottom, .nextHalf, .nextFull {
@@ -1593,11 +1612,14 @@ text-align: left;
                 font-size: 28px;
                 margin: 1px;
             }
-            
-            .center {
-                       left: -16px;
-        width: 21rem;
-        margin-top: -97px;
+            .container{
+            padding-bottom: 4rem;
+            }
+          .center {
+    width: 100%;
+    justify-content: center;
+    margin-top: 2rem; /* consistent spacing */
+    left: 0;
         gap: 1px;
             }
             
@@ -1620,7 +1642,9 @@ text-align: left;
                 line-height: 28px;
                 font-size: 22px;
             }
-            
+            .container{
+            padding-bottom: 4rem;
+            }
           
             
             .description {
