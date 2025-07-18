@@ -3636,7 +3636,7 @@ async function addNewLocation(day, type) {
       <div class="images-container">
         ${data.images?.map(img => `
           <div class="image-wrapper">
-            <img src="${img}" class="location-image" />
+            <img src="/api/photo?ref=${img.split('photoreference=')[1]}" class="location-image" />
           </div>
         `).join("") || '<div class="no-images">No images available</div>'}
       </div>
