@@ -2279,7 +2279,7 @@ async function displayResults(data) {
           <div id="restaurants-${dayIndex}-${locIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
           <div class="images-container">
              <div class="image-wrapper">
-            ${location.images?.map(img => `<img src="${img}" class="location-image" />`).join('') || '<div class="no-images">No images available</div>'}
+            ${location.images?.map(img => `<img src="/api/photo?ref=${img.split('photoreference=')[1]}" class="location-image" />`).join('') || '<div class="no-images">No images available</div>'}
              </div>
           </div>
            <div class="location-actions">
