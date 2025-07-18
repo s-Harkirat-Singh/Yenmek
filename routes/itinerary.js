@@ -501,6 +501,125 @@ res.json({
   }
 });
 
+async function fetchCoordinates(placeName) {
+  const apiKey = process.env.MAPS_BACKEND_KEY;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(placeName)}&key=${apiKey}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  if (data.status !== "OK" || !data.results.length) {
+    throw new Error("Failed to get coordinates for: " + placeName);
+  }
+
+  const location = data.results[0].geometry.location;
+  return {
+    lat: location.lat,
+    lng: location.lng
+  };
+}
+
+
+
+router.post("/add-location", async (req, res) => {
+  const { day, destination, type, existingLocations = [] } = req.body;
+
+  if (!day || !destination || !type) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const apiKey = process.env.GROQ_EDIT_API_KEY;
+
+  if (!apiKey || !apiKey.startsWith("gsk_")) {
+    return res.status(401).json({ error: "Missing or invalid GROQ_EDIT_API_KEY in env" });
+  }
+
+  const exclusionText = existingLocations.length
+    ? `Avoid suggesting these places: ${existingLocations.join(", ")}.`
+    : "";
+
+  const prompt = `
+You are a travel planner helping a user build their itinerary for ${destination}.
+
+They want to **add** a **real place that is specifically a "${type}"** to their trip on ${day}.
+
+Follow these rules strictly:
+1. The place must match the category "${type}" (e.g. if type is "temple", it must be a real temple).
+2. It must be:
+   - Real and findable on Google Maps
+   - Publicly accessible
+   - Located within ${destination}
+   - Popular or well-reviewed
+3. ${exclusionText}
+
+Return strictly formatted JSON:
+{
+  "location": "Exact Place Name, City, Country",
+  "description": "1–2 sentences explaining why it's a good fit"
+}
+`;
+
+  try {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "llama3-8b-8192",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.6,
+        max_tokens: 300,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return res.status(response.status).json({ error: `Groq API Error: ${errorText}` });
+    }
+
+    const data = await response.json();
+    const rawContent = data.choices[0].message.content.trim();
+    const jsonMatch = rawContent.match(/\{[\s\S]*?\}/);
+
+    if (!jsonMatch) {
+      console.error("❌ Could not extract JSON from response:", rawContent);
+      return res.status(500).json({ error: "Invalid format returned by Groq AI" });
+    }
+
+    const result = JSON.parse(jsonMatch[0]);
+
+    if (!result.location || !result.description) {
+      return res.status(500).json({ error: "Incomplete response from Groq" });
+    }
+
+    let images = [];
+    try {
+      images = await getImagesFromGooglePlaces(result.location, destination);
+    } catch (imgErr) {
+      console.warn(`Image fetch failed for ${result.location}:`, imgErr.message);
+    }
+let coordinates = null;
+try {
+  coordinates = await fetchCoordinates(result.location);
+} catch (err) {
+  console.warn("Could not fetch coordinates:", err.message);
+}
+    res.json({
+      success: true,
+  location: result.location,
+  description: result.description,
+  images,
+  coordinates, 
+  day
+    });
+  } catch (err) {
+    console.error("Add location error:", err.message);
+    res.status(500).json({ error: "Server error while adding location" });
+  }
+});
+
 
 // Health check endpoint
 router.get("/health", (req, res) => {

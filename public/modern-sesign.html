@@ -28,7 +28,11 @@
   src: url('./style/font/Montserrat-Bold.ttf') format('truetype');
  
 }
-
+@font-face {
+  font-family: 'Perfograma';
+  src: url('./style/font/new/Perfograma.otf') format('truetype');
+ 
+}
 
 /* Main body font */
 body {
@@ -409,7 +413,7 @@ body {
         .generate-btn:hover::before {
             left: 100%;
         }
-
+/* 3 90 119 / 40% */
         .generate-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(3, 90, 119, 0.4);
@@ -582,12 +586,20 @@ body {
         }
 
         .location-name {
-            font-size: 26px;
-            font-weight: 600;
-            color: #323232;
-            margin-bottom: 12px;
-            letter-spacing: -0.01em;
-        }
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+
+    background: linear-gradient(135deg, #062135, #035a77);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text; /* Firefox */
+    color: transparent;
+
+    transition: background 0.5s ease-in-out;
+}
+
 
         .location-description {
             color: #707070;
@@ -1387,7 +1399,7 @@ text-align: left;
   position: absolute;
   z-index: 2;
   width: 100%;
-  background: linear-gradient(90deg, #ffffff1c, #ffffff1c);
+  background: linear-gradient(90deg, #0000001c, #ffffff1c);
   padding: 12px 0;
   display: flex;
   justify-content: center;
@@ -1421,6 +1433,198 @@ text-align: left;
   letter-spacing: 0.5px;
   font-family: 'Segoe UI', sans-serif;
 }
+.center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+  .splitflap {
+            font-family: 'Perfograma', sans-serif;
+            position: relative;
+            width: 60px;
+            height: 60px;
+            margin: 2px;
+            line-height: 50px;
+            font-size: 48px;
+           
+            text-align: center;
+            color: white;
+        }
+
+        .top {
+          font-family: 'Perfograma', sans-serif;
+            position: relative;
+            height: 50%;
+            width: 100%;
+            background-color: #0621359c;
+            border-radius: 6px 6px 0 0;
+            overflow: hidden;
+            z-index: 0;
+            /* border: 1px solid #062135; */
+        }
+
+        .bottom {
+          font-family: 'Perfograma', sans-serif;
+            position: relative;
+            height: 100%;
+            width: 100%;
+            margin-top: -50%;
+            border-radius: 6px 6px 6px 6px;
+            z-index: -1;
+            background-color: black;
+            background-image: linear-gradient(rgba(255, 255, 255, 0), #0621359c);
+            transform-origin: center;
+            /* border: 1px solid #0621359c; */
+        }
+
+        .nextHalf {
+          font-family: 'Perfograma', sans-serif;
+            position: relative;
+            height: 50%;
+            width: 100%;
+            margin-top: -100%;
+            overflow: hidden;
+            border-radius: 6px 6px 0 0;
+            z-index: 2;
+            background-color: black;
+            background-image: linear-gradient(#0621357a, rgba(255, 255, 255, 0));
+            transform-origin: bottom;
+            /* border: 1px solid #0621359c; */
+        }
+
+        .nextFull {
+          font-family: 'Perfograma', sans-serif;
+            position: relative;
+            height: 100%;
+            width: 100%;
+            background-color: #06213581;
+            margin-top: -50%;
+            border-radius: 6px 6px 6px 6px;
+            z-index: -3;
+            /* border: 1px solid #0621359c; */
+        }
+
+        .flip1 {
+            animation: flip1 ease-in 1;
+            animation-duration: 0.2s;
+        }
+
+        .flip2 {
+            animation: flip2 ease-out 1;
+            animation-duration: 0.2s;
+        }
+
+        @keyframes flip1 {
+            0% {
+                transform: rotateX(0deg);
+                background-color: #06213581;
+            }
+            50% {
+                transform: rotateX(90deg);
+                background-color: black;
+            }
+            100% {
+                transform: rotateX(90deg);
+            }
+        }
+
+        @keyframes flip2 {
+            0% {
+                transform: rotateX(-90deg);
+            }
+            50% {
+                transform: rotateX(-90deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+                background-color: #06213581;
+            }
+        }
+
+        .description {
+            margin-top: 140px;
+            text-align: center;
+            color: #ccc;
+            font-size: 16px;
+            padding: 0 1rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .splitflap {
+              font-family: 'Perfograma', sans-serif;
+                width: 45px;
+                height: 45px;
+                line-height: 45px;
+                font-size: 36px;
+                margin: 1px;
+            }
+            
+            
+            
+            .top, .bottom, .nextHalf, .nextFull {
+              font-family: 'Perfograma', sans-serif;
+                border-radius: 4px 4px 0 0;
+            }
+            
+            .bottom, .nextFull {
+              font-family: 'Perfograma', sans-serif;
+                border-radius: 4px 4px 4px 4px;
+            }
+            
+            .description {
+                margin-top: 100px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .splitflap {
+                width: 35px;
+                height: 35px;
+                line-height: 35px;
+                font-size: 28px;
+                margin: 1px;
+            }
+            
+            .center {
+                       left: -16px;
+        width: 21rem;
+        margin-top: -97px;
+        gap: 1px;
+            }
+            
+            .description {
+                margin-top: 80px;
+                font-size: 12px;
+            }
+            
+            .header {
+              left: -3px;
+                margin-top: 1rem;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 320px) {
+            .splitflap {
+                width: 28px;
+                height: 28px;
+                line-height: 28px;
+                font-size: 22px;
+            }
+            
+          
+            
+            .description {
+                margin-top: 60px;
+                font-size: 11px;
+            }
+        }
+
 
 
     </style>
@@ -1435,7 +1639,7 @@ text-align: left;
 </head>
 <body>
 <div class="top-brand-bar">
-  <img src="./img/ChatGPT Image Jun 22, 2025, 03_50_49 AM.png" alt="Logo" class="brand-logo-centered" />
+  <img src="./img/yenmeklogo-removebg-preview.png" alt="Logo" class="brand-logo-centered" />
 </div>
 
 
@@ -1491,11 +1695,11 @@ text-align: left;
 
 
     <div class="container">
-        <div class="header" style="margin-top: 3rem;">
-            <h1 style="padding-top: 5rem;" id="splitFlap" class="split-flap-heading">Trips That Think Ahead</h1>
-            <p style="    margin-top: 30px;">Intelligent travel planning powered by Yenmek</p>
+<div class="header">
+        <div class="center" id="flipBoardContainer" style="margin-top: 8rem;"></div>
+        <!-- <p class="description">Intelligent travel planning powered by Yenmek</p> -->
+    </div>
 
-        </div>
 
         <div class="form-container">
             <!-- <div class="digital-rain" id="digitalRain"></div> -->
@@ -1567,7 +1771,19 @@ text-align: left;
     </div>
   </div>
 </div>
-
+<div id="addLocationModal" class="modal hidden">
+  <div class="modal-content" style="padding: 24px;">
+    <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: #333;">Add Location</h3>
+    <p id="addLocationDayInfo" style="margin-bottom: 12px; color: #555;">
+      Add to <strong><span id="addLocationDayLabel"></span></strong>
+    </p>
+    <input type="text" id="newLocationType" placeholder="e.g. temple, shopping street" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; margin-bottom: 20px; font-size: 14px;" />
+    <div class="modal-actions" style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button id="submitAddLocationBtn" class="modern-btn primary">Add</button>
+      <button id="cancelAddLocationBtn" class="modern-btn secondary">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <!-- 🔐 Firebase Auth Login/Signup -->
 <div id="auth-section" style="
@@ -1676,62 +1892,116 @@ text-align: left;
   }, 5000); // every 5 seconds
 </script>
 <script>
-  const textList = [
-    "Plan in Seconds",
-    "AI Knows the Way",
-    "One Tap to Travel",
-    "Go Beyond Maps"
-  ];
-
-  const element = document.getElementById('splitFlap');
-  let currentTextIndex = 0;
-  let currentText = '';
-  let charIndex = 0;
-  let isDeleting = false;
-  let typingSpeed = 80; // default speed
-  let lastTime = 0;
-
-  function type(timestamp) {
-    if (!lastTime) lastTime = timestamp;
-    const delta = timestamp - lastTime;
-
-    if (delta > typingSpeed) {
-      const fullText = textList[currentTextIndex];
-
-      if (isDeleting) {
-        charIndex--;
-        currentText = fullText.substring(0, charIndex);
-      } else {
-        charIndex++;
-        currentText = fullText.substring(0, charIndex);
-      }
-
-      element.textContent = currentText;
-
-      lastTime = timestamp;
-
-      // Adjust speed based on action
-      typingSpeed = isDeleting ? 40 : 90;
-
-      // Pause before delete
-      if (!isDeleting && currentText === fullText) {
-        typingSpeed = 1500;
-        isDeleting = true;
-      }
-
-      // Pause before typing next
-      if (isDeleting && currentText === '') {
-        isDeleting = false;
-        currentTextIndex = (currentTextIndex + 1) % textList.length;
-        typingSpeed = 300;
-      }
-    }
-
-    requestAnimationFrame(type);
-  }
-
-  requestAnimationFrame(type);
+ speed = 0.2; // seconds
+        beginStr = "AI KNOW THE WAY".toUpperCase().split("");
+        endStr = "YOUR AI TRAVELER".toUpperCase().split("");
+        
+        amountOfFlaps = (beginStr.length >= endStr.length) ? beginStr.length : endStr.length;
+        
+        div = document.querySelector(".center");
+        html = "";
+        for (var x = 0; x < amountOfFlaps; x++) {
+            html += '<div class=splitflap><div class="top"></div><div class="bottom"></div><div class="nextHalf"></div><div class="nextFull"></div></div>';
+        }
+        
+        div.innerHTML = html;
+        
+        // Set up more stuff
+        a1 = document.querySelectorAll(".top");
+        a2 = document.querySelectorAll(".bottom");
+        b1 = document.querySelectorAll(".nextFull");
+        b2 = document.querySelectorAll(".nextHalf");
+        
+        for (var x = 0; x < a1.length; x++) {
+            a2[x].style.animationDuration = speed + "s";
+            b2[x].style.animationDuration = speed + "s";
+        }
+        
+        // Character set
+        char = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
+                'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                'Y', 'Z', ' '];
+        
+        strCount = [];
+        flag = [];
+        
+        // Pad strings to equal length
+        for (var x = 0; x < amountOfFlaps; x++) {
+            if (beginStr.length != amountOfFlaps) {
+                for (var x = 0; x < amountOfFlaps - beginStr.length; x++) {
+                    beginStr.push(" ");
+                }
+            } else if (endStr.length != amountOfFlaps) {
+                for (var x = 0; x < amountOfFlaps - endStr.length; x++) {
+                    endStr.push(" ");
+                }
+            }
+        }
+        
+        for (var x = 0; x < amountOfFlaps; x++) {
+            strCount[x] = char.indexOf(beginStr[x]);
+            flag[x] = false;
+        }
+        
+        flag2 = true;
+        
+        // Flip them flaps
+        setInterval(function() {
+            for (var x = 0; x < amountOfFlaps; x++) {
+                if (b1[x].innerHTML == endStr[x]) {
+                    dontFlipIt(x);
+                } else {
+                    flipIt(x);
+                }
+                
+                if (flag.every(function(e) { return e; }) && flag2) {
+                    flag2 = false;
+                    changeDestination();
+                }
+            }
+        }, speed * 1000);
+        
+        function flipIt(x) {
+            a1[x].innerHTML = char[(strCount[x] == 0) ? char.length - 1 : strCount[x] - 1];
+            a2[x].innerHTML = char[(strCount[x] == 0) ? char.length - 1 : strCount[x] - 1];
+            b1[x].innerHTML = char[strCount[x]];
+            b2[x].innerHTML = char[strCount[x]];
+            
+            a2[x].classList.remove("flip1");
+            a2[x].offsetWidth = a2[x].offsetWidth;
+            a2[x].classList.add("flip1");
+            b2[x].classList.remove("flip2");
+            b2[x].offsetWidth = b2[x].offsetWidth;
+            b2[x].classList.add("flip2");
+            
+            if (strCount[x] > char.length - 2) {
+                strCount[x] = 0;
+            } else {
+                strCount[x]++;
+            }
+        }
+        
+        function dontFlipIt(x) {
+            flag[x] = true;
+            a2[x].classList.remove("flip2");
+            a2[x].style.backgroundColor = "#ffffff13";
+            b2[x].style.backgroundColor = "#ffffff13";
+            a1[x].innerHTML = char[(strCount[x] == 0) ? char.length - 1 : strCount[x] - 1];
+            a2[x].innerHTML = char[(strCount[x] == 0) ? char.length - 1 : strCount[x] - 1];
+        }
+        
+        function changeDestination() {
+            setTimeout(function() {
+                flag.fill(false);
+                flag2 = true;
+                
+                var tempArr = endStr.slice();
+                endStr = beginStr.slice();
+                beginStr = tempArr.slice();
+            }, 3000);
+        }
 </script>
+
 
 
 
@@ -1772,8 +2042,8 @@ text-align: left;
 
     </script>
     <script>
-        // const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
-        const API_BASE_URL = window.location.origin;
+        const API_BASE_URL = 'http://localhost:5000'; // Your backend URL
+        // const API_BASE_URL = window.location.origin;
         let googleMapsLoaded = false;
         let mapsToInitialize = [];
         let allLocationsData = [];
@@ -1883,29 +2153,7 @@ if (data.success) {
   itinerary: sanitizeItinerary(data.itinerary)
 });
 
-if (user) {
-  try {
-    const uid = user.uid;
-    const cleanedItinerary = sanitizeItinerary(data.itinerary);
-    await firebase.firestore()
-      .collection("users")
-      .doc(uid)
-      .collection("itineraries")
-      .add({
-        destination: data.destination,
-        days: data.days,
-        generatedAt: new Date().toISOString(),
-        itinerary: sanitizeItinerary(data.itinerary)
-      });
-  //  console.log("Cleaned itinerary:", sanitizeItinerary(data.itinerary));
 
-    // console.log("Itinerary saved to Firestore");
-  } catch (saveError) {
-    console.error("Failed to save itinerary:", saveError.message);
-  }
-} else {
-    console.warn("User not logged in, skipping save.");
-  }
 
 } else {
   throw new Error(data.error || 'Failed to generate itinerary');
@@ -2026,15 +2274,19 @@ async function displayResults(data) {
       const location = dayLocations[locIndex];
       html += `
         <div class="location-card">
-          <div class="location-name">📍 ${location.location}</div>
+          <div class="location-name">✈ ${location.location}</div>
           <div class="location-description">${location.description}</div>
           <div id="restaurants-${dayIndex}-${locIndex}" class="restaurants-section" style="margin: 15px 0;"></div>
           <div class="images-container">
              <div class="image-wrapper">
-            ${location.images?.map(img => `<img src="/api/photo?ref=${img.split('photoreference=')[1]}" class="location-image" />`).join('') || '<div class="no-images">No images available</div>'}
+            ${location.images?.map(img => `<img src="${img}" class="location-image" />`).join('') || '<div class="no-images">No images available</div>'}
              </div>
           </div>
            <div class="location-actions">
+           <button class="add-location-btn modern-icon-btn" data-day="${day}" data-location="${location.location}">
+  ✚ Add Location
+</button>
+
   <button class="edit-btn modern-icon-btn" title="Edit" data-day="${location.day}" data-location="${location.location}">
     ✎ Edit
   </button>
@@ -2675,7 +2927,7 @@ function refreshDistancesAfterEdit(day) {
   cards.forEach((card) => {
     const btn = card.querySelector(".edit-btn");
     if (btn && btn.dataset.day === day) {
-      const location = card.querySelector(".location-name")?.textContent?.replace("📍", "").trim();
+      const location = card.querySelector(".location-name")?.textContent?.replace("✈", "").trim();
       if (location) {
         updatedLocations.push({ location });
       }
@@ -3128,7 +3380,7 @@ let currentEditDay = "";
 
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("edit-btn")) {
-    if (!requireLogin()) return; // 🔒 Require login
+    if (!requireLogin()) return; // Require login
 
     currentEditLocation = e.target.dataset.location;
     currentEditDay = e.target.dataset.day;
@@ -3151,7 +3403,7 @@ submitBtn.addEventListener("click", async () => {
   const preference = preferenceInput.value.trim();
   if (!preference) return alert("Please enter your preference");
   const allLocations = Array.from(document.querySelectorAll(".location-name")).map(el =>
-  el.textContent.replace("📍", "").trim()
+  el.textContent.replace("✈", "").trim()
 );
   try {
   const res = await fetch(`${API_BASE_URL}/api/itinerary/replace-location`, {
@@ -3205,21 +3457,21 @@ document.addEventListener("click", function (e) {
 });
 
 
-document.addEventListener("click", function (e) {
-  if (e.target.classList.contains("add-location-btn")) {
-    if (!requireLogin()) return; // 🔒 Block if not logged in
+// document.addEventListener("click", function (e) {
+//   if (e.target.classList.contains("add-location-btn")) {
+//     if (!requireLogin()) return; // 🔒 Block if not logged in
 
-    currentEditLocation = null;
-    currentEditDay = e.target.dataset.day;
+//     currentEditLocation = null;
+//     currentEditDay = e.target.dataset.day;
 
-    // Reset modal
-    suggestionInput.value = "";
-    modalTitle.textContent = `Add a new location to ${currentEditDay}`;
-    submitBtn.textContent = "Add";
-    document.getElementById("editLocationCurrentLoc").style.display = "none";
-    editModal.classList.remove("hidden");
-  }
-});
+//     // Reset modal
+//     suggestionInput.value = "";
+//     modalTitle.textContent = `Add a new location to ${currentEditDay}`;
+//     submitBtn.textContent = "Add";
+//     document.getElementById("editLocationCurrentLoc").style.display = "none";
+//     editModal.classList.remove("hidden");
+//   }
+// });
 
 
 
@@ -3235,7 +3487,7 @@ function updateItineraryLocation(day, oldLocation, newLocation, newDescription, 
     const btnLocation = btn?.dataset.location;
 
     if (locDay === day && btnLocation === oldLocation) {
-      nameElem.textContent = "📍 " + newLocation;
+      nameElem.textContent = "✈ " + newLocation;
       card.querySelector(".location-description").textContent = newDescription;
       btn.dataset.location = newLocation;
 
@@ -3273,7 +3525,7 @@ function refreshOverviewMapFromDOM() {
   const newOverviewData = [];
 
   cards.forEach((card, index) => {
-    const name = card.querySelector(".location-name")?.textContent?.replace("📍", "").trim();
+    const name = card.querySelector(".location-name")?.textContent?.replace("✈", "").trim();
     const description = card.querySelector(".location-description")?.textContent?.trim();
     const day = card.querySelector(".edit-btn")?.dataset.day;
 
@@ -3297,45 +3549,151 @@ function refreshOverviewMapFromDOM() {
 </script>
 
 <script>
-    function addNewLocationCard(day, location, description) {
-  const container = document.querySelector(`[data-day-container="${day}"]`);
-  if (!container) return;
+  // Store the day we're adding to
+let currentAddDay = "";
 
-  const card = document.createElement("div");
-  card.classList.add("location-card");
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('add-location-btn')) {
+    currentAddDay = e.target.getAttribute('data-day');
+    document.getElementById('addLocationDayLabel').textContent = currentAddDay;
+    document.getElementById('addLocationModal').classList.remove('hidden');
+  }
 
-  card.innerHTML = `
-    <div class="flex justify-between items-center">
-      <h4 class="location-name text-lg font-semibold">📍 ${location}</h4>
-      <div class="space-x-2">
-        <button class="edit-btn text-blue-500 hover:text-blue-700" data-day="${day}" data-location="${location}">✏️</button>
-        <button class="delete-btn text-red-500 hover:text-red-700" data-day="${day}" data-location="${location}">❌</button>
-      </div>
-    </div>
-    <p class="location-description">${description}</p>
-    <div class="location-map mt-2" style="height: 200px; border-radius: 8px;"></div>
-  `;
+  if (e.target.id === 'cancelAddLocationBtn') {
+    document.getElementById('addLocationModal').classList.add('hidden');
+    document.getElementById('newLocationType').value = '';
+  }
 
-  container.appendChild(card);
+  if (e.target.id === 'submitAddLocationBtn') {
+    const type = document.getElementById('newLocationType').value.trim();
+    if (!type) return alert("Please enter a type");
 
-  // You can initialize map + restaurants here if needed
-  geocodeLocation(location).then(coords => {
-    if (coords) {
-      const mapId = `map-${day}-${Date.now()}`;
-      card.querySelector(".location-map").id = mapId;
+    document.getElementById('addLocationModal').classList.add('hidden');
+    addNewLocation(currentAddDay, type);
+    document.getElementById('newLocationType').value = '';
+  }
+});
 
-      initializeMapWithRestaurants(
-        mapId,
-        [{ location, description, day }],
-        false,
-        parseInt(day.replace("Day", "")) - 1 || 0,
-        container.querySelectorAll(".location-card").length - 1,
-        ""
-      );
+async function addNewLocation(day, type) {
+  try {
+    const destination = document.getElementById("destination").value.trim();
+
+    const daySection = Array.from(document.querySelectorAll(".day-section")).find(d =>
+      d.querySelector(".day-header")?.textContent === day
+    );
+    if (!daySection) return alert("Day section not found");
+
+    const existingLocations = Array.from(daySection.querySelectorAll(".location-name"))
+      .map(el => el.textContent.replace("✈", "").trim());
+
+    // Show a temporary loading indicator within the day section
+    const loadingHtml = `<div id="add-loading-${day.replace(/\s/g, '-')}" style="text-align: center; padding: 15px; color: #666;">
+                            Generating new location...
+                         </div>`;
+    const lastCard = daySection.lastElementChild;
+    if (lastCard && lastCard.classList.contains('location-card')) {
+        lastCard.insertAdjacentHTML('afterend', loadingHtml);
+    } else {
+        daySection.insertAdjacentHTML('beforeend', loadingHtml);
     }
-  });
-}
 
+
+    const response = await fetch(`${API_BASE_URL}/api/itinerary/add-location`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        day,
+        destination,
+        type,
+        existingLocations
+      })
+    });
+
+    // Remove loading indicator
+    const tempLoader = document.getElementById(`add-loading-${day.replace(/\s/g, '-')}`);
+    if (tempLoader) tempLoader.remove();
+
+    const data = await response.json();
+    if (!data.success) throw new Error(data.error || "Failed to fetch");
+
+    // Get the index of the day (e.g., "Day 1" -> 0, "Day 2" -> 1)
+    const dayIndexMatch = day.match(/\d+/);
+    const dayIndex = dayIndexMatch ? parseInt(dayIndexMatch[0]) - 1 : 0;
+    
+    // Determine the location index for the new card within its day
+    const locationsInDay = Array.from(daySection.querySelectorAll('.location-card')).length;
+    const newLocationIndex = locationsInDay; // Since we are adding at the end
+
+    const newLocationIdPrefix = `new-location-${Date.now()}`; // Unique ID for the new map and restaurant container
+
+
+    const locationCard = document.createElement("div");
+    locationCard.className = "location-card";
+    locationCard.innerHTML = `
+      <div class="location-name">✈ ${data.location}</div>
+      <div class="location-description">${data.description}</div>
+      <div id="restaurants-${newLocationIdPrefix}" class="restaurants-section" style="margin: 15px 0;"></div>
+      <div class="images-container">
+        ${data.images?.map(img => `
+          <div class="image-wrapper">
+            <img src="${img}" class="location-image" />
+          </div>
+        `).join("") || '<div class="no-images">No images available</div>'}
+      </div>
+      <div class="location-actions">
+        <button class="add-location-btn modern-icon-btn" data-day="${day}" data-location="${data.location}">
+            ✚ Add Location
+        </button>
+        <button class="edit-btn modern-icon-btn" data-day="${day}" data-location="${data.location}">✎ Edit</button>
+        <button class="delete-btn modern-icon-btn danger" data-day="${day}" data-location="${data.location}">✕ Delete</button>
+      </div>
+      <div id="map-${newLocationIdPrefix}" class="location-map"></div>
+    `;
+
+    // Append the new card before the distance summary (if it exists)
+    const distanceSummaryEl = daySection.querySelector(".summary-section");
+    if (distanceSummaryEl) {
+      daySection.insertBefore(locationCard, distanceSummaryEl);
+    } else {
+      daySection.appendChild(locationCard);
+    }
+
+    // Initialize map for the newly added card
+    if (googleMapsLoaded) {
+      await initializeMapWithRestaurants(
+        `map-${newLocationIdPrefix}`,
+        [{ location: data.location, description: data.description, day: day, images: data.images, restaurants: [] }],
+        false, // not overview
+        dayIndex,
+        newLocationIndex,
+        `restaurants-${newLocationIdPrefix}`
+      );
+    } else {
+        // If maps API not loaded yet, push to queue
+        mapsToInitialize.push({
+            elementId: `map-${newLocationIdPrefix}`,
+            locations: [{ location: data.location, description: data.description, day: day, images: data.images, restaurants: [] }],
+            isOverview: false,
+            dayIndex: dayIndex,
+            locationIndex: newLocationIndex,
+            restaurantContainerId: `restaurants-${newLocationIdPrefix}`
+        });
+    }
+
+    // Refresh the overview map to include the new location
+    refreshOverviewMapFromDOM();
+    // Re-calculate and display distances for the affected day
+    refreshDistancesAfterEdit(day);
+
+    locationCard.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  } catch (err) {
+    console.error("Error adding location:", err);
+    alert("Failed to add new location: " + err.message);
+    const tempLoader = document.getElementById(`add-loading-${day.replace(/\s/g, '-')}`);
+    if (tempLoader) tempLoader.remove();
+  }
+}
 </script>
 
 <!-- hotel reccomendations  -->
@@ -3546,32 +3904,48 @@ function logout() {
 });
 
 </script>
-
 <script>
-async function saveItineraryToFirebase(data) {
+async function saveItineraryToFirebase() {
   const user = firebase.auth().currentUser;
   if (!user) {
     console.warn("User not logged in — skipping save.");
+    alert("Please log in to save your itinerary."); // Provide user feedback
+    showAuthForm(); // Optional: show auth form if not logged in
     return;
   }
 
+  // Ensure current itinerary data exists before saving
+  if (!window.currentItineraryData) {
+      console.warn("No itinerary data available to save.");
+      alert("No itinerary to save. Please generate one first.");
+      return;
+  }
+
   try {
-    const cleanedItinerary = sanitizeItinerary(data.itinerary);
+    // Pass window.currentItineraryData to sanitizeItinerary
+    const cleanedItinerary = sanitizeItinerary(window.currentItineraryData.itinerary);
     const uid = user.uid;
     await firebase.firestore()
       .collection("users")
       .doc(uid)
       .collection("itineraries")
       .add({
-        destination: data.destination,
-        days: data.days,
+        destination: window.currentItineraryData.destination,
+        days: window.currentItineraryData.days,
         generatedAt: new Date().toISOString(),
         itinerary: cleanedItinerary
       });
 
     console.log("Itinerary saved to Firestore (via manual save)");
+    // Optional: Update the button state or provide visual feedback
+    document.getElementById("saveFloatingBtn").textContent = "✅ Saved!";
+    setTimeout(() => {
+        document.getElementById("saveFloatingBtn").textContent = "⎙ Save Itinerary";
+    }, 2000); // Reset text after 2 seconds
+
   } catch (err) {
     console.error(" Failed to manually save itinerary:", err.message);
+    alert("Failed to save itinerary. Please try again.");
   }
 }
 </script>
