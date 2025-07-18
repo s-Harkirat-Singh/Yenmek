@@ -1004,10 +1004,14 @@ font-family: 'Montserrat Normal', sans-serif;
 
 /* Make sure all content stays above the rain */
 .container {
+      display: flex;
+    flex-direction: column;
     position: relative;
     z-index: 2;
     min-height: 100vh;
-  padding-bottom: 80px;
+    padding-bottom: 80px;
+    justify-content: center;
+    align-items: center;
 
 }
 
