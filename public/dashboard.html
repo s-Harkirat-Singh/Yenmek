@@ -12,162 +12,261 @@
 
   <!-- Basic styling -->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f9f9f9;
-    }
+
+  body {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f2f4f8;
+  }
 
 header {
-  background: linear-gradient(to right, #00c6ff, #0072ff); /* match main gradient */
+  background: linear-gradient(135deg, #062135, #035a77);
   color: white;
   padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
-header div {
+header strong {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+}
+
+header .user-email {
+  font-size: 14px;
+  opacity: 0.85;
+}
+header .header-buttons {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
-.container {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 24px;
-}
-.trip-card {
-  background: white;
+.btn {
+  padding: 10px 18px;
   border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-
-.trip-card h3 {
-  margin: 0 0 8px;
-  font-size: 18px;
-}
-
-.trip-meta {
-  color: #777;
+  font-weight: 600;
   font-size: 14px;
-  margin-bottom: 12px;
-}
-.trip-card button {
-  margin-right: 8px;
-  margin-bottom: 8px;
-}
-.delete-btn {
-  background: #ff5252;
-  color: white;
-  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.download-btn {
-  background: white;
-  border: 1px solid #4CAF50;
-  color: #4CAF50;
-  padding: 6px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.logout-btn {
-  background: #ffffff22;
   color: white;
-  padding: 6px 12px;
-  border: 1px solid white;
-  border-radius: 5px;
-  cursor: pointer;
 }
-
 .logout-btn {
-  background: #ff4d4d;
+  background-color: #f44336;
 }
 
 .logout-btn:hover {
-  background: #e60000;
+  background-color: #c62828;
 }
 
 .back-btn {
-  background: #0072ff;
-  text-decoration: none;
+  background-color: #2196f3;
 }
 
 .back-btn:hover {
-  background: #0056cc;
+  background-color: #0b7dda;
 }
+  header div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 
+  .container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 24px;
+  }
 
-.logout-btn,
-.back-btn {
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  color: white;
-}
-
-@media (max-width: 600px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
+  h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+    color: #062135;
   }
 
   .trip-card {
-    padding: 12px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .trip-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
   }
 
   .trip-card h3 {
-    font-size: 16px;
+    margin: 0 0 10px;
+    font-size: 20px;
+    color: #035a77;
   }
 
   .trip-meta {
-    font-size: 13px;
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 14px;
   }
 
-  .trip-card button,
+  .delete-btn {
+    background: #ff4d4d;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+
+  .delete-btn:hover {
+    background: #d93636;
+  }
+
   .download-btn {
-    width: 100%;
-    margin-right: 0;
+    background: transparent;
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .download-btn:hover {
+    background: #4CAF50;
+    color: white;
   }
 
   .logout-btn,
   .back-btn {
-    width: 100%;
-    text-align: center;
-    margin-top: 6px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: white;
   }
 
-  header div {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+  .logout-btn {
+    background: #ff4d4d;
   }
 
-  header div {
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 10px;
+  .logout-btn:hover {
+    background: #c62828;
+  }
+
+  .back-btn {
+    background: #2196F3;
+    text-decoration: none;
+  }
+
+  .back-btn:hover {
+    background: #0b7dda;
+  }
+
+  @media (max-width: 600px) {
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    header div {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .trip-card {
+      padding: 16px;
+    }
+
+    .trip-card button {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .logout-btn,
+    .back-btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+
+.floating-user-menu {
+  position: fixed;
+  top: 7rem;
+  right: 20px;
+  z-index: 9999;
 }
 
-.logout-btn,
-.back-btn {
-  width: auto;
+.floating-user-menu button {
+  background: linear-gradient(135deg, #062135, #035a77);
+  border: none;
+  color: white;
+  font-size: 18px;
+  padding: 10px 14px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  overflow: visible;
+  padding-bottom: 8px; 
 }
+
+.menu-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  overflow: hidden;
+  font-size: 14px;
 }
+
+.menu-dropdown a,
+.menu-dropdown button {
+  padding: 8px 16px;
+  text-align: left;
+  background: white;
+  color: #333;
+  border: none;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.menu-dropdown a:hover,
+.menu-dropdown button:hover {
+  background: #f5f5f5;
+}
+
+.menu-dropdown.hidden {
+  display: none;
+}
+
+
+</style>
+
   </style>
       <script data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
   (function () {
@@ -181,13 +280,25 @@ header div {
 
 <body>
  <header>
-  <div><strong>My Itineraries</strong></div>
-  <div style="display: flex; gap: 10px; align-items: center;">
+  <div><strong>Your Itineraries</strong></div>
+<div style="display: flex; gap: 10px; align-items: center;">
     
     <span id="userEmail">...</span>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-    <a href="modern-sesign.html" class="back-btn" style="background: #2196F3; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none;">Back</a>
+ <div class="menu-options" id="menuOptions">
+  <div class="floating-user-menu">
+  <button id="userMenuToggle" title="Menu">☰</button>
+  <div id="userMenuDropdown" class="menu-dropdown hidden">
+  <div id="userEmail" class="user-email-display">Loading...</div>
+  
+  <a href="#" class="logout-btn" onclick="logout()">Logout</a>
+
+  <a href="modern-design.html" class="back-btn" style=" color: rgb(58, 58, 58);  border-radius: 6px; text-decoration: none;">Back</a>
+  
+</div>
   </div>
+  
+</div>
+</div>
 </header>
 
 
@@ -197,8 +308,29 @@ header div {
       <!-- Itineraries will be inserted here -->
     </div>
   </div>
+<script>
+  document.getElementById("userMenuToggle").addEventListener("click", () => {
+    document.getElementById("userMenuDropdown").classList.toggle("hidden");
+  });
 
-  <!-- Firebase Config (Replace with your own) -->
+  document.addEventListener("click", function (e) {
+    const toggle = document.getElementById("userMenuToggle");
+    const menu = document.getElementById("userMenuDropdown");
+    if (!toggle.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.add("hidden");
+    }
+  });
+
+  // Show user email if logged in
+  firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById("userEmail").textContent = `${user.email}`;
+    } else {
+      document.getElementById("userEmail").textContent = `Not logged in`;
+    }
+  });
+</script>
+
   <script>
   const firebaseConfig = {
   apiKey: "AIzaSyDycfEJMTSVX0nzVMHWB0lVuvVYX8vkZyw",
@@ -221,17 +353,19 @@ header div {
       // Next: fetch itineraries
     } else {
       console.warn("⛔ Not logged in. Redirecting...");
-      window.location.href = "modern-sesign.html"; // or your login page
+      window.location.href = "modern-design.html"; // or your login page
     }
   });
 
   function logout() {
     firebase.auth().signOut().then(() => {
-      window.location.href = "modern-sesign.html"; // redirect after logout
+      window.location.href = "modern-design.html"; // redirect after logout
     });
   }
 </script>
 <script>
+
+
     firebase.auth().onAuthStateChanged(async user => {
   if (user) {
     console.log("🔐 Authenticated:", user.email);
@@ -315,7 +449,7 @@ document.getElementById("itineraryList").addEventListener("click", async (e) => 
 
   } else {
     console.warn("⛔ Not logged in. Redirecting...");
-    window.location.href = "modern-sesign.html";
+    window.location.href = "modern-design.html";
   }
 });
 

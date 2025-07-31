@@ -1,13 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const puppeteer = require("puppeteer");
 
 // Load environment variables FIRST with explicit path
 require("dotenv").config({ path: path.resolve(__dirname, '.env') });
 
 // Import routes
 const itineraryRoute = require("./routes/itinerary");
-// const redditRoute = require('./routes/reddit');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 const thrillophiliaRoute = require('./routes/thrillophilia');
@@ -110,7 +111,7 @@ app.use('/api/insights', insightRoute);
 
 // Serve index.html at root
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "modern-sesign.html"));
+  res.sendFile(path.join(__dirname, "public", "modern-design.html"));
 });
 
 
@@ -146,23 +147,120 @@ app.get("/api/photo", async (req, res) => {
 
 
 
-// Handle 404 for any other routes
-app.use((req, res) => {
-  console.log(`404 - Route not found: ${req.method} ${req.originalUrl}`);
-  res.status(404).json({
-    error: "Route not found",
-    success: false,
-    requestedPath: req.originalUrl,
-    availableEndpoints: [
-      "GET /",
-      "POST /api/itinerary",
-      "GET /api/itinerary/health",
-      "GET /api/itinerary/test"
-    ],
-    timestamp: new Date().toISOString()
-  });
-});
+app.get("/api/hotels", async (req, res) => {
+  const { location, destination, city } = req.query;
 
+  if (!location || !destination || !city) {
+    return res.status(400).json({ error: "Location, Destination, and City context are required" });
+  }
+
+  const googleApiKey = process.env.MAPS_BACKEND_KEY;
+  if (!googleApiKey) {
+    return res.status(500).json({ error: "Google Maps API key not configured on backend." });
+  }
+
+  let browser;
+  try {
+    // Step 1: Use Google Places API Text Search to find hotels NEAR the specific location, but within the destination city
+    const findPlaceUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=hotels in ${encodeURIComponent(city)}&fields=name,rating,user_ratings_total,photos&key=${googleApiKey}`;
+    const googleResponse = await axios.get(findPlaceUrl);
+    const googlePlaces = googleResponse.data.results;
+
+    if (!googlePlaces || googlePlaces.length === 0) {
+  // If the specific city search fails, fall back to the overall destination
+  const fallbackUrl = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=hotels in ${encodeURIComponent(destination)}&fields=name,rating,user_ratings_total,photos&key=${googleApiKey}`;
+  const fallbackResponse = await axios.get(fallbackUrl);
+  const fallbackPlaces = fallbackResponse.data.results;
+  if (!fallbackPlaces || fallbackPlaces.length === 0) {
+      return res.json([]);
+  }
+  // Return the fallback results, formatted similarly to the primary results
+  return res.json(fallbackPlaces.slice(0, 5).map(place => ({
+      name: place.name,
+      reviews: `${place.rating || 'N/A'} (${place.user_ratings_total || 0} reviews)`,
+      image: place.photos?.[0] ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${googleApiKey}` : 'https://placehold.co/280x160/E0E0E0/666666?text=No+Image',
+      link: '',
+      price: 'N/A'
+  })));
+}
+
+    const hotelsWithGoogleInfo = [];
+    const maxHotelsToProcess = 5;
+    for (let i = 0; i < Math.min(googlePlaces.length, maxHotelsToProcess); i++) {
+      const place = googlePlaces[i];
+      const imageUrl = place.photos && place.photos.length > 0 ? 
+                       `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=${googleApiKey}` : 
+                       'https://placehold.co/280x160/E0E0E0/666666?text=No+Image';
+
+      hotelsWithGoogleInfo.push({
+        name: place.name,
+        reviews: `${place.rating || 'N/A'} (${place.user_ratings_total || 0} reviews)`, 
+        image: imageUrl,
+        link: '',
+        price: 'N/A'
+      });
+    }
+
+    // Step 2: Use Puppeteer to get Booking.com links for each hotel
+    browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox", "--disable-setuid-sandbox"] });
+    const finalHotels = [];
+    const bookingComAffiliateId = 'YOUR_BOOKING_COM_AFFILIATE_ID';
+
+    for (const hotel of hotelsWithGoogleInfo) {
+      const page = await browser.newPage();
+      await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
+
+      const today = new Date();
+      const tomorrow = new Date(today);
+      const dayAfter = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      dayAfter.setDate(today.getDate() + 2);
+      const formatDate = (date) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+
+      // This is the key change: Search for the hotel name AND the destination city/country
+      const bookingSearchUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(`${hotel.name}, ${destination}`)}&checkin=${formatDate(tomorrow)}&checkout=${formatDate(dayAfter)}&group_adults=2&no_rooms=1`;
+
+      try {
+        await page.goto(bookingSearchUrl, { waitUntil: "networkidle2", timeout: 60000 });
+        await page.waitForSelector('[data-testid="property-card"]', { timeout: 15000 }).catch(() => {});
+        await new Promise(resolve => setTimeout(resolve, 3000)); 
+
+        const bookingData = await page.evaluate((hotelName) => {
+          let link = '';
+          const hotelCard = document.querySelector('[data-testid="property-card"]');
+          if (hotelCard) {
+            const linkElement = hotelCard.querySelector('a');
+            if (linkElement) {
+              link = linkElement.href;
+            }
+          }
+          return { link };
+        }, hotel.name);
+
+        if (bookingData.link) {
+            const url = new URL(bookingData.link);
+            url.searchParams.set('aid', bookingComAffiliateId);
+            hotel.link = url.toString();
+        }
+      } catch (scrapeError) {
+        console.warn(`❌ Failed to get Booking.com data for ${hotel.name}:`, scrapeError.message);
+      } finally {
+        await page.close();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      finalHotels.push(hotel);
+    }
+
+    res.json(finalHotels);
+  } catch (err) {
+    console.error("❌ Major Hotels API error:", err); 
+    res.status(500).json({ error: "Failed to fetch hotels" });
+  } finally {
+    if (browser) {
+      await browser.close(); 
+    }
+  }
+});
 // Global error handler
 app.use((error, req, res, next) => {
   console.error("=== GLOBAL ERROR HANDLER ===");

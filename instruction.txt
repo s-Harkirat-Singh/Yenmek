@@ -38,3 +38,7 @@ Now, I want to migrate this project from Firebase to **MongoDB Atlas** as the ba
 Can you help me migrate this to a full **MongoDB Atlas + Express.js backend setup** with the same frontend functionality?
 
 Let’s start with the backend structure, then auth, and API routes for saving/fetching itineraries.
+
+
+
+

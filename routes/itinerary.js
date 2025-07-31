@@ -620,6 +620,17 @@ try {
   }
 });
 
+async function fetchHotelsForLocation(locationName) {
+  try {
+    const response = await fetch(`/api/hotels?location=${encodeURIComponent(locationName)}`);
+    if (!response.ok) throw new Error("Failed to fetch hotels");
+    const hotels = await response.json();
+    return hotels;
+  } catch (err) {
+    console.error("❌ Hotel fetch error:", err);
+    return [];
+  }
+}
 
 // Health check endpoint
 router.get("/health", (req, res) => {
